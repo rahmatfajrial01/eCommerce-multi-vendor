@@ -7,6 +7,9 @@ const Verif = require("../models/verifModels");
 const sendEmail = require('./emailCtrls');
 const { v4 } = require("uuid");
 
+const crypto = require("crypto");
+
+
 
 const register = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
@@ -129,7 +132,45 @@ const login = asyncHandler(async (req, res, next) => {
     }
 })
 
+const forgotPassword = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("user not found with this email")
+    try {
+        const token = await user.createPasswordResetToken();
+        await user.save()
+        const resetURL = `hi please follow this link to reset your password this, link is valid till 10 minutes
+        from now <a href='http://localhost:5174/reset-password/${token}'> Clik here</a>`
+        const data = {
+            to: email,
+            text: "hey User",
+            subject: "forgot password link",
+            html: resetURL
+        }
+        sendEmail(data)
+        res.json(token)
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+const resetPassword = asyncHandler(async (req, res) => {
+    const { password } = req.body;
+    const { token } = req.params;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex")
+    const user = await User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gte: Date.now() }
+    })
+    if (!user) throw new Error("token expired please try again later")
+    user.password = password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+    res.json(user);
+})
+
 module.exports = {
-    register, verification, resendOtp,login
+    register, verification, resendOtp, login, forgotPassword, resetPassword
 }
 
