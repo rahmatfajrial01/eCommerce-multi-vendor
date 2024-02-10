@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup';
 import { login, resetState } from '../features/auth/authSlice'
+import Oauth from '../components/Oauth'
 
 const Login = () => {
 
@@ -78,9 +79,10 @@ const Login = () => {
                 </div>
                 <p className='text-sm text-blue-500'><Link to={'/forgot-password'}>Forgot password ?</Link></p>
                 <Button
-                    type={'submit'}
-                    color={'green'}
-                    name={'submit'} />
+                    type='submit'
+                    color='green'
+                    name='Submit' />
+                <Oauth />
                 <p className='text-sm'>not have an account ?<Link to={'/register'} className='text-blue-500'> Register ?</Link></p>
             </form>
         </section>

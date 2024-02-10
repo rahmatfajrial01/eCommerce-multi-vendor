@@ -45,37 +45,13 @@ export const changePassword = createAsyncThunk("auth/change-password", async (us
     }
 })
 
-// export const loginGoogle = createAsyncThunk("auth/login-google", async (userData, thunkApi) => {
-//     try {
-//         return await authService.google(userData)
-//     } catch (error) {
-//         return thunkApi.rejectWithValue(error)
-//     }
-// })
-
-// export const profileUser = createAsyncThunk("auth/profile", async (token, thunkApi) => {
-//     try {
-//         return await authService.profile(token)
-//     } catch (error) {
-//         return thunkApi.rejectWithValue(error)
-//     }
-// })
-
-// export const updateUser = createAsyncThunk("auth/update-user", async (data, thunkApi) => {
-//     try {
-//         return await authService.updateUser(data)
-//     } catch (error) {
-//         return thunkApi.rejectWithValue(error)
-//     }
-// })
-
-// export const updateUserProfile = createAsyncThunk("auth/update-user-profile", async (data, thunkApi) => {
-//     try {
-//         return await authService.updateUserProfile(data)
-//     } catch (error) {
-//         return thunkApi.rejectWithValue(error)
-//     }
-// })
+export const loginGoogle = createAsyncThunk("auth/login-google", async (userData, thunkApi) => {
+    try {
+        return await authService.loginGoogle(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const logoutUser = createAsyncThunk("auth/logout", (thunkApi) => {
     try {
@@ -262,6 +238,29 @@ export const authSlice = createSlice({
                 state.user = null;
                 state.createdUser = null;
                 state.createdUserVerif = null;
+                state.changedPassword = null;
+            })
+            .addCase(loginGoogle.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(loginGoogle.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.user = action.payload;
+                if (state.isSuccess === true) {
+                    // localStorage.setItem("user", JSON.stringify(action.payload))
+                    toast.info("User Login Successfully")
+                }
+            })
+            .addCase(loginGoogle.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
             })
     }
 })
