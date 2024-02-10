@@ -12,6 +12,10 @@ import Register from './pages/Register'
 import Store from './pages/Store'
 import VerifieEmail from './pages/VerifieEmail'
 import Wishlist from './pages/Wishlist'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import { OpenRoutes } from './routing/openRoutes'
+import { PrivateRoutes } from './routing/privateRoutes'
 
 function App() {
   return (
@@ -21,17 +25,29 @@ function App() {
           <Route index element={<Home />} />
           <Route path='detail' element={<Detail />} />
           <Route path='store' element={<Store />} />
-          <Route path='wishlist' element={<Wishlist />} />
-          <Route path='cart' element={<Cart />} />
-          <Route path='order' element={<Order />} />
+          <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
+          <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />
+          <Route path='order' element={<PrivateRoutes><Order /></PrivateRoutes>} />
         </Route>
-        <Route path='/register' element={<Register />} />
-        <Route path='/verifie-email' element={<VerifieEmail />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/change-password' element={<ChangePassword />} />
+        <Route path='/register' element={<OpenRoutes><Register /></OpenRoutes>} />
+        <Route path='/verifie-email/:slug' element={<OpenRoutes><VerifieEmail /></OpenRoutes>} />
+        <Route path='/login' element={<OpenRoutes><Login /></OpenRoutes>} />
+        <Route path='/forgot-password' element={<OpenRoutes><ForgotPassword /></OpenRoutes>} />
+        <Route path='/change-password' element={<OpenRoutes><ChangePassword /></OpenRoutes>} />
         <Route path='*' element={<NotFound />} />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </BrowserRouter>
   )
 }

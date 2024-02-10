@@ -10,9 +10,25 @@ import {
     FaUser,
     FaSearch
 } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logoutUser, resetState } from '../features/auth/authSlice';
 
 const Header = () => {
+    const dispatch = useDispatch()
+    const authState = useSelector(state => state?.auth)
+
+    const handleLogout = () => {
+        // localStorage.clear()
+        // navigate('/')
+        // window.location.reload()
+        setTimeout(() => {
+            dispatch(logoutUser())
+        }, 100);
+        dispatch(resetState())
+    }
+
+
     return (
         <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>
             <section className='container mx-auto'>
@@ -35,7 +51,13 @@ const Header = () => {
                         <Link to={'/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
                         <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaShoppingCart />Cart</Link>
                         <Link to={'/order'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaList />Orders</Link>
-                        <Link to={'/login'} className='border-2 flex items-center gap-1 py-1 px-2 rounded-full hover:opacity-80'><FaUser />Login</Link>
+                        {
+                            authState?.user === null
+                                ?
+                                <Link to={'/login'} className='border-2 flex items-center gap-1 py-1 px-2 rounded-full hover:opacity-80'><FaUser />Login</Link>
+                                :
+                                <Link onClick={handleLogout} to={'/'} className='border-2 flex items-center gap-1 py-1 px-2 rounded-full hover:opacity-80'><FaUser />Logout</Link>
+                        }
                     </div>
                 </div>
                 <div className='justify-between flex text-sm'>

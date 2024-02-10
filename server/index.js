@@ -1,9 +1,11 @@
 const express = require("express")
 const app = express()
 const dotenv = require("dotenv")
+const cors = require('cors')
 const connectDatabase = require("./src/config/db")
 const morgan = require('morgan')
 
+app.use(cors())
 app.use(morgan("dev"))
 dotenv.config()
 app.use(express.json())

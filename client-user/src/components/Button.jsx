@@ -1,9 +1,10 @@
 import React from 'react'
 
 export const Button = (props) => {
-    const { name, type, color } = props
+    const { name, type, color, onClick } = props
     return (
         <button
+            onClick={onClick}
             type={type}
             className={`text-center w-full p-2 bg-${color}-500 rounded-xl text-white`}
         >
