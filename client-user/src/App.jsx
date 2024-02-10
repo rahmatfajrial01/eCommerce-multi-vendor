@@ -33,7 +33,7 @@ function App() {
         <Route path='/verifie-email/:slug' element={<OpenRoutes><VerifieEmail /></OpenRoutes>} />
         <Route path='/login' element={<OpenRoutes><Login /></OpenRoutes>} />
         <Route path='/forgot-password' element={<OpenRoutes><ForgotPassword /></OpenRoutes>} />
-        <Route path='/change-password' element={<OpenRoutes><ChangePassword /></OpenRoutes>} />
+        <Route path='/change-password/:token' element={<OpenRoutes><ChangePassword /></OpenRoutes>} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       <ToastContainer

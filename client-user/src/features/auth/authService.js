@@ -22,12 +22,22 @@ const resentOtp = async (userData) => {
 const login = async (userData) => {
     const response = await axios.post(`${base_url}user/login`, userData)
     if (response.data) {
-        // localStorage.setItem("user", JSON.stringify(response.data))
         return response.data
     }
 }
-
-
+const forgotPassword = async (userData) => {
+    const response = await axios.post(`${base_url}user/forgot-password`, userData)
+    if (response.data) {
+        return response.data
+    }
+}
+const changePassword = async (userData) => {
+    console.log(userData.data)
+    const response = await axios.put(`${base_url}user/reset-password/${userData.token}`, userData.data)
+    if (response.data) {
+        return response.data
+    }
+}
 const logout = () => {
     localStorage.clear()
 }
@@ -37,6 +47,7 @@ export const authService = {
     login,
     logout,
     createUser,
-    resentOtp
-
+    resentOtp,
+    forgotPassword,
+    changePassword
 }

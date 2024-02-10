@@ -2,14 +2,11 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import Input from '../components/Input'
-
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup';
-import { login } from '../features/auth/authSlice'
-
-
+import { login, resetState } from '../features/auth/authSlice'
 
 const Login = () => {
 
@@ -36,7 +33,7 @@ const Login = () => {
 
     useEffect(() => {
         if (authState?.user?.verified === false) {
-            navigate(`/verification/${authState?.user?.slug}`)
+            navigate(`/verifie-email/${authState?.user?.slug}`)
             dispatch(resetState())
         }
         else if (authState.user !== null && authState.isError === false) {

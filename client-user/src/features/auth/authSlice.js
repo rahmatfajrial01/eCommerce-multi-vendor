@@ -23,7 +23,6 @@ export const resentOtp = createAsyncThunk("auth/resent-otp", async (userData, th
         return thunkApi.rejectWithValue(error)
     }
 })
-
 export const login = createAsyncThunk("auth/login", async (userData, thunkApi) => {
     try {
         return await authService.login(userData)
@@ -31,6 +30,52 @@ export const login = createAsyncThunk("auth/login", async (userData, thunkApi) =
         return thunkApi.rejectWithValue(error)
     }
 })
+export const forgotPassword = createAsyncThunk("auth/forgot-password", async (userData, thunkApi) => {
+    try {
+        return await authService.forgotPassword(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+export const changePassword = createAsyncThunk("auth/change-password", async (userData, thunkApi) => {
+    try {
+        return await authService.changePassword(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+// export const loginGoogle = createAsyncThunk("auth/login-google", async (userData, thunkApi) => {
+//     try {
+//         return await authService.google(userData)
+//     } catch (error) {
+//         return thunkApi.rejectWithValue(error)
+//     }
+// })
+
+// export const profileUser = createAsyncThunk("auth/profile", async (token, thunkApi) => {
+//     try {
+//         return await authService.profile(token)
+//     } catch (error) {
+//         return thunkApi.rejectWithValue(error)
+//     }
+// })
+
+// export const updateUser = createAsyncThunk("auth/update-user", async (data, thunkApi) => {
+//     try {
+//         return await authService.updateUser(data)
+//     } catch (error) {
+//         return thunkApi.rejectWithValue(error)
+//     }
+// })
+
+// export const updateUserProfile = createAsyncThunk("auth/update-user-profile", async (data, thunkApi) => {
+//     try {
+//         return await authService.updateUserProfile(data)
+//     } catch (error) {
+//         return thunkApi.rejectWithValue(error)
+//     }
+// })
 
 export const logoutUser = createAsyncThunk("auth/logout", (thunkApi) => {
     try {
@@ -49,7 +94,13 @@ const getTokenFromLocalStorage = localStorage.getItem("user")
 const initialState = {
     user: getTokenFromLocalStorage,
     createdUser: null,
+    isError: "",
+    isSuccess: "",
+    isLoading: "",
     createdUserVerif: ""
+    // message: "",
+    // profile: "",
+    // allUser: "",
 }
 
 export const authSlice = createSlice({
@@ -75,7 +126,6 @@ export const authSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
-                // state.createdUserVerif = null;
                 if (state.isError === true) {
                     toast.error(action.payload.response.data.message)
                 }
@@ -146,7 +196,47 @@ export const authSlice = createSlice({
                     toast.error(action.payload.response.data.message)
                 }
             })
-
+            .addCase(forgotPassword.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                if (state.isSuccess === true) {
+                    toast.info("Check your email")
+                }
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
+            })
+            .addCase(changePassword.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.changedPassword = action.payload
+                if (state.isSuccess === true) {
+                    toast.info("Password change success")
+                }
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
+            })
             .addCase(logoutUser.pending, (state) => {
                 state.isLoading = true;
             })
