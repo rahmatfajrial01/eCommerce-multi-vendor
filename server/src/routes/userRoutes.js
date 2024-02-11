@@ -14,4 +14,5 @@ router.get("/", getAllUser);
 router.get("/current-user", authGuard, singleUser);
 
 
+
 module.exports = router;
