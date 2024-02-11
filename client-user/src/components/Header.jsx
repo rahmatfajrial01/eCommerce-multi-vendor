@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutUser, resetState } from '../features/auth/authSlice';
+import { Menu } from '@headlessui/react'
 
 const Header = () => {
     const dispatch = useDispatch()
@@ -54,9 +55,31 @@ const Header = () => {
                         {
                             authState?.user === null
                                 ?
-                                <Link to={'/login'} className='border-2 flex items-center gap-1 py-1 px-2 rounded-full hover:opacity-80'><FaUser />Login</Link>
+                                <>
+                                    <Link to={'/register'} className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Register</Link>
+                                    <Link to={'/login'} className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Login</Link>
+                                </>
                                 :
-                                <Link onClick={handleLogout} to={'/'} className='border-2 flex items-center gap-1 py-1 px-2 rounded-full hover:opacity-80'><FaUser />Logout</Link>
+                                <>
+                                    <Link to={'/admin/register'} target="_blank" className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Seller</Link>
+                                    <div className='relative'>
+                                        <Menu>
+                                            <Menu.Button className='flex items-center'>
+                                                <button className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Account</button>
+                                            </Menu.Button>
+                                            <Menu.Items className='absolute w-max bg-white text-black right-0 top-10 p-3 rounded-xl flex flex-col text-end border'>
+                                                <Menu.Item>
+                                                    <Link className='hover:bg-slate-300 px-2 py-1 rounded-xl transition-all' to={'/profile'}>Profile</Link>
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                    <Link to={'/'} className='hover:bg-slate-300 px-2 py-1 rounded-xl transition-all '
+                                                        onClick={handleLogout}
+                                                    >Logout</Link>
+                                                </Menu.Item>
+                                            </Menu.Items>
+                                        </Menu>
+                                    </div>
+                                </>
                         }
                     </div>
                 </div>

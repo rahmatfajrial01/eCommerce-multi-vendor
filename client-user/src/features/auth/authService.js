@@ -47,6 +47,21 @@ const loginGoogle = async (userData) => {
     }
     console.log('yess')
 }
+
+const currentUser = async (token) => {
+    if (token === undefined) return
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.get(`${base_url}user/current-user`, config)
+    if (response.data) {
+        return response.data
+    }
+}
+
 const logout = () => {
     localStorage.clear()
 }
@@ -59,5 +74,6 @@ export const authService = {
     resentOtp,
     forgotPassword,
     changePassword,
-    loginGoogle
+    loginGoogle,
+    currentUser
 }

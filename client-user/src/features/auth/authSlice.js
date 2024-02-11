@@ -61,6 +61,14 @@ export const logoutUser = createAsyncThunk("auth/logout", (thunkApi) => {
     }
 })
 
+export const getCurrentUser = createAsyncThunk("auth/profile", async (token, thunkApi) => {
+    try {
+        return await authService.currentUser(token)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 export const resetState = createAction("Reset_all")
 
 const getTokenFromLocalStorage = localStorage.getItem("user")
@@ -261,6 +269,21 @@ export const authSlice = createSlice({
                 if (state.isError === true) {
                     toast.error(action.payload.response.data.message)
                 }
+            })
+            .addCase(getCurrentUser.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getCurrentUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.currentUser = action.payload;
+            })
+            .addCase(getCurrentUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
             })
     }
 })

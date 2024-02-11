@@ -1,15 +1,9 @@
-
 const asyncHandler = require('express-async-handler');
-
 const User = require("../models/userModels");
 const Verif = require("../models/verifModels");
-
 const sendEmail = require('./emailCtrls');
 const { v4 } = require("uuid");
-
 const crypto = require("crypto");
-
-
 
 const register = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
@@ -140,7 +134,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
         const token = await user.createPasswordResetToken();
         await user.save()
         const resetURL = `hi please follow this link to reset your password this, link is valid till 10 minutes
-        from now <a href='http://localhost:5175/change-password/${token}'> Clik here</a>`
+        from now <a href='http://localhost:5173/change-password/${token}'> Clik here</a>`
         const data = {
             to: email,
             text: "hey User",
@@ -214,7 +208,47 @@ const loginGoogle = async (req, res, next) => {
     }
 };
 
+const getAllUser = async (req, res, next) => {
+    try {
+        const allUser = await User.find({}).select('-password');
+        return res.json(allUser);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const singleUser = async (req, res, next) => {
+    try {
+        let user = await User.findById(req.user._id);
+
+        if (user) {
+            return res.status(201).json({
+                _id: user._id,
+                avatar: user.avatar,
+                username: user.username,
+                email: user.email,
+                // verified: user.verified,
+                admin: user.admin,
+            });
+        } else {
+            let error = new Error("User not found");
+            error.statusCode = 404;
+            next(error);
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
-    register, verification, resendOtp, login, forgotPassword, resetPassword, loginGoogle
+    register,
+    verification,
+    resendOtp,
+    login,
+    forgotPassword,
+    resetPassword,
+    loginGoogle,
+    getAllUser,
+    singleUser
 }
 

@@ -15,8 +15,10 @@ connectDatabase()
 const { notFound, errorHandler } = require("./src/middlewares/errorHandler")
 
 const authRoutes = require('./src/routes/userRoutes.js')
+const shopeRoutes = require('./src/routes/shopeRoutes.js')
 
 app.use('/api/user', authRoutes);
+app.use('/api/shope', shopeRoutes);
 
 app.use(notFound)
 app.use(errorHandler)

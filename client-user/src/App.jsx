@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import { NotFound } from './pages/NotFound'
 import Order from './pages/Order'
 import Register from './pages/Register'
+import Profile from './pages/Profile'
 import Store from './pages/Store'
 import VerifieEmail from './pages/VerifieEmail'
 import Wishlist from './pages/Wishlist'
@@ -16,6 +17,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { OpenRoutes } from './routing/openRoutes'
 import { PrivateRoutes } from './routing/privateRoutes'
+
+import SecondLayout from './components/Admin/SecondLayout'
+import Dashboard from './pages/Admin/Dashboard'
+import User from './pages/Admin/User'
+import Category from './pages/Admin/Category'
+import RegisterAdmin from './pages/Admin/Register'
 
 function App() {
   return (
@@ -28,7 +35,16 @@ function App() {
           <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
           <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />
           <Route path='order' element={<PrivateRoutes><Order /></PrivateRoutes>} />
+          <Route path='profile' element={<PrivateRoutes><Profile /></PrivateRoutes>} />
         </Route>
+
+        <Route path='/admin/register' element={<PrivateRoutes><RegisterAdmin /></PrivateRoutes>} />
+        <Route path='/admin' element={<PrivateRoutes><SecondLayout /></PrivateRoutes>} >
+          <Route index element={<Dashboard />} />
+          <Route path='user' element={<User />} />
+          <Route path='category' element={<Category />} />
+        </Route >
+
         <Route path='/register' element={<OpenRoutes><Register /></OpenRoutes>} />
         <Route path='/verifie-email/:slug' element={<OpenRoutes><VerifieEmail /></OpenRoutes>} />
         <Route path='/login' element={<OpenRoutes><Login /></OpenRoutes>} />
