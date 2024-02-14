@@ -7,7 +7,7 @@ const register = asyncHandler(async (req, res) => {
     let checkUser = await User.findById(user);
     if (checkUser) {
         let shope = await Shope.findOne({ shopeName });
-        if (shope) return res.json({ message: "shope already axists" })
+        if (shope) throw new Error("shope already axists")
         shope = await Shope.create({
             telephone,
             shopeName,
@@ -15,6 +15,7 @@ const register = asyncHandler(async (req, res) => {
             codePos,
             user
         });
+        await User.findByIdAndUpdate(user, { role: 2 });
         return res.status(201).json({
             shope,
             message: "shope created"
@@ -24,6 +25,27 @@ const register = asyncHandler(async (req, res) => {
     }
 });
 
+const currentShope = asyncHandler(async (req, res, next) => {
+    try {
+        let shope = await Shope.find({ user: req.params.id }).populate([
+            {
+                path: "user",
+                select: ["avatar", "username", "email"],
+            }
+        ]);
+        if (shope) {
+            return res.status(201).json({
+                shope
+            });
+        } else {
+            throw new Error("shope not axists")
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 module.exports = {
-    register
+    register, currentShope
 }

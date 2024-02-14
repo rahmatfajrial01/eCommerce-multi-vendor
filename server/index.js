@@ -14,11 +14,15 @@ connectDatabase()
 
 const { notFound, errorHandler } = require("./src/middlewares/errorHandler")
 
-const authRoutes = require('./src/routes/userRoutes.js')
-const shopeRoutes = require('./src/routes/shopeRoutes.js')
+const authRoutes = require('./src/routes/userRoutes')
+const shopeRoutes = require('./src/routes/shopeRoutes')
+const productCategoryRoutes = require('./src/routes/productCategoryRoutes')
+
 
 app.use('/api/user', authRoutes);
 app.use('/api/shope', shopeRoutes);
+app.use('/api/product-category', productCategoryRoutes);
+
 
 app.use(notFound)
 app.use(errorHandler)

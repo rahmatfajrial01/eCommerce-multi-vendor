@@ -227,7 +227,7 @@ const singleUser = async (req, res, next) => {
                 avatar: user.avatar,
                 username: user.username,
                 email: user.email,
-                // verified: user.verified,
+                role: user.role,
                 admin: user.admin,
             });
         } else {
