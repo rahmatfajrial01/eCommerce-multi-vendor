@@ -9,7 +9,7 @@ const createPostCategory = async (req, res, next) => {
         const postCategory = await PostCategories.findOne({ title });
 
         if (postCategory) {
-            const error = new Error("Category is already created!");
+            const error = new Error("Category is already exist");
             return next(error);
         }
 
@@ -49,7 +49,14 @@ const updatePostCategory = async (req, res, next) => {
     try {
         const { title } = req.body;
 
-        const postCategory = await PostCategories.findByIdAndUpdate(
+        let postCategory = await PostCategories.findOne({ title });
+
+        if (postCategory) {
+            const error = new Error("Category is already exist");
+            return next(error);
+        }
+
+        postCategory = await PostCategories.findByIdAndUpdate(
             req.params.postCategoryId,
             {
                 title,
