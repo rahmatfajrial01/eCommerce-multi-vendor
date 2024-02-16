@@ -18,12 +18,14 @@ const Navigasi = () => {
                         <>
                             <Link to={'/admin/user'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>User</Link>
                             <Link to={'/admin/category'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Category</Link>
+                            <Link to={'/admin/banner'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Banner</Link>
+                            <Link to={'/admin/brand'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Brand</Link>
                         </>
                         :
                         ""
                 }
-                <Link className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Product</Link>
-                <Link className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Order</Link>
+                <Link to={'/admin/product'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Product</Link>
+                <Link to={'/admin/order'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Order</Link>
                 {/* <Link to={'/'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Back</Link> */}
             </section>
         </nav>

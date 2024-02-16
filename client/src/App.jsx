@@ -23,6 +23,10 @@ import Dashboard from './pages/Admin/Dashboard'
 import User from './pages/Admin/User'
 import Category from './pages/Admin/Category'
 import RegisterAdmin from './pages/Admin/Register'
+import Product from './pages/Admin/Product'
+import Banner from './pages/Admin/Banner'
+import Order2 from './pages/Admin/Order'
+import Brand from './pages/Admin/Brand'
 
 function App() {
   return (
@@ -43,6 +47,10 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path='user' element={<User />} />
           <Route path='category' element={<Category />} />
+          <Route path='product' element={<Product />} />
+          <Route path='order' element={<Order2 />} />
+          <Route path='banner' element={<Banner />} />
+          <Route path='brand' element={<Brand />} />
         </Route >
 
         <Route path='/register' element={<OpenRoutes><Register /></OpenRoutes>} />

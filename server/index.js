@@ -5,10 +5,13 @@ const cors = require('cors')
 const connectDatabase = require("./src/config/db")
 const morgan = require('morgan')
 
+
+
 app.use(cors())
 app.use(morgan("dev"))
 dotenv.config()
 app.use(express.json())
+
 const PORT = process.env.PORT
 connectDatabase()
 
@@ -17,11 +20,14 @@ const { notFound, errorHandler } = require("./src/middlewares/errorHandler")
 const authRoutes = require('./src/routes/userRoutes')
 const shopeRoutes = require('./src/routes/shopeRoutes')
 const productCategoryRoutes = require('./src/routes/productCategoryRoutes')
+const bannerRoutes = require('./src/routes/bannerRoutes')
+
 
 
 app.use('/api/user', authRoutes);
 app.use('/api/shope', shopeRoutes);
 app.use('/api/product-category', productCategoryRoutes);
+app.use('/api/banner', bannerRoutes);
 
 
 app.use(notFound)
