@@ -3,8 +3,8 @@ import React from 'react'
 const DataTable = (props) => {
     const { headerTitle, data, children } = props
     return (
-        <div className='overflow-x-auto'>
-            <table className='border w-full text-nowrap'>
+        <div className='overflow-x-auto p-5 bg-slate-200 rounded-xl'>
+            <table className='border w-full text-nowrap bg-white rounded-xl'>
                 <thead>
                     <tr className='border-2'>
                         {

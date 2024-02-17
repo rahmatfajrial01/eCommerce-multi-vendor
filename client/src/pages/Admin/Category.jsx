@@ -72,7 +72,7 @@ const Category = () => {
 
     return (
         <section className='mt-4 px-4 overflow-x-auto space-y-3 w-full'>
-            <form onSubmit={formik.handleSubmit} className='flex gap-3'>
+            <form onSubmit={formik.handleSubmit} className='flex gap-1 p-5 bg-slate-200 rounded-xl'>
                 <div className='relative w-64'>
                     <Input
                         type="text"
