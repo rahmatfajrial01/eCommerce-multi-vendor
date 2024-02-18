@@ -21,6 +21,7 @@ const authRoutes = require('./src/routes/userRoutes')
 const shopeRoutes = require('./src/routes/shopeRoutes')
 const productCategoryRoutes = require('./src/routes/productCategoryRoutes')
 const bannerRoutes = require('./src/routes/bannerRoutes')
+const brandRoutes = require('./src/routes/brandRoutes')
 
 
 
@@ -28,6 +29,7 @@ app.use('/api/user', authRoutes);
 app.use('/api/shope', shopeRoutes);
 app.use('/api/product-category', productCategoryRoutes);
 app.use('/api/banner', bannerRoutes);
+app.use('/api/brand', brandRoutes);
 
 
 app.use(notFound)

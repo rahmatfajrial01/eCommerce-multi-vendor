@@ -15,7 +15,7 @@ const register = async (userData) => {
 }
 
 const currentShope = async (userData) => {
-    console.log(userData.user)
+    // console.log(userData.user)
     const config = {
         headers: {
             Authorization: `Bearer ${userData.token}`,
