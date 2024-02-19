@@ -21,5 +21,5 @@ const shopeSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-module.exports = mongoose.model('shope', shopeSchema);
+module.exports = mongoose.model('Shope', shopeSchema);
 

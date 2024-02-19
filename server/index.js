@@ -5,8 +5,6 @@ const cors = require('cors')
 const connectDatabase = require("./src/config/db")
 const morgan = require('morgan')
 
-
-
 app.use(cors())
 app.use(morgan("dev"))
 dotenv.config()
@@ -22,15 +20,14 @@ const shopeRoutes = require('./src/routes/shopeRoutes')
 const productCategoryRoutes = require('./src/routes/productCategoryRoutes')
 const bannerRoutes = require('./src/routes/bannerRoutes')
 const brandRoutes = require('./src/routes/brandRoutes')
-
-
+const productRoutes = require('./src/routes/productRoutes')
 
 app.use('/api/user', authRoutes);
 app.use('/api/shope', shopeRoutes);
 app.use('/api/product-category', productCategoryRoutes);
 app.use('/api/banner', bannerRoutes);
 app.use('/api/brand', brandRoutes);
-
+app.use('/api/product', productRoutes);
 
 app.use(notFound)
 app.use(errorHandler)
