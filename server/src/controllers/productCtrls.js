@@ -11,7 +11,7 @@ const createProduct = asyncHandler(async (req, res) => {
             folder: "eCommerce/products"
         })
 
-        const { title, description, price, category, brand, quantity, shope } = req.body;
+        const { title, description, price, category, brand, quantity, shope, tag } = req.body;
         const newProduct = await Product.create({
             title,
             slug: slugify(req.body.title),
@@ -20,6 +20,7 @@ const createProduct = asyncHandler(async (req, res) => {
             category,
             brand,
             quantity,
+            tag,
             shope,
             images: {
                 public_id: result.public_id,
@@ -58,7 +59,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     }
 });
 
-const getAllProduct = asyncHandler(async (req, res) => {
+const getAllProducts = asyncHandler(async (req, res) => {
     try {
         //filtering
         const queryObj = { ...req.query };
@@ -101,6 +102,14 @@ const getAllProduct = asyncHandler(async (req, res) => {
         res.json(product)
         // const findAllProduct = await Product.find(queryObj);
         // res.json(findAllProduct)
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+const getAllProduct = asyncHandler(async (req, res) => {
+    try {
+        const allProduct = await Product.find({}).populate('category').populate('brand').populate('shope')
+        return res.json(allProduct);
     } catch (error) {
         throw new Error(error);
     }

@@ -16,16 +16,19 @@ const Navigasi = () => {
                     authState?.currentUser?.role >= 3
                         ?
                         <>
+                            <span className='py-1  ps-5 pe-10 hover:bg-white rounded-full font-bold mt-3'>Admin</span>
                             <Link to={'/admin/user'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>User</Link>
                             <Link to={'/admin/category'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Category</Link>
                             <Link to={'/admin/banner'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Banner</Link>
                             <Link to={'/admin/brand'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Brand</Link>
+                            <Link to={'/admin/list-all-product'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Product</Link>
                         </>
                         :
                         ""
                 }
-                <Link to={'/admin/product'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Product</Link>
-                <Link to={'/admin/order'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Order</Link>
+                {authState?.currentUser?.role >= 3 && <span className='py-1  ps-5 pe-10 hover:bg-white rounded-full font-bold mt-3'>Seller</span>}
+                <Link to={'/admin/list-product'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>My Product</Link>
+                <Link to={'/admin/order'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>My Order</Link>
                 {/* <Link to={'/'} className='py-1  ps-5 pe-10 hover:bg-white rounded-full'>Back</Link> */}
             </section>
         </nav>

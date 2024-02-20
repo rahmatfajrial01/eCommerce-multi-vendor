@@ -33,5 +33,15 @@ const adminGuard = (req, res, next) => {
     }
 };
 
-module.exports = { authGuard, adminGuard }
+const sellerGuard = (req, res, next) => {
+    if (req.user && req.user.role >= 2) {
+        next();
+    } else {
+        let error = new Error("Not authorized as an seller");
+        error.statusCode = 401;
+        next(error);
+    }
+};
+
+module.exports = { authGuard, adminGuard, sellerGuard }
 

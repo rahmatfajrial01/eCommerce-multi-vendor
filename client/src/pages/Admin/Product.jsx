@@ -6,20 +6,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllProductCategory } from '../../features/category/productCategorySlice'
 import { getAllBrand } from '../../features/brand/brandSlice'
 import { TiDeleteOutline } from 'react-icons/ti'
+import * as yup from 'yup';
+import { useFormik } from 'formik'
+import { createProduct, resetState } from '../../features/product/productSlice'
+import { useNavigate } from 'react-router-dom'
 
 
 const Product = () => {
     const token = useSelector(state => state?.auth?.user?.token)
     const productCatState = useSelector(state => state?.productCategory)
     const brandState = useSelector(state => state?.brand)
+    const shopeState = useSelector(state => state?.shope)
+    const productState = useSelector(state => state?.product)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
+    console.log(productState)
 
     useEffect(() => {
         dispatch(getAllProductCategory())
         dispatch(getAllBrand())
     }, [])
-    console.log(brandState.allBrand)
+    // console.log(shopeState?.currentShope?.shope[0]?._id)
 
 
     const options = [
@@ -114,75 +122,175 @@ const Product = () => {
     const handleChoose = (e) => {
         const file = e.target.files[0];
         setPicture(file);
-        // formik.setFieldValue('image', e.currentTarget.files[0]);
+        formik.setFieldValue('image', e.currentTarget.files[0]);
     }
     const handleResetPic = () => {
         setPicture('');
-        // formik.setFieldValue('image', "");
+        formik.setFieldValue('image', "");
     }
+
+
+    const Schema = yup.object({
+        title: yup.string().required('Product Name is required'),
+        description: yup.string().required('Description is required'),
+        price: yup.number().required('Price is required'),
+        category: yup.string().required('Category is required'),
+        brand: yup.string().required('brand is required'),
+        quantity: yup.number().required('quantity is required'),
+        tag: yup.string().required('tag is required'),
+        image: yup.mixed().required("image is required"),
+    });
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            title: '',
+            description: '',
+            price: '',
+            category: '',
+            brand: '',
+            quantity: '',
+            tag: '',
+            image: '',
+        },
+        validationSchema: Schema,
+        onSubmit: (values, { resetForm }) => {
+            // alert(JSON.stringify(values, null, 2));
+            // console.log(value)
+            // if (productCatState?.productCategory) {
+            // const data = { token, values, id: productCatState.productCategory._id }
+            // dispatch(updateProductCategory(data))
+            // } else {
+
+            const data = new FormData()
+            data.append('title', values.title)
+            data.append('description', values.description)
+            data.append('price', values.price)
+            data.append('category', values.category)
+            data.append('brand', values.brand)
+            data.append('quantity', values.quantity)
+            data.append('tag', values.tag)
+            data.append('shope', shopeState?.currentShope?.shope[0]?._id)
+            data.append('image', values.image)
+            const dataProducts = { token, data }
+            dispatch(createProduct(dataProducts))
+
+            // resetForm()
+            // }
+        },
+    });
+
+    useEffect(() => {
+        if (productState.productCreated !== null && productState.isError === false) {
+            navigate('/admin/list-product')
+            dispatch(resetState())
+        }
+    }, [productState?.productCreated])
 
     return (
         <section className='p-5'>
             <div className='space-y-5'>
                 <div className='bg-slate-200 p-5 rounded-xl'>
-                    <div className='space-y-5'>
-                        <Input
-                            type="text"
-                            name="title"
-                            label="Product Name"
-                            placeholder='...'
-                        />
-                        <Input
-                            type="text"
-                            name="desc"
-                            label="Description"
-                            placeholder='...'
-                        />
+                    <form onSubmit={formik.handleSubmit} className='space-y-5 text-sm'>
+                        <div>
+                            <Input
+                                type="text"
+                                name="title"
+                                label="Product Name"
+                                placeholder='...'
+                                value={formik.values.title}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.title && formik.touched.title ? <p className='text-red-500'>{formik.errors.title}</p> : null}
+                        </div>
+                        <div>
+                            <Input
+                                type="text"
+                                name="description"
+                                label="Description"
+                                placeholder='...'
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.description && formik.touched.description ? <p className='text-red-500'>{formik.errors.description}</p> : null}
+                        </div>
                         <div className='text-sm'>
-                            <label htmlFor="">Category</label>
-                            <select className='w-full p-2 rounded-xl '>
-                                <option>Choose</option>
-                                {
-                                    productCatState.allProductCategory && productCatState.allProductCategory.map((item, index) =>
-                                        <option value={item._id} >{item?.title}</option>
-                                    )
-                                }
-                            </select>
+                            <div>
+                                <label htmlFor="">Category</label>
+                                <select
+                                    name="category"
+                                    value={formik.values.category}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    className='w-full p-2 rounded-xl'>
+                                    <option value=''>Choose</option>
+                                    {
+                                        productCatState.allProductCategory && productCatState.allProductCategory.map((item, index) =>
+                                            <option value={item._id} >{item?.title}</option>
+                                        )
+                                    }
+                                </select>
+                                {formik.errors.category && formik.touched.category ? <p className='text-red-500'>{formik.errors.category}</p> : null}
+                            </div>
                         </div>
                         <div className='text-sm'>
                             <label htmlFor="">Brand</label>
-                            <select className='w-full p-2 rounded-xl '>
-                                <option>Choose</option>
+                            <select
+                                name="brand"
+                                value={formik.values.brand}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className='w-full p-2 rounded-xl '>
+                                <option value=''>Choose</option>
                                 {
                                     brandState.allBrand && brandState.allBrand.map((item, index) =>
                                         <option value={item._id} >{item?.title}</option>
                                     )
                                 }
                             </select>
+                            {formik.errors.brand && formik.touched.brand ? <p className='text-red-500'>{formik.errors.brand}</p> : null}
                         </div>
-                        <div className='text-sm space-y-3'>
-                            <label htmlFor="">Condition</label>
+                        <div
+                            value={formik.values.tag}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className='text-sm space-y-3'>
+                            <label htmlFor="">Tag</label>
                             <div className='space-x-1'>
-                                <input name='con' type="radio" />
-                                <label htmlFor="">New</label>
+                                <input name='tag' value="Featured" type="radio" />
+                                <label htmlFor="">Featured</label>
                             </div>
                             <div className='space-x-1'>
-                                <input name='con' type="radio" />
-                                <label htmlFor="">Second</label>
+                                <input name='tag' value="Basic" type="radio" />
+                                <label htmlFor="">Basic</label>
                             </div>
+                            {formik.errors.tag && formik.touched.tag ? <p className='text-red-500'>{formik.errors.tag}</p> : null}
                         </div>
-                        <Input
-                            type="number"
-                            name="price"
-                            label="Price"
-                            placeholder='...'
-                        />
-                        <Input
-                            type="number"
-                            name="qty"
-                            label="Qty"
-                            placeholder='...'
-                        />
+                        <div>
+                            <Input
+                                type="number"
+                                name="price"
+                                label="Price"
+                                placeholder='...'
+                                value={formik.values.price}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.price && formik.touched.price ? <p className='text-red-500'>{formik.errors.price}</p> : null}
+                        </div>
+                        <div>
+                            <Input
+                                type="number"
+                                name="quantity"
+                                label="Qty"
+                                placeholder='...'
+                                value={formik.values.quantity}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.quantity && formik.touched.quantity ? <p className='text-red-500'>{formik.errors.quantity}</p> : null}
+                        </div>
 
                         <div className='w-36'>
                             {
@@ -201,8 +309,15 @@ const Product = () => {
                             }
                             {/* {formik.errors.image && formik.touched.image ? <p className='text-red-500'>{formik.errors.image}</p> : null} */}
                             <input onChange={handleChoose} type="file" id='img' className='hidden' />
+                            {formik.errors.image && formik.touched.image ? <p className='text-red-500'>{formik.errors.image}</p> : null}
+
                         </div>
-                    </div>
+                        <Button
+                            color='green'
+                            type='submit'
+                            name={productState.isLoading ? "Loading..." : "Submit"}
+                        />
+                    </form>
                 </div>
 
                 <div className='p-5 bg-slate-200 rounded-xl space-y-5'>
@@ -329,7 +444,7 @@ const Product = () => {
 
 
 
-            </div>
+            </div >
         </section >
 
 

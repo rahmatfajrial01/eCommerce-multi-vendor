@@ -24,10 +24,11 @@ import User from './pages/Admin/User'
 import Category from './pages/Admin/Category'
 import RegisterAdmin from './pages/Admin/Register'
 import Product from './pages/Admin/Product'
-import Product2 from './pages/Admin/Product2'
 import Banner from './pages/Admin/Banner'
 import Order2 from './pages/Admin/Order'
 import Brand from './pages/Admin/Brand'
+import ListProduct from './pages/Admin/ListProduct'
+import ListAllProduct from './pages/Admin/ListAllProduct'
 
 function App() {
   return (
@@ -49,6 +50,8 @@ function App() {
           <Route path='user' element={<User />} />
           <Route path='category' element={<Category />} />
           <Route path='product' element={<Product />} />
+          <Route path='list-product' element={<ListProduct />} />
+          <Route path='list-all-product' element={<ListAllProduct />} />
           <Route path='order' element={<Order2 />} />
           <Route path='banner' element={<Banner />} />
           <Route path='brand' element={<Brand />} />
