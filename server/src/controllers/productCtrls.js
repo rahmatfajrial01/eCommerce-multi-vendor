@@ -35,9 +35,9 @@ const createProduct = asyncHandler(async (req, res) => {
 
 
 const getAProduct = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { slug } = req.params;
     try {
-        const findProduct = await Product.findById(id).populate("shope");
+        const findProduct = await Product.findOne({ slug: req.params.slug }).populate("shope");
         res.json(findProduct)
     } catch (error) {
         throw new Error(error);

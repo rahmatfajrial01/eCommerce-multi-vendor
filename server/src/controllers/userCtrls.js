@@ -249,6 +249,6 @@ module.exports = {
     resetPassword,
     loginGoogle,
     getAllUser,
-    singleUser
+    singleUser,
 }
 

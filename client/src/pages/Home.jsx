@@ -128,14 +128,13 @@ const Home = () => {
                     <div className='grid grid-cols-4 gap-5'>
                         {
                             productState.allProduct && productState.allProduct.filter(item => item?.tag === 'Featured').map((item, index) =>
-                                <Link key={index} to={'/detail'} className=' bg-white rounded-xl'>
+                                <Link key={index} to={item?.slug} className=' bg-white rounded-xl'>
                                     <img src={item?.images?.url} alt="" className='h-56 w-full  rounded-t-xl' />
                                     <div className='p-3 space-y-1'>
                                         <p>{item?.title}</p>
-                                        <p className='font-semibold'>Rp {item?.price}</p>
-                                        <div className='flex items-center gap-3'>
-                                            <CgProfile className='text-4xl' />
-                                            <p className='opacity-85'>{item?.shope?.shopeName}</p>
+                                        <div className='flex justify-between items-center gap-3'>
+                                            <p className='font-semibold'>Rp {item?.price}</p>
+                                            <p className='opacity-85'>{item?.sold} Sold</p>
                                         </div>
                                     </div>
                                 </Link>

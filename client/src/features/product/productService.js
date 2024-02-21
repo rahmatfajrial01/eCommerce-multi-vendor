@@ -8,6 +8,13 @@ export const getAllProduct = async () => {
     }
 }
 
+const getAProduct = async (slug) => {
+    const response = await axios.get(`${base_url}product/${slug}`)
+    if (response.data) {
+        return response.data
+    }
+}
+
 export const createProduct = async (data) => {
     const config = {
         headers: {
@@ -38,4 +45,5 @@ export const productService = {
     getAllProduct,
     createProduct,
     deleteProduct,
+    getAProduct
 }

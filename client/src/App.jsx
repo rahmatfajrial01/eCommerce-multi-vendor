@@ -29,14 +29,16 @@ import Order2 from './pages/Admin/Order'
 import Brand from './pages/Admin/Brand'
 import ListProduct from './pages/Admin/ListProduct'
 import ListAllProduct from './pages/Admin/ListAllProduct'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path='/' element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path='detail' element={<Detail />} />
+          <Route path=':id' element={<Detail />} />
           <Route path='store' element={<Store />} />
           <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
           <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />

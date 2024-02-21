@@ -14,11 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCurrentUser, logoutUser, resetState } from '../features/auth/authSlice';
 import { Menu } from '@headlessui/react'
+import { getCart } from '../features/cart/cartSlice';
 
 const Header = () => {
     const dispatch = useDispatch()
     const authState = useSelector(state => state?.auth)
     const shopeState = useSelector(state => state?.shope)
+    const cartState = useSelector((state) => state?.cart)
 
     const handleLogout = () => {
         // localStorage.clear()
@@ -30,10 +32,16 @@ const Header = () => {
         dispatch(resetState())
     }
 
-
     useEffect(() => {
         dispatch(getCurrentUser(authState?.user?.token))
     }, [shopeState?.createdShope])
+
+    useEffect(() => {
+        dispatch(getCart(authState?.user?.token))
+    }, [
+        cartState?.addCart,
+        cartState?.cartDeleted
+    ])
 
     return (
         <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>
@@ -55,7 +63,8 @@ const Header = () => {
                     </div>
                     <div className='flex gap-3 text-md'>
                         <Link to={'/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
-                        <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaShoppingCart />Cart</Link>
+                        <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full '>
+                            <FaShoppingCart />Cart<span className='border-2 rounded-full px-2'>{cartState?.cart?.length}</span></Link>
                         <Link to={'/order'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaList />Orders</Link>
                         {
                             authState?.user === null

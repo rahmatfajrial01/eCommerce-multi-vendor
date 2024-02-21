@@ -21,6 +21,7 @@ const productCategoryRoutes = require('./src/routes/productCategoryRoutes')
 const bannerRoutes = require('./src/routes/bannerRoutes')
 const brandRoutes = require('./src/routes/brandRoutes')
 const productRoutes = require('./src/routes/productRoutes')
+const cartRoutes = require('./src/routes/cartRoutes')
 
 app.use('/api/user', authRoutes);
 app.use('/api/shope', shopeRoutes);
@@ -28,6 +29,7 @@ app.use('/api/product-category', productCategoryRoutes);
 app.use('/api/banner', bannerRoutes);
 app.use('/api/brand', brandRoutes);
 app.use('/api/product', productRoutes);
+app.use('/api/cart', cartRoutes);
 
 app.use(notFound)
 app.use(errorHandler)
