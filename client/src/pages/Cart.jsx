@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteCart, getCart } from '../features/cart/cartSlice'
-import { FaPlus, FaMinus, FaTrash } from "react-icons/fa6";
+import { getCart } from '../features/cart/cartSlice'
 
+import CartItem from '../components/CartItem';
+import { Button } from '../components/Button';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
 
     const dispatch = useDispatch()
     const token = useSelector(state => state?.auth?.user?.token)
+    const cartState = useSelector((state) => state?.cart)
+    const [totalAmount, setTotalAmount] = useState(0)
 
     useEffect(() => {
         dispatch(getCart(token))
-    }, [])
+    }, [cartState.cartQtyChanged])
 
-    let handleDeleteCart = (id) => {
-        let userData = {
-            token, id
+    useEffect(() => {
+        let sum = 0
+        for (let index = 0; index < cartState?.cart?.length; index++) {
+            sum = sum + (Number(cartState?.cart[index]?.quantity) * cartState?.cart[index]?.price)
+            setTotalAmount(sum)
         }
-        dispatch(deleteCart(userData))
-    }
+    }, [cartState])
+    // console.log(cartState.cart)
 
-    const cartState = useSelector((state) => state?.cart)
-    console.log(cartState?.cart)
 
     return (
         <section>
@@ -36,33 +40,23 @@ const Cart = () => {
                 <div className='flex flex-col gap-2'>
                     {
                         cartState.cart && cartState.cart.map((item, index) =>
-                            <div key={index} className='h-36 border flex '>
-                                <div className='flex w-5/12'>
-                                    <img className='w-36 h-36  object-cover p-1' src={item?.product?.images?.url} alt="" />
-                                    <div className='p-5 flex items-center'>
-                                        <p>{item?.product?.title}</p>
-                                    </div>
-                                </div>
-                                <div className='w-3/12 py-5 flex items-center '>
-                                    <p>Rp. {item?.product?.price}</p>
-                                </div>
-                                <div className='w-3/12 py-5 flex items-center'>
-                                    <div className='flex gap-4 items-center'>
-                                        <FaMinus className='cursor-pointer' />
-                                        <input className='w-1 focus:outline-none' type="text" value={item?.quantity} />
-                                        <FaPlus className='cursor-pointer' />
-                                    </div>
-                                </div>
-                                <div className='w-2/12 py-5 flex items-center'>
-                                    <p>Rp. {item?.product?.price}</p>
-                                </div>
-                                <div className='w-2/12 py-5 flex items-center ps-5'>
-                                    <FaTrash onClick={() => handleDeleteCart(item?._id)} size={20} className='cursor-pointer' />
-                                </div>
-                            </div>
+                            <CartItem
+                                key={index}
+                                item={item}
+                            />
                         )
                     }
                 </div>
+                <div className='flex justify-end w-full p-5 '>
+                    <div className='flex gap-6 items-center'>
+                        <p>Grant Total :</p>
+                        <p className='font-bold text-xl'>Rp.{cartState.cart.length > 0 ? totalAmount : "0"}</p>
+                        <Link className='bg-green-500 p-2 rounded-xl text-white' to={'/checkout'}>
+                            Checkout
+                        </Link>
+                    </div>
+                </div>
+
             </div>
         </section>
     )

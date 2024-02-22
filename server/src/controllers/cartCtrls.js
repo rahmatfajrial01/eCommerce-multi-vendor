@@ -37,10 +37,28 @@ const deleteCart = asyncHandler(async (req, res) => {
     }
 })
 
+const changeQtyCart = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params;
+        const cart = await Cart.findByIdAndUpdate(
+            id,
+            { quantity: req.body.quantity }
+            ,
+            {
+                new: true
+            }
+        )
+        res.json(cart)
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
 module.exports = {
     addCart,
     getCart,
-    deleteCart
+    deleteCart,
+    changeQtyCart
 }
 
 

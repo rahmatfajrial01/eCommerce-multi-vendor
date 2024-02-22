@@ -25,6 +25,13 @@ export const deleteCart = createAsyncThunk("cart/delete-cart", async (userData, 
         return thunkApi.rejectWithValue(error)
     }
 })
+export const changeQtyCart = createAsyncThunk("cart/change-qty-cart", async (userData, thunkApi) => {
+    try {
+        return await cartService.changeQtyCart(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 const initialState = {
     cart: "",
@@ -48,7 +55,7 @@ export const authSlice = createSlice({
                 state.isSuccess = true;
                 state.addCart = action.payload;
                 if (state.isSuccess === true) {
-                    toast.info("Cart Add Successfully")
+                    toast.success("Cart Add Successfully")
                 }
             })
             .addCase(addCart.rejected, (state, action) => {
@@ -88,6 +95,27 @@ export const authSlice = createSlice({
                 }
             })
             .addCase(deleteCart.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
+            })
+            .addCase(changeQtyCart.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(changeQtyCart.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.cartQtyChanged = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("Cart Qty Updated Successfully")
+                }
+            })
+            .addCase(changeQtyCart.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

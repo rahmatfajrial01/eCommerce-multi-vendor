@@ -40,7 +40,19 @@ const getCart = async (token) => {
     }
 }
 
+const changeQtyCart = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.patch(`${base_url}cart/${userData.data.id}`, { quantity: userData.data.quantity }, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const cartService = {
-    addCart, getCart, deleteCart
+    addCart, getCart, deleteCart, changeQtyCart
 }

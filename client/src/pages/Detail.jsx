@@ -5,6 +5,7 @@ import { Button } from '../components/Button'
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { addCart } from '../features/cart/cartSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Detail = () => {
     const getSlug = location?.pathname?.split('/')[1]
@@ -22,17 +23,25 @@ const Detail = () => {
     const [quantity, setQuantity] = useState(1)
     const [alreadyAdded, setAlreadyAdded] = useState(false);
 
-    useEffect(() => {
-        for (let index = 0; index < cartState?.length; index++) {
-            if (productState?._id === cartState[index]?.product?._id) {
-                setAlreadyAdded(true)
-            }
-        }
-    })
+    // useEffect(() => {
+    // for (let index = 0; index < cartState?.length; index++) {
+    //     if (productState?._id === cartState[index]?.product?._id) {
+    // setAlreadyAdded(true)
+    //     }
+    // }
+    // if (cartState && cartState?.filter(item => item?.product?._id === productState?._id).length > 0)
+    //     setAlreadyAdded(true)
+    // }, [])
 
     const addCartHandler = () => {
-        if (alreadyAdded) {
-            navigate('/cart')
+        if (quantity > productState?.quantity) {
+            toast.info("Out of Stock")
+        }
+        else if (cartState && cartState?.filter(item => item?.product?._id === productState?._id).length > 0) {
+            toast.info("Cart Already Axist")
+        }
+        else if (quantity <= 0) {
+            toast.info("Minimal Cart 1")
         } else {
             let data = {
                 product: productState?._id,
@@ -43,9 +52,9 @@ const Detail = () => {
                 data, token
             }
             dispatch(addCart(userData))
-            setTimeout(() => {
-                setAlreadyAdded(true)
-            }, 200);
+            // setTimeout(() => {
+            //     setAlreadyAdded(true)
+            // }, 200);
         }
     }
 
@@ -76,21 +85,14 @@ const Detail = () => {
                             <div className='flex items-center space-x-5'>
                                 <p className=''>Qty</p>
                                 <input min={1} onChange={(e) => setQuantity(e.target.value)} value={quantity} type='number' className='p-1 rounded-xl w-10 focus:outline-none' />
-                                {/* <span className='rounded-full border-2 p-1 cursor-pointer'>
-                            <FaPlus />
-                        </span> */}
                             </div>
                             <div className='flex gap-3 pt-5'>
-                                <button
-                                    type='button'
+                                <Button
                                     onClick={addCartHandler}
-                                    className={`${alreadyAdded ? "bg-red-400" : "bg-green-500"}  py-1 px-4 rounded-full text-white`}>{alreadyAdded ? "Go to Cart" : "Add to Cart"}
-                                </button>
-                                {/* <Button
-                            type='button'
-                            color='green'
-                            name='Buy Now'
-                        /> */}
+                                    type='button'
+                                    color='green'
+                                    name='Add to Cart'
+                                />
                             </div>
                         </div>
                     </div>

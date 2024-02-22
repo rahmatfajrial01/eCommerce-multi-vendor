@@ -30,6 +30,7 @@ import Brand from './pages/Admin/Brand'
 import ListProduct from './pages/Admin/ListProduct'
 import ListAllProduct from './pages/Admin/ListAllProduct'
 import ScrollToTop from './components/ScrollToTop'
+import Checkout from './pages/Checkout'
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />
           <Route path='order' element={<PrivateRoutes><Order /></PrivateRoutes>} />
           <Route path='profile' element={<PrivateRoutes><Profile /></PrivateRoutes>} />
+          <Route path='checkout' element={<Checkout />} />
         </Route>
 
         <Route path='/admin/register' element={<PrivateRoutes><RegisterAdmin /></PrivateRoutes>} />
