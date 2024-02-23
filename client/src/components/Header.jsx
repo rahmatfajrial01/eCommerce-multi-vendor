@@ -21,6 +21,7 @@ const Header = () => {
     const authState = useSelector(state => state?.auth)
     const shopeState = useSelector(state => state?.shope)
     const cartState = useSelector((state) => state?.cart)
+    const userState = useSelector((state) => state?.user)
 
     const handleLogout = () => {
         // localStorage.clear()
@@ -34,7 +35,11 @@ const Header = () => {
 
     useEffect(() => {
         dispatch(getCurrentUser(authState?.user?.token))
-    }, [shopeState?.createdShope])
+    }, [
+        shopeState?.createdShope,
+        userState?.addressDeleted,
+        userState?.addressAdded
+    ])
 
     useEffect(() => {
         dispatch(getCart(authState?.user?.token))

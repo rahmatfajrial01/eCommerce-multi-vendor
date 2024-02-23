@@ -14,6 +14,32 @@ const getAllUser = async (userData) => {
     }
 }
 
+const deleteAddress = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.delete(`${base_url}user/delete-address/${userData.id}`, config)
+    if (response.data) {
+        return response.data
+    }
+}
+const addAddress = async (userData) => {
+    console.log(userData)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.post(`${base_url}user/add-address`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+
 export const authService = {
-    getAllUser
+    getAllUser, deleteAddress, addAddress
 }

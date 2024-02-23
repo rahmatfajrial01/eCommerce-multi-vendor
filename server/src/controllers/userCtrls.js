@@ -228,6 +228,7 @@ const singleUser = async (req, res, next) => {
                 username: user.username,
                 email: user.email,
                 role: user.role,
+                addresses: user.addresses,
                 admin: user.admin,
             });
         } else {
@@ -235,6 +236,38 @@ const singleUser = async (req, res, next) => {
             error.statusCode = 404;
             next(error);
         }
+    } catch (error) {
+        next(error);
+    }
+};
+
+const addAddress = async (req, res, next) => {
+    try {
+        let user = await User.findById(req.user._id).select("-password");
+        if (user) {
+            user.addresses.push(req.body);
+            await user.save();
+            res.json(user)
+        } else {
+            next(error);
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteAddress = async (req, res, next) => {
+    try {
+        const userId = req.user._id;
+        const addressId = req.params.id;
+        await User.updateOne(
+            {
+                _id: userId
+            },
+            { $pull: { addresses: { _id: addressId } } }
+        );
+        const user = await User.findById(userId);
+        res.status(200).json({ success: true, user });
     } catch (error) {
         next(error);
     }
@@ -250,5 +283,7 @@ module.exports = {
     loginGoogle,
     getAllUser,
     singleUser,
+    addAddress,
+    deleteAddress
 }
 

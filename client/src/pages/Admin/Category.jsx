@@ -33,8 +33,10 @@ const Category = () => {
         setIdCat(e)
         console.log(e)
     }
-    const closeModal = () => {
-        setIsOpen(false)
+    const closeModal = (e) => {
+        if (e === 'container') {
+            setIsOpen(false)
+        }
     }
 
     const deleteAPost = (id) => {
@@ -97,24 +99,26 @@ const Category = () => {
             <DataTable
                 headerTitle={['Category', 'Created At', 'Action']}
             >
-                {
-                    productCatState?.allProductCategory && productCatState?.allProductCategory?.map((item, index) =>
-                        <tr key={index} className='border-2 p-2'>
-                            <td className='p-2'>{item?.title}</td>
-                            <td className='p-2'>{item?.createdAt}</td>
-                            <td className='p-2 flex gap-3 '>
-                                <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />
-                                <FaEdit onClick={() => { getAId(item?._id) }} className='cursor-pointer hover:text-yellow-500' />
-                            </td>
-                        </tr>
-                    )
-                }
+                <>
+                    {
+                        productCatState?.allProductCategory && productCatState?.allProductCategory?.map((item, index) =>
+                            <tr key={index} className='border-2 p-2'>
+                                <td className='p-2'>{item?.title}</td>
+                                <td className='p-2'>{item?.createdAt}</td>
+                                <td className='p-2 flex gap-3 '>
+                                    <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />
+                                    <FaEdit onClick={() => { getAId(item?._id) }} className='cursor-pointer hover:text-yellow-500' />
+                                </td>
+                            </tr>
+                        )
+                    }
+                </>
             </DataTable>
-            <div className={`fixed inset-0 z-10 min-h-screen w-full ${isOpen === true ? "flex justify-center items-center" : "hidden"}`}>
+            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`fixed inset-0 -top-5 z-10 min-h-screen w-full ${isOpen === true ? "flex justify-center items-center" : "hidden"}`}>
                 <div className='max-w-fit space-y-3 bg-slate-300 p-3 border rounded-xl '>
                     <p>Are Your Sure Deleting This Category ?</p>
                     <div className='flex justify-end gap-3 text-white'>
-                        <button type='reset' onClick={() => closeModal()} className='bg-blue-500 py-1 px-3 rounded-xl'>NO</button>
+                        <button type='reset' onClick={() => setIsOpen(false)} className='bg-blue-500 py-1 px-3 rounded-xl'>NO</button>
                         <button onClick={() => deleteAPost(idCat)} className='bg-red-500 p-1 px-3 rounded-xl'>Yes</button>
                     </div>
                 </div>

@@ -33,6 +33,22 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    addresses: [
+        {
+            recipientName: {
+                type: String,
+            },
+            province: {
+                type: String,
+            },
+            city: {
+                type: String,
+            },
+            fullAddress: {
+                type: String,
+            },
+        }
+    ],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date
