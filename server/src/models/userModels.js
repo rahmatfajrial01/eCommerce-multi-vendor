@@ -44,6 +44,9 @@ const userSchema = new mongoose.Schema({
             city: {
                 type: String,
             },
+            city_id: {
+                type: Number,
+            },
             fullAddress: {
                 type: String,
             },

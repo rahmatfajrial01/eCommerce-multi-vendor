@@ -6,6 +6,7 @@ import bannerReducer from '../features/banner/bannerSlice'
 import brandReducer from '../features/brand/brandSlice'
 import productReducer from '../features/product/productSlice'
 import cartReducer from '../features/cart/cartSlice'
+import rajaOngkirReducer from '../features/rajaOngkir/rajaOngkirSlice'
 import productCategoryReducer from '../features/category/productCategorySlice'
 
 export const store = configureStore({
@@ -18,5 +19,6 @@ export const store = configureStore({
         productCategory: productCategoryReducer,
         product: productReducer,
         cart: cartReducer,
+        rajaOngkir: rajaOngkirReducer,
     },
 })

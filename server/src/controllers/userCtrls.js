@@ -4,6 +4,8 @@ const Verif = require("../models/verifModels");
 const sendEmail = require('./emailCtrls');
 const { v4 } = require("uuid");
 const crypto = require("crypto");
+const axios = require('axios')
+
 
 const register = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
@@ -243,15 +245,32 @@ const singleUser = async (req, res, next) => {
 
 const addAddress = async (req, res, next) => {
     try {
+        let { city, province, recipientName, fullAddress } = req.body
+        const config = {
+            headers: {
+                key: '378bb674d0fed3cf1e888656a3ae255f',
+                "content-type": "application/x-www-form-urlencoded"
+            },
+        };
+        const response = await axios.get(`https://api.rajaongkir.com/starter/city?id=${city}province=${province}`, config)
+
         let user = await User.findById(req.user._id).select("-password");
         if (user) {
-            user.addresses.push(req.body);
+            user.addresses.push({
+                recipientName,
+                province: response.data.rajaongkir.results.province,
+                city: response.data.rajaongkir.results.city_name,
+                city_id: response.data.rajaongkir.results.city_id,
+                fullAddress
+            });
             await user.save();
             res.json(user)
         } else {
+            console.log(error)
             next(error);
         }
     } catch (error) {
+        console.log(error)
         next(error);
     }
 };
