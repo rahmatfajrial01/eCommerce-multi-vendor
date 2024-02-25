@@ -248,7 +248,7 @@ const addAddress = async (req, res, next) => {
         let { city, province, recipientName, fullAddress } = req.body
         const config = {
             headers: {
-                key: '378bb674d0fed3cf1e888656a3ae255f',
+                key: `${process.env.RAJA_ONGKIR_API_KEY}`,
                 "content-type": "application/x-www-form-urlencoded"
             },
         };
@@ -266,11 +266,9 @@ const addAddress = async (req, res, next) => {
             await user.save();
             res.json(user)
         } else {
-            console.log(error)
             next(error);
         }
     } catch (error) {
-        console.log(error)
         next(error);
     }
 };

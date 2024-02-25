@@ -18,6 +18,14 @@ export const getCity = createAsyncThunk("raja-ongkir/get-city", async (data, thu
     }
 })
 
+export const getCost = createAsyncThunk("raja-ongkir/get-cost", async (data, thunkApi) => {
+    try {
+        return await authService.getCost(data)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 export const resetState = createAction("Reset_all")
 
 
@@ -70,6 +78,27 @@ export const authSlice = createSlice({
                 // }
             })
             .addCase(getCity.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                // if (state.isError === true) {
+                //     toast.error("action.payload.response.data.message")
+                // }
+            })
+            .addCase(getCost.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getCost.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.cost = action.payload;
+                // if (state.isSuccess === true) {
+                //     toast.info("shope created")
+                // }
+            })
+            .addCase(getCost.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

@@ -35,6 +35,22 @@ const getCity = asyncHandler(async (req, res) => {
     }
 });
 
+const getCost = asyncHandler(async (req, res) => {
+    try {
+        const config = {
+            headers: {
+                key: `${process.env.RAJA_ONGKIR_API_KEY}`,
+                "content-type": "application/x-www-form-urlencoded"
+            },
+        };
+        const response = await axios.post(`https://api.rajaongkir.com/starter/cost`, req.body, config)
+        return res.status(201).json(response.data)
+
+    } catch (error) {
+        throw new Error(error)
+    }
+});
+
 module.exports = {
-    getAllProvince, getCity
+    getAllProvince, getCity, getCost
 }

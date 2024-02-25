@@ -26,9 +26,19 @@ const getCity = async (data) => {
         return response.data
     }
 }
-
-
+const getCost = async (data) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.post(`${base_url}raja-ongkir/cost`, data.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const authService = {
-    getAllProvince, getCity
+    getAllProvince, getCity, getCost
 }

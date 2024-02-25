@@ -9,7 +9,7 @@ import { addAddress, deleteAddress } from '../features/user/userSlice'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Input from '../components/Input'
-import { getAllProvince, getCity } from '../features/rajaOngkir/rajaOngkirSlice'
+import { getAllProvince, getCity, getCost } from '../features/rajaOngkir/rajaOngkirSlice'
 
 const Checkout = () => {
 
@@ -26,7 +26,7 @@ const Checkout = () => {
         dispatch(getCart(token))
         dispatch(getAllProvince(token))
     }, [])
-    console.log(rajaOngkirState?.city?.rajaongkir?.results)
+    // console.log(rajaOngkirState?.city?.rajaongkir?.results)
 
     useEffect(() => {
         let sum = 0
@@ -35,14 +35,20 @@ const Checkout = () => {
             setTotalAmount(sum)
         }
     }, [cartState])
-    let cost = 5000
 
 
+
+    let [cost, setCost] = useState("")
     let [isOpen, setIsOpen] = useState(false)
     let [isOpenAdd, setIsOpenAdd] = useState(false)
     let [dataAddress, setDataAddress] = useState(false)
     let [idProvince, setIdProvince] = useState("")
+    let [idCity, setIdCity] = useState(null)
+    let [shipment, setShipment] = useState(null)
+    let [isShipment, setIsShipment] = useState(false)
     let [idCat, setIdCat] = useState("")
+
+
 
     const openModal = () => {
         setIsOpen(true)
@@ -52,6 +58,18 @@ const Checkout = () => {
         let data = { token, id: idProvince }
         dispatch(getCity(data))
     }, [idProvince])
+
+    useEffect(() => {
+        if (idCity && shipment) {
+            let data = { origin: '153', destination: idCity, weight: 1700, courier: shipment }
+            // let data = { origin: '501', destination: '114', weight: 1700, courier: 'jne' }
+            let userData = {
+                token, data
+            }
+            dispatch(getCost(userData))
+        }
+    }, [idCity, shipment])
+    console.log(rajaOngkirState?.cost?.rajaongkir?.results)
 
     const closeModal = (e) => {
         if (e === 'container') {
@@ -68,17 +86,29 @@ const Checkout = () => {
         if (id === dataAddress._id) {
             setTimeout(() => {
                 setDataAddress(null)
+                setIsShipment(false)
+                setCost('')
             }, 300);
         }
     }
 
-
+    const handlePayment = () => {
+        if (!dataAddress) {
+            alert('plaes chosse address')
+        } else if (!shipment) {
+            alert('please choose cories')
+        } else if (!cost) {
+            alert('please choose shiping cost')
+        } else {
+            alert('ok')
+        }
+    }
 
     const Schema = Yup.object().shape({
         recipientName: Yup.string().required("recipientName is required"),
         province: Yup.string().required("province name is required"),
         city: Yup.string().required("city is required"),
-        fullAddress: Yup.string().required("code pos is required"),
+        fullAddress: Yup.string().required("full adress is required"),
     });
 
     const formik = useFormik({
@@ -106,7 +136,7 @@ const Checkout = () => {
     })
 
     return (
-        <section section >
+        <section>
             <div className='flex mt-5 container justify-center mx-auto gap-5'>
                 <div className='space-y-5'>
                     <div className='w-[700px]'>
@@ -134,15 +164,45 @@ const Checkout = () => {
                         </div>
                     </div>
                     <div className='w-[700px]'>
-                        <div className='border p-5 rounded-xl space-y-5'>
-                            <h1>Shipment Methods</h1>
-                            {/* <Button
+                        {/* shipemtn methods */}
+                        {
+                            isShipment &&
+                            <div className='border p-5 rounded-xl space-y-5'>
+                                <h1>Shipment Methods</h1>
+                                <p>Sent From : <span>{rajaOngkirState?.cost?.rajaongkir?.origin_details?.province}, {rajaOngkirState?.cost?.rajaongkir?.origin_details?.city_name}</span></p>
+                                <div className='flex gap-5 items-center'>
+                                    <button onClick={() => { setShipment('jne'), setCost('') }} className={`rounded-lg p-1  ${shipment === 'jne' && 'border-2 border-green-500'}`}>
+                                        <img className='h-16 w-24 object-cover' src="../../../public/jne.png" alt="" />
+                                    </button>
+                                    <button onClick={() => { setShipment('pos'), setCost('') }} className={`rounded-lg p-1  ${shipment === 'pos' && 'border-2 border-green-500'}`}>
+                                        <img className='h-16 w-24 object-cover' src="../../../public/pos.png" alt="" />
+                                    </button>
+                                    <button onClick={() => { setShipment('tiki'), setCost('') }} className={`rounded-lg p-1 pt-5 h-16 focus:border-2  ${shipment === 'tiki' && 'border-2 border-green-500'}`}>
+                                        <img className='h-8 w-24 object-cover' src="../../../public/tiki.png" alt="" />
+                                    </button>
+                                </div>
+                                <div className='flex gap-5'>
+                                    {
+                                        rajaOngkirState?.cost?.rajaongkir?.results[0]?.costs && rajaOngkirState?.cost?.rajaongkir?.results[0]?.costs?.map((item, index) =>
+                                            <div key={index} className={`${item?.cost[0]?.value === cost && 'border-2 border-green-500'} space-y-3 p-3 rounded-xl border cursor-pointer `} onClick={() => setCost(item?.cost[0]?.value)}
+                                            >
+                                                <div className='flex justify-between gap-10'>
+                                                    <p>{item?.service}</p>
+                                                    <p>{item?.cost[0]?.etd}</p>
+                                                </div>
+                                                <p>Rp. {item?.cost[0]?.value}</p>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                {/* <Button
                                 type='button'
                                 name='Choose Address'
                                 color='green'
                                 onClick={() => { openModal() }}
                             /> */}
-                        </div>
+                            </div>
+                        }
                     </div>
                 </div>
                 <div className='w-[450px]'>
@@ -177,7 +237,7 @@ const Checkout = () => {
                             type='button'
                             name='Choose Payment'
                             color='green'
-                            onClick={() => { openModal() }}
+                            onClick={() => handlePayment()}
                         />
                     </div>
                 </div>
@@ -194,6 +254,7 @@ const Checkout = () => {
                     </div>
                     <div className='space-y-3'>
 
+                        {/* add submit */}
                         {
                             addressState?.currentUser?.addresses && addressState?.currentUser?.addresses?.map((item, index) =>
                                 <div
@@ -206,7 +267,7 @@ const Checkout = () => {
                                             <p>{item?.city}</p>
                                             <button
                                                 type='button'
-                                                onClick={() => { setIsOpen(false), setDataAddress(item) }}
+                                                onClick={() => { setIsOpen(false), setDataAddress(item), setIdCity(item?.city_id), setIsShipment(true) }}
                                                 className='bg-green-500 px-2 rounded-xl text-white'  >
                                                 Select
                                             </button>
