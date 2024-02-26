@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { getCart } from '../features/cart/cartSlice'
 import { RadioGroup } from '@headlessui/react'
@@ -10,18 +10,21 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Input from '../components/Input'
 import { getAllProvince, getCity, getCost } from '../features/rajaOngkir/rajaOngkirSlice'
+import { createMidtrans } from '../features/midtrans/midtransSlice'
+import images from '../constants/images'
 
 const Checkout = () => {
-
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const token = useSelector(state => state?.auth?.user?.token)
     const cartState = useSelector((state) => state?.cart)
     const addressState = useSelector((state) => state?.auth)
     const rajaOngkirState = useSelector((state) => state?.rajaOngkir)
+    const midtransState = useSelector((state) => state?.midtrans?.midtrans)
     const [totalAmount, setTotalAmount] = useState(0)
     // let [plan, setPlan] = useState(undefined)
 
-
+    console.log(midtransState)
     useEffect(() => {
         dispatch(getCart(token))
         dispatch(getAllProvince(token))
@@ -55,6 +58,40 @@ const Checkout = () => {
     }
 
     useEffect(() => {
+        if (midtransState) {
+            window.snap.pay(midtransState, {
+                onSuccess: (result) => {
+
+                },
+                onPending: (result) => {
+
+                },
+                onError: (result) => {
+
+                }
+            })
+        }
+
+    }, [midtransState])
+
+    useEffect(() => {
+        const midtransUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+
+        let scriptTag = document.createElement('script')
+        scriptTag.src = midtransUrl
+
+        const midtransClientkey = import.meta.env.VITE_MIDTRANS_CLIENT_ID;
+        scriptTag.setAttribute('data-client-key', midtransClientkey)
+
+        document.body.appendChild(scriptTag)
+
+        return () => {
+            document.body.removeChild(scriptTag)
+        }
+
+    }, [])
+
+    useEffect(() => {
         let data = { token, id: idProvince }
         dispatch(getCity(data))
     }, [idProvince])
@@ -69,7 +106,7 @@ const Checkout = () => {
             dispatch(getCost(userData))
         }
     }, [idCity, shipment])
-    console.log(rajaOngkirState?.cost?.rajaongkir?.results)
+    // console.log(rajaOngkirState?.cost?.rajaongkir?.results)
 
     const closeModal = (e) => {
         if (e === 'container') {
@@ -100,7 +137,9 @@ const Checkout = () => {
         } else if (!cost) {
             alert('please choose shiping cost')
         } else {
-            alert('ok')
+            let data = { cost: cost + totalAmount }
+            let userData = { token, data }
+            dispatch(createMidtrans(userData))
         }
     }
 
@@ -172,13 +211,13 @@ const Checkout = () => {
                                 <p>Sent From : <span>{rajaOngkirState?.cost?.rajaongkir?.origin_details?.province}, {rajaOngkirState?.cost?.rajaongkir?.origin_details?.city_name}</span></p>
                                 <div className='flex gap-5 items-center'>
                                     <button onClick={() => { setShipment('jne'), setCost('') }} className={`rounded-lg p-1  ${shipment === 'jne' && 'border-2 border-green-500'}`}>
-                                        <img className='h-16 w-24 object-cover' src="../../../public/jne.png" alt="" />
+                                        <img className='h-16 w-24 object-cover' src={images.jne} alt="" />
                                     </button>
                                     <button onClick={() => { setShipment('pos'), setCost('') }} className={`rounded-lg p-1  ${shipment === 'pos' && 'border-2 border-green-500'}`}>
-                                        <img className='h-16 w-24 object-cover' src="../../../public/pos.png" alt="" />
+                                        <img className='h-16 w-24 object-cover' src={images.pos} alt="" />
                                     </button>
                                     <button onClick={() => { setShipment('tiki'), setCost('') }} className={`rounded-lg p-1 pt-5 h-16 focus:border-2  ${shipment === 'tiki' && 'border-2 border-green-500'}`}>
-                                        <img className='h-8 w-24 object-cover' src="../../../public/tiki.png" alt="" />
+                                        <img className='h-8 w-24 object-cover' src={images.tiki} alt="" />
                                     </button>
                                 </div>
                                 <div className='flex gap-5'>
