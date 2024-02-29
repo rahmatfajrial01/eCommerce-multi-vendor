@@ -6,6 +6,7 @@ import { FaPlus, FaMinus } from "react-icons/fa6";
 import { addCart } from '../features/cart/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { CgProfile } from "react-icons/cg";
 
 const Detail = () => {
     const getSlug = location?.pathname?.split('/')[1]
@@ -32,6 +33,7 @@ const Detail = () => {
     // if (cartState && cartState?.filter(item => item?.product?._id === productState?._id).length > 0)
     //     setAlreadyAdded(true)
     // }, [])
+    // console.log(productState?.shope?._id)
 
     const addCartHandler = () => {
         if (quantity > productState?.quantity) {
@@ -45,6 +47,7 @@ const Detail = () => {
         } else {
             let data = {
                 product: productState?._id,
+                shope: productState?.shope?._id,
                 quantity,
                 price: productState?.price
             }
@@ -93,6 +96,10 @@ const Detail = () => {
                                     color='green'
                                     name='Add to Cart'
                                 />
+                            </div>
+                            <div className='pt-5 flex gap-2 items-center'>
+                                <CgProfile size='30' />
+                                <p>{productState?.shope?.shopeName}</p>
                             </div>
                         </div>
                     </div>

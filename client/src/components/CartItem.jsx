@@ -35,9 +35,10 @@ const CartItem = (props) => {
         dispatch(changeQtyCart(userData))
     };
 
-    let handleDeleteCart = (id) => {
+    let handleDeleteCart = (id, idShope) => {
+        console.log(id, idShope)
         let userData = {
-            token, id
+            token, id, idShope
         }
         dispatch(deleteCart(userData))
     }
@@ -68,7 +69,7 @@ const CartItem = (props) => {
             </div>
             <div className='w-2/12 py-5 flex items-center ps-5'>
                 <FaTrash
-                    onClick={() => handleDeleteCart(item?._id)}
+                    onClick={() => handleDeleteCart(item?._id, item?.product?.shope)}
                     size={20}
                     className='cursor-pointer' />
             </div>

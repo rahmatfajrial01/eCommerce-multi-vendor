@@ -5,7 +5,7 @@ const { authGuard } = require('../middlewares/authMiddleware');
 
 router.post("/", authGuard, addCart);
 router.get("/", authGuard, getCart);
-router.delete("/:id", authGuard, deleteCart);
+router.delete("/:id/:idShope", authGuard, deleteCart);
 router.patch("/:id", authGuard, changeQtyCart);
 
 module.exports = router;

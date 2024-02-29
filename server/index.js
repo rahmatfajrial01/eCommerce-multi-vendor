@@ -24,6 +24,7 @@ const productRoutes = require('./src/routes/productRoutes')
 const cartRoutes = require('./src/routes/cartRoutes')
 const rajaOngkirRoutes = require('./src/routes/rajaOngkirRoutes')
 const midtransRoutes = require('./src/routes/midtransRoutes')
+const orderRoutes = require('./src/routes/orderRoutes')
 
 app.use('/api/user', authRoutes);
 app.use('/api/shope', shopeRoutes);
@@ -34,6 +35,7 @@ app.use('/api/product', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/raja-ongkir', rajaOngkirRoutes);
 app.use('/api/midtrans', midtransRoutes);
+app.use('/api/order', orderRoutes);
 
 app.use(notFound)
 app.use(errorHandler)

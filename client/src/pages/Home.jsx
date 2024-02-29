@@ -131,6 +131,7 @@ const Home = () => {
                                 <Link key={index} to={item?.slug} className=' bg-white rounded-xl'>
                                     <img src={item?.images?.url} alt="" className='h-56 w-full  rounded-t-xl' />
                                     <div className='p-3 space-y-1'>
+                                        <p className='text-green-500'>{item?.shope?.shopeName}</p>
                                         <p>{item?.title}</p>
                                         <div className='flex justify-between items-center gap-3'>
                                             <p className='font-semibold'>Rp {item?.price}</p>
