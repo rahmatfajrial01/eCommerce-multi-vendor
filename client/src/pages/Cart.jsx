@@ -24,7 +24,7 @@ const Cart = () => {
             setTotalAmount(sum)
         }
     }, [cartState])
-    // console.log(cartState.cart)
+    console.log(cartState.cart)
 
 
     return (
@@ -39,10 +39,10 @@ const Cart = () => {
                 </div> */}
                 <div className='flex flex-col gap-5'>
                     {
-                        cartState.cart && cartState.cart.map((item, index) =>
+                        cartState.cart.inStockProduct && cartState.cart.inStockProduct.map((item, index) =>
                             <div key={index}>
-                                <p className='p-2 border'>{item?.shope?.shopeName}</p>
-                                {item?.cart && item?.cart.map((item, key) =>
+                                <p className='p-2 border'>{item?.shopeName}</p>
+                                {item?.products && item?.products.map((item, key) =>
                                     <CartItem
                                         key={key}
                                         item={item}
@@ -55,7 +55,7 @@ const Cart = () => {
                 <div className='flex justify-end w-full p-5 '>
                     <div className='flex gap-6 items-center'>
                         <p>Grant Total :</p>
-                        <p className='font-bold text-xl'>Rp.{cartState.cart.length > 0 ? totalAmount : "0"}</p>
+                        <p className='font-bold text-xl'>Rp.{cartState.cart.price}</p>
                         <Link className='bg-green-500 p-2 rounded-xl text-white' to={'/checkout'}>
                             Checkout
                         </Link>

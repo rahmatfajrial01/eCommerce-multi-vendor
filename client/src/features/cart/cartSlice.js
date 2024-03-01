@@ -91,7 +91,7 @@ export const authSlice = createSlice({
                 state.isSuccess = true;
                 state.cartDeleted = action.payload;
                 if (state.isSuccess === true) {
-                    toast.info("Cart Add Successfully")
+                    toast.info("Cart Deleted Successfully")
                 }
             })
             .addCase(deleteCart.rejected, (state, action) => {

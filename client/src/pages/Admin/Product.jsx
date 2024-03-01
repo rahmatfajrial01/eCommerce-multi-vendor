@@ -170,6 +170,7 @@ const Product = () => {
             data.append('quantity', values.quantity)
             data.append('tag', values.tag)
             data.append('shope', shopeState?.currentShope?.shope[0]?._id)
+            data.append('shopeName', shopeState?.currentShope?.shope[0]?.shopeName)
             data.append('image', values.image)
             const dataProducts = { token, data }
             dispatch(createProduct(dataProducts))

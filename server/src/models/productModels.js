@@ -14,6 +14,10 @@ let productSchema = new mongoose.Schema({
         unique: true,
         lowercase: true
     },
+    shopeName: {
+        type: String,
+        required: true,
+    },
     description: {
         type: String,
         required: true,

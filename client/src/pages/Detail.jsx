@@ -36,13 +36,14 @@ const Detail = () => {
     // console.log(productState?.shope?._id)
 
     const addCartHandler = () => {
-        if (quantity > productState?.quantity) {
-            toast.info("Out of Stock")
-        }
-        else if (cartState && cartState?.filter(item => item?.product?._id === productState?._id).length > 0) {
-            toast.info("Cart Already Axist")
-        }
-        else if (quantity <= 0) {
+        // if (quantity > productState?.quantity) {
+        //     toast.info("Out of Stock")
+        // }
+        // else if (cartState && cartState?.filter(item => item?.product?._id === productState?._id).length > 0) {
+        //     toast.info("Cart Already Axist")
+        // }
+        // else 
+        if (quantity <= 0) {
             toast.info("Minimal Cart 1")
         } else {
             let data = {

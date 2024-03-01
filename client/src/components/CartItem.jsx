@@ -35,25 +35,24 @@ const CartItem = (props) => {
         dispatch(changeQtyCart(userData))
     };
 
-    let handleDeleteCart = (id, idShope) => {
-        console.log(id, idShope)
+    let handleDeleteCart = (id) => {
         let userData = {
-            token, id, idShope
+            token, id
         }
         dispatch(deleteCart(userData))
     }
-    console.log(item?.quantity > item?.product?.quantity)
+    // console.log(item?.quantity > item?.product?.quantity)
 
     return (
         <div className='h-36 border flex '>
             <div className='flex w-5/12'>
-                <img className='w-36 h-36  object-cover p-1' src={item?.product?.images?.url} alt="" />
+                <img className='w-36 h-36  object-cover p-1' src={item?.productInfo.images?.url} alt="" />
                 <div className='p-5 flex items-center'>
-                    <p>{item?.product?.title}</p>
+                    <p>{item?.productInfo?.title}</p>
                 </div>
             </div>
             <div className='w-3/12 py-5 flex items-center '>
-                <p>Rp. {item?.product?.price}</p>
+                <p>Rp. {item?.productInfo?.price}</p>
             </div>
             <div className='w-3/12 py-5 flex items-center'>
                 <div className='flex gap-4 items-center'>
@@ -65,11 +64,11 @@ const CartItem = (props) => {
                 </div>
             </div>
             <div className='w-2/12 py-5 flex items-center'>
-                <p>Rp. {item?.price * item?.quantity}</p>
+                <p>Rp. {item?.productInfo?.price * cart}</p>
             </div>
             <div className='w-2/12 py-5 flex items-center ps-5'>
                 <FaTrash
-                    onClick={() => handleDeleteCart(item?._id, item?.product?.shope)}
+                    onClick={() => handleDeleteCart(item?._id)}
                     size={20}
                     className='cursor-pointer' />
             </div>

@@ -21,7 +21,7 @@ const deleteCart = async (userData) => {
             Accept: "application/json",
         },
     };
-    const response = await axios.delete(`${base_url}cart/${userData.id}/${userData.idShope}`, config)
+    const response = await axios.delete(`${base_url}cart/${userData.id}`, config)
     if (response.data) {
         return response.data
     }

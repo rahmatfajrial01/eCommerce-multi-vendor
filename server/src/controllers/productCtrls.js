@@ -11,7 +11,7 @@ const createProduct = asyncHandler(async (req, res) => {
             folder: "eCommerce/products"
         })
 
-        const { title, description, price, category, brand, quantity, shope, tag } = req.body;
+        const { title, description, price, category, brand, quantity, shope, tag, shopeName } = req.body;
         const newProduct = await Product.create({
             title,
             slug: slugify(req.body.title),
@@ -19,6 +19,7 @@ const createProduct = asyncHandler(async (req, res) => {
             price,
             category,
             brand,
+            shopeName,
             quantity,
             tag,
             shope,

@@ -69,7 +69,7 @@ const Header = () => {
                     <div className='flex gap-3 text-md'>
                         <Link to={'/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
                         <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full '>
-                            <FaShoppingCart />Cart<span className='border-2 rounded-full px-2'>{cartState?.cart?.length}</span></Link>
+                            <FaShoppingCart />Cart<span className='border-2 rounded-full px-2'>{cartState?.cart?.card_product_count}</span></Link>
                         <Link to={'/order'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaList />Orders</Link>
                         {
                             authState?.user === null
