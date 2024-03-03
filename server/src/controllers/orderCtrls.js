@@ -6,19 +6,25 @@ const Cart = require("../models/cartModels")
 
 const createOrder = asyncHandler(async (req, res) => {
     try {
+        const { shope, shopeName, price, products } = req.body
         const { _id } = req.user;
-        const user = await User.findById(_id);
-        if (user) {
-            let userCart = await Cart.find({ user: user._id });
+        let userOrder = await Order.find({ user: _id });
+        if (userOrder) {
+            userOrder = await Order.deleteMany()
             let newOrder = await new Order({
-                user: user._id,
-                cart: userCart
+                user: _id,
+                products,
             }).save();
-            // console.log('tests')
-
             res.json(newOrder);
         } else {
-            throw new Error("User Not Found");
+            let newOrder = await new Order({
+                user: _id,
+                shope,
+                shopeName,
+                price,
+                products,
+            }).save();
+            res.json(newOrder);
         }
     } catch (error) {
         throw new Error(error);
@@ -26,6 +32,60 @@ const createOrder = asyncHandler(async (req, res) => {
     }
 });
 
+const getOrder = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    try {
+        const allBrand = await Order.find({ user: _id })
+        return res.json(allBrand);
+    } catch (error) {
+        next(error);
+    }
+});
+
+const updateShippment = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { idShope, shippment } = req.body
+    try {
+        // let allBrand = await Order.findOne({ user: _id, })
+        let allBrand = await Order.updateOne(
+            {
+                "user": _id, "products.shope": idShope
+            },
+            {
+                $set: {
+                    "products.$.shippment": shippment
+                }
+            }
+        )
+
+        return res.json(allBrand);
+    } catch (error) {
+        next(error);
+    }
+});
+
+const updateShippmentCost = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { idShope, cost } = req.body
+    try {
+        // let allBrand = await Order.findOne({ user: _id, })
+        let allBrand = await Order.updateOne(
+            {
+                "user": _id, "products.shope": idShope
+            },
+            {
+                $set: {
+                    "products.$.shippmentCost": cost
+                }
+            }
+        )
+
+        return res.json(allBrand);
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = {
-    createOrder
+    createOrder, getOrder, updateShippment, updateShippmentCost
 }

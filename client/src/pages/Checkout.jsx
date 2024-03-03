@@ -12,6 +12,9 @@ import Input from '../components/Input'
 import { getAllProvince, getCity, getCost } from '../features/rajaOngkir/rajaOngkirSlice'
 import { createMidtrans } from '../features/midtrans/midtransSlice'
 import images from '../constants/images'
+import ShipmentMethods from '../components/ShipmentMethods'
+import OrderItem from '../components/OrderItem'
+import { getOrder, resetState, updateShippmentCost } from '../features/order/orderSlice'
 
 const Checkout = () => {
     const navigate = useNavigate()
@@ -20,16 +23,21 @@ const Checkout = () => {
     const cartState = useSelector((state) => state?.cart)
     const addressState = useSelector((state) => state?.auth)
     const rajaOngkirState = useSelector((state) => state?.rajaOngkir)
+    const orderState = useSelector((state) => state?.order)
     const midtransState = useSelector((state) => state?.midtrans?.midtrans)
     const [totalAmount, setTotalAmount] = useState(0)
     // let [plan, setPlan] = useState(undefined)
 
-    console.log(midtransState)
     useEffect(() => {
-        dispatch(getCart(token))
-        dispatch(getAllProvince(token))
-    }, [])
+        // dispatch(getCart(token))
+        // dispatch(getAllProvince(token))
+        dispatch(getOrder(token))
+    }, [
+        // orderState.createdOrder,
+        // cartState.cartQtyChanged
+    ])
     // console.log(rajaOngkirState?.city?.rajaongkir?.results)
+    console.log('ini', orderState.order[0]?.products)
 
     useEffect(() => {
         let sum = 0
@@ -50,6 +58,14 @@ const Checkout = () => {
     let [shipment, setShipment] = useState(null)
     let [isShipment, setIsShipment] = useState(false)
     let [idCat, setIdCat] = useState("")
+    let [dataCheckout, setDataCheckout] = useState("")
+
+
+    useEffect(() => {
+        setDataCheckout(cartState?.cart?.inStockProduct)
+    }, [cartState])
+
+    // console.log(cartState.cart)
 
 
 
@@ -96,16 +112,16 @@ const Checkout = () => {
         dispatch(getCity(data))
     }, [idProvince])
 
-    useEffect(() => {
-        if (idCity && shipment) {
-            let data = { origin: '153', destination: idCity, weight: 1700, courier: shipment }
-            // let data = { origin: '501', destination: '114', weight: 1700, courier: 'jne' }
-            let userData = {
-                token, data
-            }
-            dispatch(getCost(userData))
-        }
-    }, [idCity, shipment])
+    // useEffect(() => {
+    //     if (idCity && shipment) {
+    //         let data = { origin: '153', destination: idCity, weight: 1700, courier: shipment }
+    //         // let data = { origin: '501', destination: '114', weight: 1700, courier: 'jne' }
+    //         let userData = {
+    //             token, data
+    //         }
+    //         dispatch(getCost(userData))
+    //     }
+    // }, [idCity, shipment])
     // console.log(rajaOngkirState?.cost?.rajaongkir?.results)
 
     const closeModal = (e) => {
@@ -174,6 +190,27 @@ const Checkout = () => {
         },
     })
 
+
+
+    // let [data, setData] = useState('')
+    let fromChild = (datas) => {
+        // let index = dataCheckout.findIndex(item => item.shope === data[0].id)
+        // let pantek = JSON.parse(JSON.stringify(dataCheckout))
+        // let copy = [...pantek];
+
+        // copy[index].shippingCost = data[0].a
+        // setData(copy)
+        let data = {
+            idShope: datas[0].id,
+            cost: datas[0].a
+        }
+        let userData = {
+            token, data
+        }
+        dispatch(updateShippmentCost(userData))
+    }
+
+
     return (
         <section>
             <div className='flex mt-5 container justify-center mx-auto gap-5'>
@@ -202,24 +239,56 @@ const Checkout = () => {
                             }
                         </div>
                     </div>
-                    <div className='w-[700px]'>
-                        {/* shipemtn methods */}
+                    {/* {console.log(cartState.cart.inStockProduct)} */}
+                    <div className='flex flex-col gap-5'>
                         {
+                            orderState.isLoading ?
+                                // <div className='space-y-4 '>
+                                //     <div className='bg-slate-300 h-32 animate-pulse rounded-xl'></div>
+                                //     <div className='bg-slate-300 h-32 animate-pulse rounded-xl'></div>
+                                //     <div className='bg-slate-300 h-32 animate-pulse rounded-xl'></div>
+                                // </div> 
+                                "" :
+
+                                orderState.order[0]?.products && orderState.order[0]?.products.map((item, index) =>
+                                    <div key={index} className='border-2'>
+                                        <p className='p-2 border'>{item?.shopeName}</p>
+                                        {item?.products && item?.products.map((item, key) =>
+                                            <OrderItem
+                                                key={key}
+                                                item={item}
+                                            />
+                                        )}
+
+                                        {
+                                            isShipment &&
+                                            <div className='border p-5 space-y-5' >
+                                                <ShipmentMethods
+                                                    item={item}
+                                                    fromChild={fromChild}
+                                                    idShope={item?.shope}
+                                                // onClickJne={() => { setShipment('jne'), setCost('') }}
+                                                // onClickPos={() => { setShipment('pos'), setCost('') }}
+                                                // onClickTiki={() => { setShipment('tiki'), setCost('') }}
+                                                />
+                                            </div>
+                                        }
+                                    </div>
+                                )
+                        }
+                    </div>
+
+                    {/* <div className='w-[700px]'> */}
+                    {/* shipemtn methods */}
+                    {/* {
                             isShipment &&
-                            <div className='border p-5 rounded-xl space-y-5'>
-                                <h1>Shipment Methods</h1>
-                                <p>Sent From : <span>{rajaOngkirState?.cost?.rajaongkir?.origin_details?.province}, {rajaOngkirState?.cost?.rajaongkir?.origin_details?.city_name}</span></p>
-                                <div className='flex gap-5 items-center'>
-                                    <button onClick={() => { setShipment('jne'), setCost('') }} className={`rounded-lg p-1  ${shipment === 'jne' && 'border-2 border-green-500'}`}>
-                                        <img className='h-16 w-24 object-cover' src={images.jne} alt="" />
-                                    </button>
-                                    <button onClick={() => { setShipment('pos'), setCost('') }} className={`rounded-lg p-1  ${shipment === 'pos' && 'border-2 border-green-500'}`}>
-                                        <img className='h-16 w-24 object-cover' src={images.pos} alt="" />
-                                    </button>
-                                    <button onClick={() => { setShipment('tiki'), setCost('') }} className={`rounded-lg p-1 pt-5 h-16 focus:border-2  ${shipment === 'tiki' && 'border-2 border-green-500'}`}>
-                                        <img className='h-8 w-24 object-cover' src={images.tiki} alt="" />
-                                    </button>
-                                </div>
+                            <div className='border p-5 rounded-xl space-y-5' >
+                                <ShipmentMethods
+                                    onClickJne={() => { setShipment('jne'), setCost('') }}
+                                    onClickPos={() => { setShipment('pos'), setCost('') }}
+                                    onClickTiki={() => { setShipment('tiki'), setCost('') }}
+                                    shipment={shipment}
+                                />
                                 <div className='flex gap-5'>
                                     {
                                         rajaOngkirState?.cost?.rajaongkir?.results[0]?.costs && rajaOngkirState?.cost?.rajaongkir?.results[0]?.costs?.map((item, index) =>
@@ -234,19 +303,13 @@ const Checkout = () => {
                                         )
                                     }
                                 </div>
-                                {/* <Button
-                                type='button'
-                                name='Choose Address'
-                                color='green'
-                                onClick={() => { openModal() }}
-                            /> */}
                             </div>
-                        }
-                    </div>
+                        } */}
+                    {/* </div> */}
                 </div>
                 <div className='w-[450px]'>
                     <div className='border space-y-5 p-5 rounded-lg'>
-                        {
+                        {/* {
                             cartState.cart && cartState.cart.map((item, index) =>
                                 <div key={index} className='flex items-center gap-3'>
                                     <img className='w-1/4 object-cover ' src={item?.product?.images?.url} alt="" />
@@ -259,7 +322,7 @@ const Checkout = () => {
                                     </div>
                                 </div>
                             )
-                        }
+                        } */}
                         <div className='space-y-1'>
                             <div className='flex justify-between'>
                                 <p>SubTotal : </p><span className='font-semibold'>Rp. {totalAmount}</span>

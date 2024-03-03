@@ -5,7 +5,11 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    cart: {
+    // shopeName: {
+    //     type: String,
+    //     required: true,
+    // },
+    products: {
         type: Array,
         required: true,
     },
@@ -13,18 +17,14 @@ const orderSchema = new mongoose.Schema({
     //     type: Number,
     //     required: true,
     // },
-    // shope: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Shope"
-    // },
     // shippingAddress: {
     //     type: Object,
     //     required: true,
     // },
-    status: {
-        type: String,
-        default: "Processing",
-    },
+    // status: {
+    //     type: String,
+    //     default: "Processing",
+    // },
     // paymentInfo: {
     //     id: {
     //         type: String,

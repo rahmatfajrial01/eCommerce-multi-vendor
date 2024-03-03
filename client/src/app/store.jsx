@@ -8,6 +8,7 @@ import productReducer from '../features/product/productSlice'
 import cartReducer from '../features/cart/cartSlice'
 import rajaOngkirReducer from '../features/rajaOngkir/rajaOngkirSlice'
 import midtransReducer from '../features/midtrans/midtransSlice'
+import orderReducer from '../features/order/orderSlice'
 import productCategoryReducer from '../features/category/productCategorySlice'
 
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
         product: productReducer,
         cart: cartReducer,
         midtrans: midtransReducer,
+        order: orderReducer,
         rajaOngkir: rajaOngkirReducer,
     },
 })

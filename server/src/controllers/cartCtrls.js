@@ -95,6 +95,9 @@ const getCart = asyncHandler(async (req, res) => {
                         shope: unique[i],
                         shopeName: tempProduct.shopeName,
                         price,
+                        shippment: "",
+                        shippmentCost: "",
+                        price,
                         products: p[i] ? [
                             ...p[i].products,
                             {

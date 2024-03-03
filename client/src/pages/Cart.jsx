@@ -4,28 +4,55 @@ import { getCart } from '../features/cart/cartSlice'
 
 import CartItem from '../components/CartItem';
 import { Button } from '../components/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createOrder, resetState } from '../features/order/orderSlice';
 
 const Cart = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const token = useSelector(state => state?.auth?.user?.token)
     const cartState = useSelector((state) => state?.cart)
-    const [totalAmount, setTotalAmount] = useState(0)
+    const orderState = useSelector((state) => state?.order)
+
 
     useEffect(() => {
         dispatch(getCart(token))
     }, [cartState.cartQtyChanged])
 
-    useEffect(() => {
-        let sum = 0
-        for (let index = 0; index < cartState?.cart?.length; index++) {
-            sum = sum + (Number(cartState?.cart[index]?.quantity) * cartState?.cart[index]?.price)
-            setTotalAmount(sum)
-        }
-    }, [cartState])
-    console.log(cartState.cart)
+    // const [totalAmount, setTotalAmount] = useState(0)
+    // useEffect(() => {
+    //     let sum = 0
+    //     for (let index = 0; index < cartState?.cart?.length; index++) {
+    //         sum = sum + (Number(cartState?.cart[index]?.quantity) * cartState?.cart[index]?.price)
+    //         setTotalAmount(sum)
+    //     }
+    // }, [cartState])
 
+    useEffect(() => {
+        if (orderState.createdOrder !== null && orderState.isError === false) {
+            navigate(`/checkout`)
+            setTimeout(() => {
+                dispatch(resetState())
+            }, 300);
+        }
+    }, [orderState.createdOrder])
+
+    let firstdata = cartState.cart
+    console.log(firstdata)
+    let handleCheckout = () => {
+        // for (let index = 0; index < firstdata.length; index++) {
+        // let element = firstdata[index];
+        let data = {
+            // shope: element.shope,
+            // shopeName: element.shopeName,
+            // price: element.price,
+            products: firstdata.inStockProduct
+        }
+        let userData = { token, data }
+        dispatch(createOrder(userData))
+        // }
+    }
 
     return (
         <section>
@@ -56,9 +83,9 @@ const Cart = () => {
                     <div className='flex gap-6 items-center'>
                         <p>Grant Total :</p>
                         <p className='font-bold text-xl'>Rp.{cartState.cart.price}</p>
-                        <Link className='bg-green-500 p-2 rounded-xl text-white' to={'/checkout'}>
+                        <button onClick={() => handleCheckout()} className='bg-green-500 p-2 rounded-xl text-white' >
                             Checkout
-                        </Link>
+                        </button>
                     </div>
                 </div>
 

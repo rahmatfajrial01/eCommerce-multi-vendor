@@ -1,7 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const User = require("../models/userModels");
 const Shope = require("../models/ShopeModels");
-const axios = require('axios')
+const axios = require('axios');
+const Order = require('../models/orderModels');
 
 const getAllProvince = asyncHandler(async (req, res) => {
     try {
@@ -37,6 +38,7 @@ const getCity = asyncHandler(async (req, res) => {
 
 const getCost = asyncHandler(async (req, res) => {
     try {
+        const { _id } = req.user;
         const config = {
             headers: {
                 key: `${process.env.RAJA_ONGKIR_API_KEY}`,
@@ -44,8 +46,20 @@ const getCost = asyncHandler(async (req, res) => {
             },
         };
         const response = await axios.post(`https://api.rajaongkir.com/starter/cost`, req.body, config)
-        return res.status(201).json(response.data)
 
+        // update order shipments
+        await Order.updateOne(
+            {
+                "user": _id, "products.shope": response.data.rajaongkir.query.idShope
+            },
+            {
+                $set: {
+                    "products.$.shippment": response.data.rajaongkir.query.courier
+                }
+            }
+        )
+
+        return res.status(201).json(response.data)
     } catch (error) {
         throw new Error(error)
     }
