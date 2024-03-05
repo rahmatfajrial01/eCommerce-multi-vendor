@@ -39,6 +39,20 @@ const getCost = async (data) => {
     }
 }
 
+const updateCost = async (data) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}order/update-shippment-cost`, data.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+
+
 export const authService = {
-    getAllProvince, getCity, getCost
+    getAllProvince, getCity, getCost, updateCost
 }

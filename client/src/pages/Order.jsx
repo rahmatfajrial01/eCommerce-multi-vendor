@@ -5,11 +5,11 @@ const Order = () => {
         <section>
             <div className='container mx-auto space-y-2'>
                 <div className='flex gap-5 w-full justify-between '>
-                    <div className='h-5 bg-green-500 w-full'></div>
-                    <div className='h-5 bg-green-500 w-full'></div>
-                    <div className='h-5 bg-green-500 w-full'></div>
-                    <div className='h-5 bg-green-500 w-full'></div>
-                    <div className='h-5 bg-green-500 w-full'></div>
+                    <div className='h-5 bg-green-500 w-full'>WaitingPayment</div>
+                    <div className='h-5 bg-green-500 w-full'>beingpackaged</div>
+                    <div className='h-5 bg-green-500 w-full'>sended</div>
+                    <div className='h-5 bg-green-500 w-full'>delivery</div>
+                    <div className='h-5 bg-green-500 w-full'>history</div>
                     <div className='h-5 bg-green-500 w-full'></div>
                 </div>
                 <div className='h-36 flex gap-2 '>

@@ -1,8 +1,25 @@
 const midtransClient = require('midtrans-client');
 const { v4 } = require("uuid");
+const Order = require('../models/orderModels');
+const asyncHandler = require('express-async-handler');
 
-const createMidtrans = (req, res, next) => {
+
+const createMidtrans = asyncHandler(async (req, res, next) => {
     try {
+        const { _id } = req.user;
+        const order = await Order.findOne({ user: _id }).populate({ path: 'user', select: 'email', select: ['email', 'username'] });
+        let totalPrice = 0
+        let totalShippment = 0
+        for (let index = 0; index < order?.products?.length; index++) {
+            totalPrice += Number(order.products[index].price);
+            totalShippment += Number(order.products[index].shippmentCost);
+            if (!order.products[index].shippment) {
+                throw new Error("choose the shippment")
+            } else if (!order.products[index].shippmentCost) {
+                throw new Error("choose the shippment cost")
+            }
+        }
+        let grandTotal = totalPrice + totalShippment
         let snap = new midtransClient.Snap({
             isProduction: false,
             serverKey: process.env.MIDTRANS_SERVER_KEY,
@@ -12,16 +29,16 @@ const createMidtrans = (req, res, next) => {
         let parameter = {
             "transaction_details": {
                 "order_id": v4(),
-                "gross_amount": req.body.cost
+                "gross_amount": grandTotal
             },
             "credit_card": {
                 "secure": true
             },
             "customer_details": {
-                "first_name": "budi",
-                "last_name": "pratama",
-                "email": "budi.pra@example.com",
-                "phone": "08111222333"
+                "first_name": order.user.username,
+                "last_name": "",
+                "email": order.user.email,
+                "phone": ""
             }
         };
 
@@ -34,7 +51,7 @@ const createMidtrans = (req, res, next) => {
     } catch (error) {
         next(error);
     }
-};
+});
 
 module.exports = {
     createMidtrans

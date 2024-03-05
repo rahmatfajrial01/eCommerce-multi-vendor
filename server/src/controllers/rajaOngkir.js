@@ -54,7 +54,7 @@ const getCost = asyncHandler(async (req, res) => {
             },
             {
                 $set: {
-                    "products.$.shippment": response.data.rajaongkir.query.courier
+                    "products.$.shippment": response.data.rajaongkir.query.courier,
                 }
             }
         )

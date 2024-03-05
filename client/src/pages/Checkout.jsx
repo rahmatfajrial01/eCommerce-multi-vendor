@@ -5,21 +5,23 @@ import { Button } from '../components/Button'
 import { getCart } from '../features/cart/cartSlice'
 import { RadioGroup } from '@headlessui/react'
 import { FaTrashAlt } from 'react-icons/fa'
-import { addAddress, deleteAddress } from '../features/user/userSlice'
+import { addAddress, deleteAddress, getCosts, sendOrder } from '../features/user/userSlice'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Input from '../components/Input'
-import { getAllProvince, getCity, getCost } from '../features/rajaOngkir/rajaOngkirSlice'
-import { createMidtrans } from '../features/midtrans/midtransSlice'
+import { getAllProvince, getCity, updateCost } from '../features/rajaOngkir/rajaOngkirSlice'
+import { createMidtrans, resetState } from '../features/midtrans/midtransSlice'
 import images from '../constants/images'
 import ShipmentMethods from '../components/ShipmentMethods'
 import OrderItem from '../components/OrderItem'
-import { getOrder, resetState, updateShippmentCost } from '../features/order/orderSlice'
+import { getOrder, resetStateOrder, updateShippmentCost } from '../features/order/orderSlice'
+import { toast } from 'react-toastify'
 
 const Checkout = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const token = useSelector(state => state?.auth?.user?.token)
+    const userState = useSelector(state => state?.user)
     const cartState = useSelector((state) => state?.cart)
     const addressState = useSelector((state) => state?.auth)
     const rajaOngkirState = useSelector((state) => state?.rajaOngkir)
@@ -30,25 +32,34 @@ const Checkout = () => {
 
     useEffect(() => {
         // dispatch(getCart(token))
-        // dispatch(getAllProvince(token))
+        dispatch(resetStateOrder())
         dispatch(getOrder(token))
     }, [
         // orderState.createdOrder,
         // cartState.cartQtyChanged
     ])
     // console.log(rajaOngkirState?.city?.rajaongkir?.results)
-    console.log('ini', orderState.order[0]?.products)
+    // console.log('ini', orderState.order[0]?.products)
 
+    // useEffect(() => {
+    //     let sum = 0
+    //     for (let index = 0; index < cartState?.cart?.length; index++) {
+    //         sum = sum + (Number(cartState?.cart[index]?.quantity) * cartState?.cart[index]?.price)
+    //         setTotalAmount(sum)
+    //     }
+    // }, [cartState])
+    console.log(userState)
     useEffect(() => {
-        let sum = 0
-        for (let index = 0; index < cartState?.cart?.length; index++) {
-            sum = sum + (Number(cartState?.cart[index]?.quantity) * cartState?.cart[index]?.price)
-            setTotalAmount(sum)
-        }
-    }, [cartState])
+        setTimeout(() => {
+            dispatch(getCosts(token))
+        }, 300);
+    }, [
+        rajaOngkirState.updatedCost,
+        rajaOngkirState.cost,
+        userState.clearedCost
+    ])
 
-
-
+    let [midtrans, setMidtrans] = useState("")
     let [cost, setCost] = useState("")
     let [isOpen, setIsOpen] = useState(false)
     let [isOpenAdd, setIsOpenAdd] = useState(false)
@@ -67,28 +78,38 @@ const Checkout = () => {
 
     // console.log(cartState.cart)
 
-
+    useEffect(() => {
+        setMidtrans("")
+        if (midtransState) {
+            setMidtrans(midtransState)
+        }
+    }, [midtransState])
 
     const openModal = () => {
         setIsOpen(true)
     }
 
     useEffect(() => {
-        if (midtransState) {
-            window.snap.pay(midtransState, {
+        if (midtrans) {
+            window.snap.pay(midtrans, {
                 onSuccess: (result) => {
-
+                    setMidtrans("")
+                    dispatch(sendOrder(token))
                 },
                 onPending: (result) => {
-
+                    setMidtrans("")
                 },
                 onError: (result) => {
-
-                }
+                    setMidtrans("")
+                },
+                onClose: (result) => {
+                    setMidtrans("")
+                    dispatch(resetState())
+                },
             })
         }
 
-    }, [midtransState])
+    }, [midtrans])
 
     useEffect(() => {
         const midtransUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
@@ -147,16 +168,19 @@ const Checkout = () => {
 
     const handlePayment = () => {
         if (!dataAddress) {
-            alert('plaes chosse address')
-        } else if (!shipment) {
-            alert('please choose cories')
-        } else if (!cost) {
-            alert('please choose shiping cost')
-        } else {
-            let data = { cost: cost + totalAmount }
-            let userData = { token, data }
-            dispatch(createMidtrans(userData))
+            toast.error("please choose address")
+            return
         }
+        //  else if (!shipment) {
+        //     alert('please choose cories')
+        // } else if (!cost) {
+        //     alert('please choose shiping cost')
+        // } else {
+        // let data = { cost: cost + totalAmount }
+        // let userData = { token, data }
+        dispatch(createMidtrans(token))
+        // }
+        // dispatch(sendOrder(token))
     }
 
     const Schema = Yup.object().shape({
@@ -207,7 +231,7 @@ const Checkout = () => {
         let userData = {
             token, data
         }
-        dispatch(updateShippmentCost(userData))
+        dispatch(updateCost(userData))
     }
 
 
@@ -251,8 +275,8 @@ const Checkout = () => {
                                 "" :
 
                                 orderState.order[0]?.products && orderState.order[0]?.products.map((item, index) =>
-                                    <div key={index} className='border-2'>
-                                        <p className='p-2 border'>{item?.shopeName}</p>
+                                    <div key={index} className='border rounded-xl'>
+                                        <p className='p-2 rounded-t-xl'>{item?.shopeName}</p>
                                         {item?.products && item?.products.map((item, key) =>
                                             <OrderItem
                                                 key={key}
@@ -262,7 +286,7 @@ const Checkout = () => {
 
                                         {
                                             isShipment &&
-                                            <div className='border p-5 space-y-5' >
+                                            <div className='border-t p-5 space-y-5' >
                                                 <ShipmentMethods
                                                     item={item}
                                                     fromChild={fromChild}
@@ -325,13 +349,13 @@ const Checkout = () => {
                         } */}
                         <div className='space-y-1'>
                             <div className='flex justify-between'>
-                                <p>SubTotal : </p><span className='font-semibold'>Rp. {totalAmount}</span>
+                                <p>SubTotal : </p><span className='font-semibold'>Rp. {userState?.cost?.totalPrice}</span>
                             </div>
                             <div className='flex justify-between'>
-                                <p>Shipping : </p><span className='font-semibold'>Rp. {cost}</span>
+                                <p>ShippingTotal : </p><span className='font-semibold'>Rp. {isShipment ? userState?.cost?.totalShippment : '0'}</span>
                             </div>
                             <div className='flex justify-between item'>
-                                <p>Total :  </p><span className='font-semibold text-xl'>Rp. {cost + totalAmount}</span>
+                                <p>Total :  </p><span className='font-semibold text-xl'>Rp. {isShipment ? userState?.cost?.grandTotal : '0'}</span>
                             </div>
                         </div>
                         <Button
@@ -351,7 +375,7 @@ const Checkout = () => {
                         <Button
                             color='green'
                             name='+ add new address'
-                            onClick={() => { setIsOpenAdd(true), setIsOpen(false) }}
+                            onClick={() => { dispatch(getAllProvince(token)), setIsOpenAdd(true), setIsOpen(false) }}
                         />
                     </div>
                     <div className='space-y-3'>

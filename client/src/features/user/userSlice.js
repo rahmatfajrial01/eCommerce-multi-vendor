@@ -26,6 +26,30 @@ export const addAddress = createAsyncThunk("user/add-address", async (userData, 
     }
 })
 
+export const getCosts = createAsyncThunk("rajaongkirr/get-cost", async (userData, thunkApi) => {
+    try {
+        return await authService.getCosts(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const sendOrder = createAsyncThunk("order/send-order", async (userData, thunkApi) => {
+    try {
+        return await authService.sendOrder(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const clearCost = createAsyncThunk("order/clear-costs", async (userData, thunkApi) => {
+    try {
+        return await authService.clearCost(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 
 export const resetState = createAction("Reset_all")
 
@@ -38,7 +62,7 @@ const initialState = {
 }
 
 export const userSlice = createSlice({
-    name: "shope",
+    name: "user",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -93,6 +117,69 @@ export const userSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
+            })
+            .addCase(getCosts.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getCosts.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.cost = action.payload;
+                // if (state.isSuccess === true) {
+                //     toast.info("shope created")
+                // }
+            })
+            .addCase(getCosts.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                // if (state.isError === true) {
+                //     toast.error("action.payload.response.data.message")
+                // }
+            })
+            .addCase(sendOrder.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(sendOrder.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.sendedOrder = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("shope ok")
+                }
+            })
+            .addCase(sendOrder.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
+            })
+            .addCase(clearCost.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(clearCost.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.clearedCost = action.payload;
+                // if (state.isSuccess === true) {
+                //     toast.info("shope ok")
+                // }
+            })
+            .addCase(clearCost.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                // if (state.isError === true) {
+                //     toast.error(action.payload.response.data.message)
+                // }
             })
             .addCase(resetState, () => initialState)
 

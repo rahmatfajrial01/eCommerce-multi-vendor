@@ -34,7 +34,7 @@ export const updateShippmentCost = createAsyncThunk("order/udpate-shippment-cost
     }
 })
 
-export const resetState = createAction("Reset_checkout")
+export const resetStateOrder = createAction("Reset_checkout")
 
 
 const initialState = {
@@ -46,7 +46,7 @@ const initialState = {
 }
 
 export const authSlice = createSlice({
-    name: "shope",
+    name: "order",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -135,7 +135,7 @@ export const authSlice = createSlice({
                 //     toast.error("action.payload.response.data.message")
                 // }
             })
-            .addCase(resetState, (state) => {
+            .addCase(resetStateOrder, (state) => {
                 state.createdOrder = null;
             })
     }

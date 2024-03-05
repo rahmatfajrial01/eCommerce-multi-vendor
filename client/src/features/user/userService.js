@@ -40,6 +40,45 @@ const addAddress = async (userData) => {
     }
 }
 
+const getCosts = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.get(`${base_url}order/cost`, config)
+    if (response.data) {
+        return response.data
+    }
+}
+
+const clearCost = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.patch(`${base_url}order/clear-cost`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+
+const sendOrder = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.post(`${base_url}order/send-order`, "", config)
+    if (response.data) {
+        return response.data
+    }
+}
+
 export const authService = {
-    getAllUser, deleteAddress, addAddress
+    getAllUser, deleteAddress, addAddress, getCosts, sendOrder, clearCost
 }

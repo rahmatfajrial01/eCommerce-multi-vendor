@@ -25,6 +25,14 @@ export const getCost = createAsyncThunk("raja-ongkir/get-cost", async (data, thu
         return thunkApi.rejectWithValue(error)
     }
 })
+export const updateCost = createAsyncThunk("raja-ongkir/update-cost", async (data, thunkApi) => {
+    try {
+        return await authService.updateCost(data)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 
 export const resetState = createAction("Reset_all")
 
@@ -39,7 +47,7 @@ const initialState = {
 }
 
 export const authSlice = createSlice({
-    name: "shope",
+    name: "rajaongkir",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -99,6 +107,27 @@ export const authSlice = createSlice({
                 // }
             })
             .addCase(getCost.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                // if (state.isError === true) {
+                //     toast.error("action.payload.response.data.message")
+                // }
+            })
+            .addCase(updateCost.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateCost.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.updatedCost = action.payload;
+                // if (state.isSuccess === true) {
+                //     toast.info("shope created")
+                // }
+            })
+            .addCase(updateCost.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

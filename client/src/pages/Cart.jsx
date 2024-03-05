@@ -5,7 +5,7 @@ import { getCart } from '../features/cart/cartSlice'
 import CartItem from '../components/CartItem';
 import { Button } from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
-import { createOrder, resetState } from '../features/order/orderSlice';
+import { createOrder, resetStateOrder } from '../features/order/orderSlice';
 
 const Cart = () => {
 
@@ -32,9 +32,9 @@ const Cart = () => {
     useEffect(() => {
         if (orderState.createdOrder !== null && orderState.isError === false) {
             navigate(`/checkout`)
-            setTimeout(() => {
-                dispatch(resetState())
-            }, 300);
+            // setTimeout(() => {
+            //     dispatch(resetStateOrder())
+            // }, 300);
         }
     }, [orderState.createdOrder])
 
