@@ -245,7 +245,8 @@ const singleUser = async (req, res, next) => {
 
 const addAddress = async (req, res, next) => {
     try {
-        let { city, province, recipientName, fullAddress } = req.body
+        let { city, province, recipientName, fullAddress, telephone } = req.body
+        console.log(req.body)
         const config = {
             headers: {
                 key: `${process.env.RAJA_ONGKIR_API_KEY}`,
@@ -259,6 +260,7 @@ const addAddress = async (req, res, next) => {
             user.addresses.push({
                 recipientName,
                 province: response.data.rajaongkir.results.province,
+                telephone,
                 city: response.data.rajaongkir.results.city_name,
                 city_id: response.data.rajaongkir.results.city_id,
                 fullAddress

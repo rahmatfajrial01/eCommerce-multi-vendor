@@ -48,7 +48,7 @@ const Checkout = () => {
     //         setTotalAmount(sum)
     //     }
     // }, [cartState])
-    console.log(userState)
+    // console.log(userState)
     useEffect(() => {
         setTimeout(() => {
             dispatch(getCosts(token))
@@ -94,7 +94,12 @@ const Checkout = () => {
             window.snap.pay(midtrans, {
                 onSuccess: (result) => {
                     setMidtrans("")
-                    dispatch(sendOrder(token))
+                    let data = { dataAddress }
+                    let userData = { token, data }
+                    dispatch(sendOrder(userData))
+                    setTimeout(() => {
+                        navigate('/order')
+                    }, 300);
                 },
                 onPending: (result) => {
                     setMidtrans("")
@@ -165,7 +170,7 @@ const Checkout = () => {
             }, 300);
         }
     }
-
+    console.log(dataAddress)
     const handlePayment = () => {
         if (!dataAddress) {
             toast.error("please choose address")
@@ -185,6 +190,7 @@ const Checkout = () => {
 
     const Schema = Yup.object().shape({
         recipientName: Yup.string().required("recipientName is required"),
+        telephone: Yup.number().required("telephone is required"),
         province: Yup.string().required("province name is required"),
         city: Yup.string().required("city is required"),
         fullAddress: Yup.string().required("full adress is required"),
@@ -193,6 +199,7 @@ const Checkout = () => {
     const formik = useFormik({
         initialValues: {
             recipientName: '',
+            telephone: '',
             province: '',
             city: '',
             fullAddress: '',
@@ -202,6 +209,7 @@ const Checkout = () => {
             // alert(JSON.stringify(values, null, 2));
             let data = {
                 recipientName: values.recipientName,
+                telephone: values.telephone,
                 province: values.province,
                 city: values.city,
                 fullAddress: values.fullAddress,
@@ -257,7 +265,10 @@ const Checkout = () => {
                                             <p>province : <span className='font-semibold'>{dataAddress?.province}</span></p>
                                             <p>city: <span className='font-semibold'>{dataAddress?.city}</span></p>
                                         </div>
-                                        <p>full address : <span className='font-semibold'> {dataAddress?.fullAddress}</span></p>
+                                        <div>
+                                            <p>telephone : <span className='font-semibold'>{dataAddress?.telephone}</span> </p>
+                                            <p>full address : <span className='font-semibold'> {dataAddress?.fullAddress}</span></p>
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -398,7 +409,10 @@ const Checkout = () => {
                                                 Select
                                             </button>
                                         </div>
-                                        <p>{item?.fullAddress}</p>
+                                        <div className='flex flex-col'>
+                                            <p>{item?.telephone}</p>
+                                            <p>{item?.fullAddress}</p>
+                                        </div>
                                     </div>
                                     <div className='flex items-center'>
                                         <span id='trash' onClick={() => deleteAddressHandler(item?._id)} className='cursor-pointer hover:text-red-500'>
@@ -428,6 +442,18 @@ const Checkout = () => {
                                 value={formik.values.recipientName}
                             />
                             {formik.errors.recipientName && formik.touched.recipientName ? <p className='text-red-500'>{formik.errors.recipientName}</p> : null}
+                        </div>
+                        <div>
+                            <Input
+                                type="text"
+                                name="telephone"
+                                label="Telephone"
+                                placeholder='telephone...'
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleChange}
+                                value={formik.values.telephone}
+                            />
+                            {formik.errors.telephone && formik.touched.telephone ? <p className='text-red-500'>{formik.errors.telephone}</p> : null}
                         </div>
                         <div>
                             <label name="" id="">Province</label>

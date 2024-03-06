@@ -67,13 +67,14 @@ const clearCost = async (userData) => {
 }
 
 const sendOrder = async (userData) => {
+    console.log('ini', userData)
     const config = {
         headers: {
-            Authorization: `Bearer ${userData}`,
+            Authorization: `Bearer ${userData.token}`,
             Accept: "application/json",
         },
     };
-    const response = await axios.post(`${base_url}order/send-order`, "", config)
+    const response = await axios.post(`${base_url}order/send-order`, userData.data, config)
     if (response.data) {
         return response.data
     }

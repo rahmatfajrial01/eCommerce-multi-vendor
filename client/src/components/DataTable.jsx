@@ -15,7 +15,9 @@ const DataTable = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {children}
+                    <>
+                        {children}
+                    </>
                 </tbody>
             </table>
         </div>

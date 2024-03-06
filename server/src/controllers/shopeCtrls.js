@@ -27,7 +27,8 @@ const register = asyncHandler(async (req, res) => {
 
 const currentShope = asyncHandler(async (req, res, next) => {
     try {
-        let shope = await Shope.find({ user: req.params.id }).populate([
+        const { _id } = req.user;
+        let shope = await Shope.find({ user: _id }).populate([
             {
                 path: "user",
                 select: ["avatar", "username", "email"],

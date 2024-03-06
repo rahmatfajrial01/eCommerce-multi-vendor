@@ -4,6 +4,7 @@ const Shope = require("../models/ShopeModels");
 const Order = require("../models/orderModels");
 const Cart = require("../models/cartModels");
 const Order2 = require('../models/order2Models');
+const { v4 } = require("uuid");
 
 const createOrder = asyncHandler(async (req, res) => {
     try {
@@ -108,18 +109,23 @@ const getCost = asyncHandler(async (req, res) => {
 
 const sendOrder = asyncHandler(async (req, res, next) => {
     const { _id } = req.user;
+    const { dataAddress } = req.body
     try {
         let order = await Order.findOne({ user: _id })
         let cart = await Cart.findOne({ user: _id })
+
         let data
         let astaga
         for (let index = 0; index < order.products.length; index++) {
             data = {
+                orderId: v4(),
                 user: order.user,
                 shope: order.products[index].shope,
+                shopeName: order.products[index].shopeName,
                 price: order.products[index].price,
                 shippment: order.products[index].shippment,
                 shippmentCost: order.products[index].shippmentCost,
+                address: dataAddress,
                 products: order.products[index].products
             }
             astaga = await new Order2(data).save();

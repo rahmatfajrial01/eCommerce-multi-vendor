@@ -6,6 +6,7 @@ import CartItem from '../components/CartItem';
 import { Button } from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { createOrder, resetStateOrder } from '../features/order/orderSlice';
+import { toast } from 'react-toastify';
 
 const Cart = () => {
 
@@ -28,6 +29,7 @@ const Cart = () => {
     //         setTotalAmount(sum)
     //     }
     // }, [cartState])
+    console.log(cartState?.cart?.inStockProduct?.length < 1)
 
     useEffect(() => {
         if (orderState.createdOrder !== null && orderState.isError === false) {
@@ -50,7 +52,12 @@ const Cart = () => {
             products: firstdata.inStockProduct
         }
         let userData = { token, data }
-        dispatch(createOrder(userData))
+        if (cartState?.cart?.inStockProduct?.length < 1) {
+            toast.error("not item to checkout")
+
+        } else {
+            dispatch(createOrder(userData))
+        }
         // }
     }
 
@@ -67,8 +74,8 @@ const Cart = () => {
                 <div className='flex flex-col gap-5'>
                     {
                         cartState.cart.inStockProduct && cartState.cart.inStockProduct.map((item, index) =>
-                            <div key={index}>
-                                <p className='p-2 border'>{item?.shopeName}</p>
+                            <div className='border rounded-xl' key={index}>
+                                <p className='p-2'>{item?.shopeName}</p>
                                 {item?.products && item?.products.map((item, key) =>
                                     <CartItem
                                         key={key}

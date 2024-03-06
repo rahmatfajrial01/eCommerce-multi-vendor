@@ -14,14 +14,16 @@ const Header = () => {
     }, [])
 
     useEffect(() => {
-        if (authState?.currentUser?._id !== undefined) {
-            let user = authState?.currentUser?._id
-            let token = authState?.user?.token
-            let userData = { token, user }
-            dispatch(getCurrentShope(userData))
-        }
+        // if (authState?.currentUser?._id !== undefined) {
+        let user = authState?.currentUser?._id
+        let token = authState?.user?.token
+        let userData = { token, user }
+        dispatch(getCurrentShope(userData))
+        // }
 
-    }, [authState?.currentUser?._id])
+    }, [
+        // authState?.currentUser?._id
+    ])
 
     // console.log('ini', authState?.currentUser)
     // console.log('ini2', shopeState?.currentShope?.shope[0])

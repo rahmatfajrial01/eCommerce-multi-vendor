@@ -38,6 +38,9 @@ const userSchema = new mongoose.Schema({
             recipientName: {
                 type: String,
             },
+            telephone: {
+                type: Number,
+            },
             province: {
                 type: String,
             },
