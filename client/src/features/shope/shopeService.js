@@ -18,11 +18,11 @@ const currentShope = async (userData) => {
     // console.log(userData.user)
     const config = {
         headers: {
-            Authorization: `Bearer ${userData.token}`,
+            Authorization: `Bearer ${userData}`,
             Accept: "application/json",
         },
     };
-    const response = await axios.get(`${base_url}shope/current-shope/${userData.user}`, config)
+    const response = await axios.get(`${base_url}shope/current-shope`, config)
     if (response.data) {
         return response.data
     }

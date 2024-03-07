@@ -4,6 +4,6 @@ const { register, currentShope } = require('../controllers/shopeCtrls');
 const { authGuard } = require('../middlewares/authMiddleware');
 
 router.post("/register", authGuard, register);
-router.get("/current-shope/:id", authGuard, currentShope);
+router.get("/current-shope", authGuard, currentShope);
 
 module.exports = router;

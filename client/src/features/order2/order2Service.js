@@ -1,27 +1,27 @@
 import axios from 'axios';
 import { base_url } from '../../Utils/axiosConfig';
 
-// const createOrder = async (userData) => {
-//     const config = {
-//         headers: {
-//             Authorization: `Bearer ${userData.token}`,
-//             Accept: "application/json",
-//         },
-//     };
-//     const response = await axios.post(`${base_url}order`, userData.data, config)
-//     if (response.data) {
-//         return response.data
-//     }
-// }
+const changeStatusOrder2 = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.patch(`${base_url}order2/${userData.data.id}`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 const getOrder2 = async (userData) => {
     const config = {
         headers: {
-            Authorization: `Bearer ${userData}`,
+            Authorization: `Bearer ${userData.token}`,
             Accept: "application/json",
         },
     };
-    const response = await axios.get(`${base_url}order2`, config)
+    const response = await axios.get(`${base_url}order2?orderStatus=${userData.orderStatus}`, config)
     if (response.data) {
         return response.data
     }
@@ -30,11 +30,11 @@ const getOrder2 = async (userData) => {
 const getOrder2ByShope = async (userData) => {
     const config = {
         headers: {
-            Authorization: `Bearer ${userData}`,
+            Authorization: `Bearer ${userData.token}`,
             Accept: "application/json",
         },
     };
-    const response = await axios.get(`${base_url}order2/order-by-shope`, config)
+    const response = await axios.get(`${base_url}order2/order-by-shope?orderStatus=${userData.orderStatus}`, config)
     if (response.data) {
         return response.data
     }
@@ -69,5 +69,5 @@ const getOrder2ByShope = async (userData) => {
 // }
 
 export const order2Service = {
-    getOrder2, getOrder2ByShope
+    getOrder2, getOrder2ByShope, changeStatusOrder2
 }

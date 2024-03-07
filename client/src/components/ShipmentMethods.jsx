@@ -18,6 +18,7 @@ const ShipmentMethods = (props) => {
     const rajaOngkirState = useSelector((state) => state?.rajaOngkir)
     let [shipment, setShipment] = useState(item?.shippment)
     let [cost, setCost] = useState(item?.shippmentCost)
+    let [service, setService] = useState(item?.shippmentService)
     const dispatch = useDispatch()
 
     // console.log(idShope)
@@ -46,9 +47,10 @@ const ShipmentMethods = (props) => {
         shipment
     ])
 
-    let handleClick = (a) => {
+    let handleClick = (a, b) => {
         setCost(a)
-        fromChild([{ id, a }])
+        setService(b)
+        fromChild([{ id, a, b }])
     }
 
     const handleClearCost = () => {
@@ -76,7 +78,7 @@ const ShipmentMethods = (props) => {
             <div className='flex gap-5'>
                 {
                     dataCost && dataCost.map((item, index) =>
-                        <div key={index} className={`${item?.cost[0]?.value === cost && 'border-2 border-green-500'} space-y-3 p-3 rounded-xl border cursor-pointer `} onClick={() => handleClick(item?.cost[0]?.value)}
+                        <div key={index} className={`${item?.cost[0]?.value === cost && 'border-2 border-green-500'} space-y-3 p-3 rounded-xl border cursor-pointer `} onClick={() => { handleClick(item?.cost[0]?.value, item?.service), setService(item?.service) }}
                         >
                             <div className='flex justify-between gap-10'>
                                 <p>{item?.service}</p>

@@ -30,6 +30,10 @@ const order2Schema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        shippmentService: {
+            type: String,
+            required: true,
+        },
         products: {
             type: Array,
             required: true,

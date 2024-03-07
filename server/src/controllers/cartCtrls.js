@@ -97,6 +97,7 @@ const getCart = asyncHandler(async (req, res) => {
                         price,
                         shippment: "",
                         shippmentCost: "",
+                        shippmentService: "",
                         price,
                         products: p[i] ? [
                             ...p[i].products,

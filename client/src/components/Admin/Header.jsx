@@ -15,10 +15,10 @@ const Header = () => {
 
     useEffect(() => {
         // if (authState?.currentUser?._id !== undefined) {
-        let user = authState?.currentUser?._id
+        // let user = authState?.currentUser?._id
         let token = authState?.user?.token
-        let userData = { token, user }
-        dispatch(getCurrentShope(userData))
+        // let userData = { token, user }
+        dispatch(getCurrentShope(token))
         // }
 
     }, [

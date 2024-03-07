@@ -68,7 +68,7 @@ const updateShippment = asyncHandler(async (req, res) => {
 
 const updateShippmentCost = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-    const { idShope, cost } = req.body
+    const { idShope, cost, service } = req.body
     try {
         // let allBrand = await Order.findOne({ user: _id, })
         let allBrand = await Order.updateOne(
@@ -77,7 +77,8 @@ const updateShippmentCost = asyncHandler(async (req, res) => {
             },
             {
                 $set: {
-                    "products.$.shippmentCost": cost
+                    "products.$.shippmentCost": cost,
+                    "products.$.shippmentService": service
                 }
             }
         )
@@ -125,6 +126,7 @@ const sendOrder = asyncHandler(async (req, res, next) => {
                 price: order.products[index].price,
                 shippment: order.products[index].shippment,
                 shippmentCost: order.products[index].shippmentCost,
+                shippmentService: order.products[index].shippmentService,
                 address: dataAddress,
                 products: order.products[index].products
             }

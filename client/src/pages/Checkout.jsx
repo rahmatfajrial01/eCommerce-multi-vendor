@@ -226,15 +226,10 @@ const Checkout = () => {
 
     // let [data, setData] = useState('')
     let fromChild = (datas) => {
-        // let index = dataCheckout.findIndex(item => item.shope === data[0].id)
-        // let pantek = JSON.parse(JSON.stringify(dataCheckout))
-        // let copy = [...pantek];
-
-        // copy[index].shippingCost = data[0].a
-        // setData(copy)
         let data = {
             idShope: datas[0].id,
-            cost: datas[0].a
+            cost: datas[0].a,
+            service: datas[0].b
         }
         let userData = {
             token, data

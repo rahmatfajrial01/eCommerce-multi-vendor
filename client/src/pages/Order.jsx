@@ -8,37 +8,37 @@ const Order = () => {
     const dispatch = useDispatch()
     const token = useSelector(state => state?.auth?.user?.token)
     const order2State = useSelector(state => state?.order2)
-    console.log(order2State)
-    useEffect(() => {
-        dispatch(getOrder2(token))
-    }, [])
     let [orderStatus, setOrderStatus] = useState("")
+    useEffect(() => {
+        let userData = { token, orderStatus }
+        dispatch(getOrder2(userData))
+    }, [orderStatus])
     return (
         <section className='pt-5'>
             <div className='container mx-auto space-y-5'>
                 <div className='flex gap-5 w-full justify-between text-center'>
                     <div
+                        onClick={() => setOrderStatus("")}
+                        className={`${orderStatus === '' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>All</div>
+                    <div
                         onClick={() => setOrderStatus("6")}
-                        className={`${orderStatus === '6' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer `}>Waiting Payment</div>
+                        className={`${orderStatus === '6' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Waiting Payment</div>
                     <div
                         onClick={() => setOrderStatus('Being Packaged')}
-                        className={`${orderStatus === 'Being Packaged' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer `}>being packaged</div>
+                        className={`${orderStatus === 'Being Packaged' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Being Packaged</div>
                     <div
                         onClick={() => setOrderStatus('Sended')}
-                        className={`${orderStatus === 'Sended' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer `}>sended</div>
+                        className={`${orderStatus === 'Sended' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Sended</div>
                     <div
-                        onClick={() => setOrderStatus('3')}
-                        className={`${orderStatus === '3' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer `}>delivery</div>
+                        onClick={() => setOrderStatus('Delifery')}
+                        className={`${orderStatus === 'Delifery' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Delivery</div>
                     <div
                         onClick={() => setOrderStatus('4')}
-                        className={`${orderStatus === '4' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer `}>history</div>
-                    <div
-                        onClick={() => setOrderStatus('5')}
-                        className={`${orderStatus === '5' ? "bg-green-500 text-white " : 'bg-slate-300'}  w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer `}>refund</div>
+                        className={`${orderStatus === '4' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Cancel</div>
                 </div>
                 <div className='space-y-3'>
                     {
-                        order2State?.order2 && order2State?.order2?.filter(item => item.orderStatus === orderStatus).map((item, index) =>
+                        order2State?.order2 && order2State?.order2.map((item, index) =>
                             <div key={index} className='border rounded-xl'>
                                 <div className='flex justify-between p-2'>
                                     <p>{item?.shopeName}</p>

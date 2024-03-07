@@ -2,13 +2,13 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit"
 import { order2Service } from "./order2Service"
 import { toast } from 'react-toastify';
 
-// export const createOrder = createAsyncThunk("order/create-order", async (userData, thunkApi) => {
-//     try {
-//         return await order2Service.createOrder(userData)
-//     } catch (error) {
-//         return thunkApi.rejectWithValue(error)
-//     }
-// })
+export const changeStatusOrder2 = createAsyncThunk("order2/change-status-order", async (userData, thunkApi) => {
+    try {
+        return await order2Service.changeStatusOrder2(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const getOrder2 = createAsyncThunk("order2/get-order2", async (userData, thunkApi) => {
     try {
@@ -54,32 +54,32 @@ const initialState = {
 }
 
 export const order2Slice = createSlice({
-    name: "order",
+    name: "order2",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // .addCase(createOrder.pending, (state) => {
-            //     state.isLoading = true;
-            // })
-            // .addCase(createOrder.fulfilled, (state, action) => {
-            //     state.isLoading = false;
-            //     state.isError = false;
-            //     state.isSuccess = true;
-            //     state.createdOrder = action.payload;
-            //     // if (state.isSuccess === true) {
-            //     //     toast.info("order created")
-            //     // }
-            // })
-            // .addCase(createOrder.rejected, (state, action) => {
-            //     state.isLoading = false;
-            //     state.isError = true;
-            //     state.isSuccess = false;
-            //     state.message = action.error;
-            //     if (state.isError === true) {
-            //         toast.error(action.payload.response.data.message)
-            //     }
-            // })
+            .addCase(changeStatusOrder2.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(changeStatusOrder2.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.changeStatusOrder2 = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("change status successfull")
+                }
+            })
+            .addCase(changeStatusOrder2.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
+            })
             .addCase(getOrder2.pending, (state) => {
                 state.isLoading = true;
             })
