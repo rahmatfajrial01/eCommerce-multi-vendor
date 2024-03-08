@@ -7,6 +7,8 @@ import { addCart } from '../features/cart/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { CgProfile } from "react-icons/cg";
+import { FaHeart } from "react-icons/fa";
+import { addWishlist, getWishlist } from '../features/user/userSlice';
 
 const Detail = () => {
     const getSlug = location?.pathname?.split('/')[1]
@@ -14,12 +16,17 @@ const Detail = () => {
     const productState = useSelector((state) => state?.product?.singleProduct)
     const loading = useSelector((state) => state?.product?.isLoading)
     const cartState = useSelector((state) => state?.cart?.cart)
+    const wishlistState = useSelector(state => state?.user)
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getSingleProduct(getSlug))
     }, [])
+
+    useEffect(() => {
+        dispatch(getWishlist(token))
+    }, [wishlistState.wishlistAdded])
 
     const [quantity, setQuantity] = useState(1)
     const [alreadyAdded, setAlreadyAdded] = useState(false);
@@ -62,6 +69,12 @@ const Detail = () => {
         }
     }
 
+    const addToWishlistHandler = (id) => {
+        const data = { token, id }
+        dispatch(addWishlist(data))
+    }
+
+    // console.log(wishlistState.wishlist.wishlist)
     return (
         <section>
             {
@@ -90,12 +103,17 @@ const Detail = () => {
                                 <p className=''>Qty</p>
                                 <input min={1} onChange={(e) => setQuantity(e.target.value)} value={quantity} type='number' className='p-1 rounded-xl w-10 focus:outline-none' />
                             </div>
-                            <div className='flex gap-3 pt-5'>
+                            <div className='flex gap-3 pt-5 items-center'>
                                 <Button
                                     onClick={addCartHandler}
                                     type='button'
                                     color='green'
                                     name='Add to Cart'
+                                />
+                                <FaHeart
+                                    onClick={() => addToWishlistHandler(productState?._id)}
+                                    size={22}
+                                    className={`hover:opacity-95 cursor-pointer ${wishlistState.wishlist.wishlist && wishlistState.wishlist.wishlist?.filter((item) => item?._id === productState?._id).length === 1 ? "text-red-500 " : ""}`}
                                 />
                             </div>
                             <div className='pt-5 flex gap-2 items-center'>

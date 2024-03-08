@@ -26,6 +26,22 @@ export const addAddress = createAsyncThunk("user/add-address", async (userData, 
     }
 })
 
+export const addWishlist = createAsyncThunk("user/add-wishlis", async (userData, thunkApi) => {
+    try {
+        return await authService.addWishlist(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const getWishlist = createAsyncThunk("user/get-wishlis", async (userData, thunkApi) => {
+    try {
+        return await authService.getWishlist(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 export const getCosts = createAsyncThunk("rajaongkirr/get-cost", async (userData, thunkApi) => {
     try {
         return await authService.getCosts(userData)
@@ -56,6 +72,7 @@ export const resetState = createAction("Reset_all")
 
 const initialState = {
     allUser: null,
+    wishlist: "",
     isError: "",
     isSuccess: "",
     isLoading: "",
@@ -113,6 +130,39 @@ export const userSlice = createSlice({
                 }
             })
             .addCase(addAddress.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(addWishlist.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(addWishlist.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.wishlistAdded = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("wishlist modify succesfully")
+                }
+            })
+            .addCase(addWishlist.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(getWishlist.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getWishlist.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.wishlist = action.payload;
+            })
+            .addCase(getWishlist.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

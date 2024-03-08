@@ -6,7 +6,6 @@ const { v4 } = require("uuid");
 const crypto = require("crypto");
 const axios = require('axios')
 
-
 const register = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
     let user = await User.findOne({ email });
@@ -292,6 +291,51 @@ const deleteAddress = async (req, res, next) => {
     }
 };
 
+const addToWishlist = async (req, res) => {
+    const { _id } = req.user
+    const { productId } = req.params
+    try {
+        const user = await User.findById(_id)
+        const alreadyadded = user.wishlist.find((id) => id.toString() === productId)
+        if (alreadyadded) {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $pull: { wishlist: productId },
+                },
+                {
+                    new: true
+                }
+            )
+            res.json(user)
+        } else {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $push: { wishlist: productId },
+                },
+                {
+                    new: true
+                }
+            )
+            res.json(user)
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+const getWishlist = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    try {
+        const findUser = await User.findById(_id).select('_id').populate('wishlist')
+        res.json(findUser)
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+
 module.exports = {
     register,
     verification,
@@ -303,6 +347,8 @@ module.exports = {
     getAllUser,
     singleUser,
     addAddress,
-    deleteAddress
+    deleteAddress,
+    addToWishlist,
+    getWishlist
 }
 

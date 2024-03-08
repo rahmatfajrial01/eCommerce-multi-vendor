@@ -78,7 +78,7 @@ const ShipmentMethods = (props) => {
             <div className='flex gap-5'>
                 {
                     dataCost && dataCost.map((item, index) =>
-                        <div key={index} className={`${item?.cost[0]?.value === cost && 'border-2 border-green-500'} space-y-3 p-3 rounded-xl border cursor-pointer `} onClick={() => { handleClick(item?.cost[0]?.value, item?.service), setService(item?.service) }}
+                        <div key={index} className={`${item?.cost[0]?.value === cost && 'border-2 border-green-500'} space-y-3 p-3 rounded-xl border cursor-pointer `} onClick={() => handleClick(item?.cost[0]?.value, item?.service)}
                         >
                             <div className='flex justify-between gap-10'>
                                 <p>{item?.service}</p>

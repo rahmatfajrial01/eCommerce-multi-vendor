@@ -39,6 +39,30 @@ const addAddress = async (userData) => {
         return response.data
     }
 }
+const addWishlist = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.patch(`${base_url}user/wishlist/${userData.id}`, "", config)
+    if (response.data) {
+        return response.data
+    }
+}
+const getWishlist = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.get(`${base_url}user/wishlist`, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 const getCosts = async (userData) => {
     const config = {
@@ -81,5 +105,5 @@ const sendOrder = async (userData) => {
 }
 
 export const authService = {
-    getAllUser, deleteAddress, addAddress, getCosts, sendOrder, clearCost
+    getAllUser, deleteAddress, addAddress, getCosts, sendOrder, clearCost, addWishlist, getWishlist
 }
