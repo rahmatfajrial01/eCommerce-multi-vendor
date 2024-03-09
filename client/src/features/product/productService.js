@@ -7,6 +7,12 @@ export const getAllProduct = async () => {
         return response.data
     }
 }
+const sortProduct = async (data) => {
+    const response = await axios.get(`${base_url}product/sort?search=${data}`)
+    if (response.data) {
+        return response.data
+    }
+}
 
 const getAProduct = async (slug) => {
     const response = await axios.get(`${base_url}product/${slug}`)
@@ -45,5 +51,6 @@ export const productService = {
     getAllProduct,
     createProduct,
     deleteProduct,
-    getAProduct
+    getAProduct,
+    sortProduct
 }

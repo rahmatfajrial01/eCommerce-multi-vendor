@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     FaInstagram,
     FaTiktok,
@@ -11,12 +11,14 @@ import {
     FaSearch
 } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCurrentUser, logoutUser, resetState } from '../features/auth/authSlice';
 import { Menu } from '@headlessui/react'
 import { getCart } from '../features/cart/cartSlice';
+import { sortProduct } from '../features/product/productSlice';
 
 const Header = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const authState = useSelector(state => state?.auth)
     const shopeState = useSelector(state => state?.shope)
@@ -48,6 +50,14 @@ const Header = () => {
         cartState?.cartDeleted
     ])
 
+    let [search, setSearch] = useState("")
+
+    let handleSearch = (e) => {
+        e.preventDefault()
+        dispatch(sortProduct(search))
+        navigate(`/store`)
+    }
+
     return (
         <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>
             <section className='container mx-auto'>
@@ -62,10 +72,16 @@ const Header = () => {
                 </div>
                 <div className='flex justify-between gap-6 py-2 items-center'>
                     <div className='font-semibold text-2xl'><a href="/">eCommerce.</a> </div>
-                    <div className='flex items-center w-full border-2 rounded-full bg-white border-white'>
-                        <input placeholder='search...' className='text-black w-full py-1 px-3 focus:outline-none rounded-s-full text-sm' type="text" />
-                        <button className='text-black py-2 px-3 rounded-full hover:opacity-80 bg-green-600'><FaSearch className='text-white' /></button>
-                    </div>
+                    <form onSubmit={handleSearch} className='flex items-center w-full border-2 rounded-full bg-white border-white'>
+                        <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder='search...'
+                            className='text-black w-full py-1 px-3 focus:outline-none rounded-s-full text-sm'
+                            type="text"
+                        />
+                        <button type='submit' className='text-black py-2 px-3 rounded-full hover:opacity-80 bg-green-600'><FaSearch className='text-white' /></button>
+                    </form>
                     <div className='flex gap-3 text-md'>
                         <Link to={'/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
                         <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full '>

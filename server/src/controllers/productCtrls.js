@@ -115,10 +115,24 @@ const getAllProduct = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 });
+const sortProduct = asyncHandler(async (req, res) => {
+    try {
+        const filter = req.query.search;
+        let where = {};
+        if (filter) {
+            where.title = { $regex: filter, $options: "i" };
+        }
+        const allProduct = await Product.find(where).populate('category').populate('brand').populate('shope')
+        return res.json(allProduct);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 
 module.exports = {
     createProduct,
     getAProduct,
     getAllProduct,
     deleteProduct,
+    sortProduct
 }
