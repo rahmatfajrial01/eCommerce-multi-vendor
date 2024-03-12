@@ -16,6 +16,7 @@ import { getCurrentUser, logoutUser, resetState } from '../features/auth/authSli
 import { Menu } from '@headlessui/react'
 import { getCart } from '../features/cart/cartSlice';
 import { sortProduct } from '../features/product/productSlice';
+import { getAllProductCategory } from '../features/category/productCategorySlice';
 
 const Header = () => {
     const navigate = useNavigate()
@@ -24,6 +25,9 @@ const Header = () => {
     const shopeState = useSelector(state => state?.shope)
     const cartState = useSelector((state) => state?.cart)
     const userState = useSelector((state) => state?.user)
+    const CategoryState = useSelector((state) => state?.productCategory)
+
+    console.log(CategoryState)
 
     const handleLogout = () => {
         // localStorage.clear()
@@ -49,6 +53,10 @@ const Header = () => {
         cartState?.addCart,
         cartState?.cartDeleted
     ])
+
+    useEffect(() => {
+        dispatch(getAllProductCategory())
+    }, [])
 
     let [search, setSearch] = useState("")
 
@@ -126,7 +134,16 @@ const Header = () => {
                     </div>
                 </div>
                 <div className='justify-between flex text-sm'>
-                    <div className=''>Kategory</div>
+                    <div className='relative group cursor-pointer'>
+                        <p>Category</p>
+                        <div className='group-hover:block hidden absolute left-0 bg-green-600 pt-4 px-5 pb-4 space-y-3 rounded-b-xl text-white '>
+                            {
+                                CategoryState.allProductCategory && CategoryState.allProductCategory.map((item, index) =>
+                                    <p>{item?.title}</p>
+                                )
+                            }
+                        </div>
+                    </div>
                     <div className='flex gap-3'>
                         <Link to={'/'}>Home</Link>
                         <Link to={'store'}>Store</Link>

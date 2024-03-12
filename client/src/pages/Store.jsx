@@ -23,7 +23,7 @@ const Store = () => {
                     <div className='h-10 bg-green-500'></div>
                     <div className=' grid grid-cols-5 gap-2'>
                         {
-                            productState?.sortProducts
+                            productState?.sortProducts?.length > 0
                                 ?
                                 (
                                     productState?.sortProducts.map((item, index) =>
@@ -40,7 +40,10 @@ const Store = () => {
                                         </Link>
                                     )
                                 )
-                                : ""
+                                :
+                                <div className='h-40 flex items-center justify-center col-span-5'>
+                                    <p>no product found</p>
+                                </div>
                         }
                     </div>
                 </div>
