@@ -42,6 +42,10 @@ const order2Schema = new mongoose.Schema(
             type: Array,
             required: true,
         },
+        payInfo: {
+            type: Array,
+            required: true,
+        },
         orderStatus: {
             type: String,
             default: "Being Packaged"

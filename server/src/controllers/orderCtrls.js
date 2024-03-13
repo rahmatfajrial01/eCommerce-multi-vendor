@@ -110,16 +110,22 @@ const getCost = asyncHandler(async (req, res) => {
 
 const sendOrder = asyncHandler(async (req, res, next) => {
     const { _id } = req.user;
-    const { dataAddress } = req.body
+    const { dataAddress, result } = req.body
     try {
         let order = await Order.findOne({ user: _id })
         let cart = await Cart.findOne({ user: _id })
 
-        let data
+        let data = {}
         let astaga
+        let orderStatus
+        const orderId = v4()
+
+        if (result.transaction_status === 'pending') {
+            orderStatus = 'Unpaid'
+        }
         for (let index = 0; index < order.products.length; index++) {
             data = {
-                orderId: v4(),
+                orderId,
                 user: order.user,
                 shope: order.products[index].shope,
                 shopeName: order.products[index].shopeName,
@@ -128,6 +134,8 @@ const sendOrder = asyncHandler(async (req, res, next) => {
                 shippmentCost: order.products[index].shippmentCost,
                 shippmentService: order.products[index].shippmentService,
                 address: dataAddress,
+                payInfo: result,
+                orderStatus,
                 products: order.products[index].products
             }
             astaga = await new Order2(data).save();

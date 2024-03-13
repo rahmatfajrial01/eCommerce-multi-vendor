@@ -13,6 +13,7 @@ const Order = () => {
         let userData = { token, orderStatus }
         dispatch(getOrder2(userData))
     }, [orderStatus])
+    // console.log(order2State.order2.order2Unpaid)
     return (
         <section className='pt-5'>
             <div className='container mx-auto space-y-5'>
@@ -21,8 +22,8 @@ const Order = () => {
                         onClick={() => setOrderStatus("")}
                         className={`${orderStatus === '' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>All</div>
                     <div
-                        onClick={() => setOrderStatus("6")}
-                        className={`${orderStatus === '6' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Waiting Payment</div>
+                        onClick={() => setOrderStatus("Unpaid")}
+                        className={`${orderStatus === 'Unpaid' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Waiting Payment</div>
                     <div
                         onClick={() => setOrderStatus('Being Packaged')}
                         className={`${orderStatus === 'Being Packaged' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Being Packaged</div>
@@ -36,9 +37,42 @@ const Order = () => {
                         onClick={() => setOrderStatus('4')}
                         className={`${orderStatus === '4' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Cancel</div>
                 </div>
+                <div className='space-y-5'>
+                    {
+                        order2State?.order2?.order2Unpaid && order2State?.order2?.order2Unpaid.map((item, index) =>
+                            <div key={index} className='border rounded-xl'>
+                                <div className='flex justify-between py-2 px-5'>
+                                    <p>Order Id : {item?.orderId}</p>
+                                    <p>Unpaid</p>
+                                </div>
+                                <div className='border-t'>
+                                    {item?.order && item?.order.map((i, key) =>
+                                        <div className='flex justify-between p-5 '>
+                                            <div className='flex gap-8'>
+                                                <div>
+                                                    <p>Payment Methods</p>
+                                                    <span className='font-semibold'>{i?.payInfo[0].payment_type} ( {i?.payInfo[0]?.va_numbers[0]?.bank})</span>
+                                                </div>
+                                                <div>
+                                                    <p>Virtual Number</p>
+                                                    <span className='font-semibold'> {i?.payInfo[0].va_numbers[0].va_number}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p>Tota Price</p>
+                                                <span className='font-semibold'>Rp. {i?.payInfo[0].gross_amount}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                            </div>
+                        )
+                    }
+                </div>
                 <div className='space-y-3'>
                     {
-                        order2State?.order2 && order2State?.order2.map((item, index) =>
+                        order2State?.order2.order2 && order2State?.order2.order2.filter(item => item.orderStatus !== 'Unpaid').map((item, index) =>
                             <div key={index} className='border rounded-xl'>
                                 <div className='flex justify-between p-2'>
                                     <p>{item?.shopeName}</p>
@@ -55,11 +89,8 @@ const Order = () => {
                                 </div>
                             </div>
                         )
-
                     }
-
                 </div>
-
             </div>
         </section>
     )

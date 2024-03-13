@@ -94,7 +94,7 @@ const Checkout = () => {
             window.snap.pay(midtrans, {
                 onSuccess: (result) => {
                     setMidtrans("")
-                    let data = { dataAddress }
+                    let data = { dataAddress, result }
                     let userData = { token, data }
                     dispatch(sendOrder(userData))
                     setTimeout(() => {
@@ -103,6 +103,13 @@ const Checkout = () => {
                 },
                 onPending: (result) => {
                     setMidtrans("")
+                    let data = { dataAddress, result }
+                    let userData = { token, data }
+                    console.log(result)
+                    dispatch(sendOrder(userData))
+                    setTimeout(() => {
+                        navigate('/order')
+                    }, 300);
                 },
                 onError: (result) => {
                     setMidtrans("")
