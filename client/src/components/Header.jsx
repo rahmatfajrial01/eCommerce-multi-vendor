@@ -17,6 +17,7 @@ import { Menu } from '@headlessui/react'
 import { getCart } from '../features/cart/cartSlice';
 import { sortProduct } from '../features/product/productSlice';
 import { getAllProductCategory } from '../features/category/productCategorySlice';
+import { getAllBrand } from '../features/brand/brandSlice';
 
 const Header = () => {
     const navigate = useNavigate()
@@ -27,7 +28,9 @@ const Header = () => {
     const userState = useSelector((state) => state?.user)
     const CategoryState = useSelector((state) => state?.productCategory)
 
-    console.log(CategoryState)
+    // console.log(CategoryState)
+
+    let [cat, setCat] = useState(true)
 
     const handleLogout = () => {
         // localStorage.clear()
@@ -56,6 +59,7 @@ const Header = () => {
 
     useEffect(() => {
         dispatch(getAllProductCategory())
+        dispatch(getAllBrand())
     }, [])
 
     let [search, setSearch] = useState("")
@@ -64,6 +68,13 @@ const Header = () => {
         e.preventDefault()
         dispatch(sortProduct(search))
         navigate(`/store`)
+    }
+    let handleCat = () => {
+        setCat(false)
+        navigate(`/store`)
+        setTimeout(() => {
+            setCat(true)
+        }, 200);
     }
 
     return (
@@ -136,10 +147,10 @@ const Header = () => {
                 <div className='justify-between flex text-sm'>
                     <div className='relative group cursor-pointer'>
                         <p>Category</p>
-                        <div className='group-hover:block hidden absolute left-0 bg-green-600 pt-4 px-5 pb-4 space-y-3 rounded-b-xl text-white '>
+                        <div className={`${cat ? "group-hover:block" : ""} hidden absolute left-0 bg-green-600 pt-4 px-5 pb-4 space-y-3 rounded-b-xl text-white`}>
                             {
                                 CategoryState.allProductCategory && CategoryState.allProductCategory.map((item, index) =>
-                                    <p>{item?.title}</p>
+                                    <p className='hover:text-slate-300' onClick={() => handleCat()} key={index}>{item?.title}</p>
                                 )
                             }
                         </div>

@@ -22,7 +22,6 @@ const Home = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getAllBanner())
-        dispatch(getAllBrand())
         dispatch(getAllProduct())
     }, [])
     const bannerState = useSelector(state => state?.banner)

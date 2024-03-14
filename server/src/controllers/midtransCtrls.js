@@ -2,7 +2,7 @@ const midtransClient = require('midtrans-client');
 const { v4 } = require("uuid");
 const Order = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
-
+const axios = require('axios')
 
 const createMidtrans = asyncHandler(async (req, res, next) => {
     try {
@@ -52,7 +52,21 @@ const createMidtrans = asyncHandler(async (req, res, next) => {
         next(error);
     }
 });
+const getStatusOrder = asyncHandler(async (req, res, next) => {
+    try {
+        const config = {
+            auth: {
+                username: process.env.MIDTRANS_SERVER_KEY,
+                password: "",
+            },
+        };
+        const response = await axios.get(`https://api.sandbox.midtrans.com/v2/840db1c7-8b26-4d59-b8bc-1ce99a18dee1/status`, config)
+        return res.status(201).json(response.data)
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = {
-    createMidtrans
+    createMidtrans, getStatusOrder
 }

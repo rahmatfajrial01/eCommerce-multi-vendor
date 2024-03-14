@@ -3,24 +3,73 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/Button'
+import { CgMenuGridR, CgMenu } from "react-icons/cg";
 
 const Store = () => {
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
+    const CategoryState = useSelector((state) => state?.productCategory)
+    const brandState = useSelector(state => state?.brand)
+
     // useEffect(() => {
     //     dispatch(resetStateSort())
     // }, [])
     const productState = useSelector(state => state?.product)
     return (
         <section>
-            <div className='flex gap-3 container mx-auto'>
+            <div className='flex gap-3 container mx-auto pt-5'>
                 <div className=' w-1/5 flex flex-col gap-2'>
-                    <div className='h-10 bg-green-500'></div>
-                    <div className='h-52 bg-green-500'></div>
-                    <div className='h-52 bg-green-500'></div>
-                    <div className='h-52 bg-green-500'></div>
+                    <div className='bg-white border rounded-xl p-3'>
+                        <p className='font-semibold mb-2'>Categories</p>
+                        {
+                            CategoryState.allProductCategory && CategoryState.allProductCategory.map((item, index) =>
+                                <p key={index}>{item?.title}</p>
+                            )
+                        }
+                    </div>
+                    <div className='bg-white border rounded-xl p-3'>
+                        <p className='font-semibold mb-2'>Price</p>
+                        <div className='space-y-3'>
+                            <input placeholder='min-price' type="number" className='border w-full rounded-xl py-1 px-2' />
+                            <input placeholder='max-price' type="number" className='border w-full rounded-xl py-1 px-2' />
+                            <button className='border p-1 rounded-xl w-full'>Submit</button>
+                        </div>
+                    </div>
+                    <div className='bg-white border rounded-xl p-3'>
+                        <p className='font-semibold mb-2'>Produck Tages</p>
+                        <div className='space-y-3'>
+                            <div className='border p-1 rounded-xl'>Basic</div>
+                            <div className='border p-1 rounded-xl'>Featured</div>
+                        </div>
+                    </div>
+                    <div className='bg-white border rounded-xl p-3'>
+                        <p className='font-semibold mb-2'>Brands</p>
+                        <div className='flex flex-wrap gap-2'>
+                            {
+                                brandState.allBrand && brandState.allBrand.map((item, index) =>
+                                    <div key={index} className='border p-1 rounded-xl w-max'>{item?.title}</div>
+                                )
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div className='w-4/5 flex flex-col gap-3'>
-                    <div className='h-10 bg-green-500'></div>
+                <div className='w-4/5 flex flex-col gap-3 '>
+                    <div className='py-1 bg-white border rounded-xl flex justify-between'>
+                        <div className='flex items-center gap-2 ps-5'>
+                            <span className='font-semibold '>Sort By :</span>
+                            <select className='border p-1 rounded-lg' name="" id="">
+                                <option value="title">Alphabetically, A-Z</option>
+                                <option value="-title">Alphabetically, Z-A</option>
+                                <option value="price">price low to hight</option>
+                                <option value="-price">price hight to low</option>
+                                <option value="createdAt">date old to new"</option>
+                                <option value="-createdAt">date low to old </option>
+                            </select>
+                        </div>
+                        <div className='flex items-center pe-5'>
+                            <CgMenu size={30} />
+                            <CgMenuGridR size={28} />
+                        </div>
+                    </div>
                     <div className=' grid grid-cols-5 gap-2'>
                         {
                             productState?.sortProducts?.length > 0

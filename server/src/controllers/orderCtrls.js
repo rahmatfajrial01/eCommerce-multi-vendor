@@ -118,14 +118,14 @@ const sendOrder = asyncHandler(async (req, res, next) => {
         let data = {}
         let astaga
         let orderStatus
-        const orderId = v4()
+        // const orderId = v4()
 
         if (result.transaction_status === 'pending') {
             orderStatus = 'Unpaid'
         }
         for (let index = 0; index < order.products.length; index++) {
             data = {
-                orderId,
+                orderId: result.order_id,
                 user: order.user,
                 shope: order.products[index].shope,
                 shopeName: order.products[index].shopeName,

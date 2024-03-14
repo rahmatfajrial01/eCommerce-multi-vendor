@@ -2,17 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrder2 } from '../features/order2/order2Slice'
 import OrderItem from '../components/OrderItem'
+import { getStatusOrder } from '../features/midtrans/midtransSlice'
 
 
 const Order = () => {
     const dispatch = useDispatch()
     const token = useSelector(state => state?.auth?.user?.token)
     const order2State = useSelector(state => state?.order2)
+    const midtransState = useSelector(state => state?.midtrans)
     let [orderStatus, setOrderStatus] = useState("")
     useEffect(() => {
         let userData = { token, orderStatus }
         dispatch(getOrder2(userData))
     }, [orderStatus])
+
+    // useEffect(() => {
+    //     dispatch(getStatusOrder(token))
+    // }, [])
     // console.log(order2State.order2.order2Unpaid)
     return (
         <section className='pt-5'>
@@ -47,7 +53,7 @@ const Order = () => {
                                 </div>
                                 <div className='border-t'>
                                     {item?.order && item?.order.map((i, key) =>
-                                        <div className='flex justify-between p-5 '>
+                                        <div key={key} className='flex justify-between p-5 '>
                                             <div className='flex gap-8'>
                                                 <div>
                                                     <p>Payment Methods</p>
