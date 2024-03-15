@@ -42,6 +42,8 @@ export const deleteProduct = createAsyncThunk("product/delete-product", async (d
 })
 
 export const resetState = createAction("Reset_createdProduct")
+export const setSearchs = createAction("product/set-search-filter")
+export const setCategory = createAction("product/set-category-filter")
 
 const initialState = {
     productCreated: null,
@@ -49,7 +51,8 @@ const initialState = {
     isError: "",
     isSuccess: "",
     isLoading: "",
-    message: ""
+    message: "",
+    value: ""
 }
 
 export const productSlice = createSlice({
@@ -144,6 +147,12 @@ export const productSlice = createSlice({
             })
             .addCase(resetState, (state) => {
                 state.productCreated = null;
+            })
+            .addCase(setSearchs, (state, action) => {
+                state.value = action.payload;
+            })
+            .addCase(setCategory, (state, action) => {
+                state.valueCat = action.payload;
             })
     }
 })

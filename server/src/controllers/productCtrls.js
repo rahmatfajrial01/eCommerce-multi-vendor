@@ -118,9 +118,19 @@ const getAllProduct = asyncHandler(async (req, res) => {
 const sortProduct = asyncHandler(async (req, res) => {
     try {
         const filter = req.query.search;
+        const { category, tag, brand } = req.query
         let where = {};
         if (filter) {
             where.title = { $regex: filter, $options: "i" };
+        }
+        if (category) {
+            where.category = category
+        }
+        if (tag) {
+            where.tag = tag
+        }
+        if (brand) {
+            where.brand = brand
         }
         const allProduct = await Product.find(where).populate('category').populate('brand').populate('shope')
         return res.json(allProduct);

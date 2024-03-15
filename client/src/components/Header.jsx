@@ -15,9 +15,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getCurrentUser, logoutUser, resetState } from '../features/auth/authSlice';
 import { Menu } from '@headlessui/react'
 import { getCart } from '../features/cart/cartSlice';
-import { sortProduct } from '../features/product/productSlice';
+import { setCategory, sortProduct } from '../features/product/productSlice';
 import { getAllProductCategory } from '../features/category/productCategorySlice';
 import { getAllBrand } from '../features/brand/brandSlice';
+import { setSearchs } from '../features/product/productSlice';
 
 const Header = () => {
     const navigate = useNavigate()
@@ -66,10 +67,13 @@ const Header = () => {
 
     let handleSearch = (e) => {
         e.preventDefault()
-        dispatch(sortProduct(search))
+        // let data = { search }
+        // dispatch(sortProduct(data))
         navigate(`/store`)
+        dispatch(setSearchs(search))
     }
-    let handleCat = () => {
+    let handleCat = (a) => {
+        dispatch(setCategory(a))
         setCat(false)
         navigate(`/store`)
         setTimeout(() => {
@@ -150,7 +154,7 @@ const Header = () => {
                         <div className={`${cat ? "group-hover:block" : ""} hidden absolute left-0 bg-green-600 pt-4 px-5 pb-4 space-y-3 rounded-b-xl text-white`}>
                             {
                                 CategoryState.allProductCategory && CategoryState.allProductCategory.map((item, index) =>
-                                    <p className='hover:text-slate-300' onClick={() => handleCat()} key={index}>{item?.title}</p>
+                                    <p className='hover:text-slate-300' onClick={() => handleCat(item._id)} key={index}>{item?.title}</p>
                                 )
                             }
                         </div>

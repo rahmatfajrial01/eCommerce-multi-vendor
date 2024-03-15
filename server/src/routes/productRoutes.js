@@ -6,7 +6,7 @@ const upload = require('../middlewares/multer')
 
 router.post("/", authGuard, sellerGuard, upload.single('image'), createProduct);
 router.get("/", getAllProduct);
-router.get("/sort", sortProduct);
+router.get("/filter", sortProduct);
 router.get("/:slug", getAProduct);
 router.delete("/:id", authGuard, adminGuard, deleteProduct);
 

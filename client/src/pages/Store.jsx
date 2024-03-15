@@ -1,19 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { CgMenuGridR, CgMenu } from "react-icons/cg";
+import { sortProduct } from '../features/product/productSlice'
 
 const Store = () => {
     const dispatch = useDispatch()
     const CategoryState = useSelector((state) => state?.productCategory)
     const brandState = useSelector(state => state?.brand)
-
+    const sendState = useSelector(state => state?.product)
     // useEffect(() => {
     //     dispatch(resetStateSort())
     // }, [])
     const productState = useSelector(state => state?.product)
+    let [category, setCategory] = useState("")
+    let [tag, setTag] = useState("")
+    let [brand, setBrand] = useState("")
+
+    useEffect(() => {
+        let data = { category: category || sendState.valueCat, tag, brand, search: sendState.value }
+        dispatch(sortProduct(data))
+    }, [category, tag, brand, sendState.value, sendState.valueCat])
+
     return (
         <section>
             <div className='flex gap-3 container mx-auto pt-5'>
@@ -22,7 +32,7 @@ const Store = () => {
                         <p className='font-semibold mb-2'>Categories</p>
                         {
                             CategoryState.allProductCategory && CategoryState.allProductCategory.map((item, index) =>
-                                <p key={index}>{item?.title}</p>
+                                <p className='cursor-pointer' onClick={() => setCategory(item?._id)} key={index}>{item?.title}</p>
                             )
                         }
                     </div>
@@ -37,8 +47,8 @@ const Store = () => {
                     <div className='bg-white border rounded-xl p-3'>
                         <p className='font-semibold mb-2'>Produck Tages</p>
                         <div className='space-y-3'>
-                            <div className='border p-1 rounded-xl'>Basic</div>
-                            <div className='border p-1 rounded-xl'>Featured</div>
+                            <div onClick={() => setTag('Basic')} className='border p-1 rounded-xl cursor-pointer'>Basic</div>
+                            <div onClick={() => setTag('Featured')} className='border p-1 rounded-xl cursor-pointer'>Featured</div>
                         </div>
                     </div>
                     <div className='bg-white border rounded-xl p-3'>
@@ -46,7 +56,7 @@ const Store = () => {
                         <div className='flex flex-wrap gap-2'>
                             {
                                 brandState.allBrand && brandState.allBrand.map((item, index) =>
-                                    <div key={index} className='border p-1 rounded-xl w-max'>{item?.title}</div>
+                                    <div key={index} onClick={() => setBrand(item?._id)} className='border p-1 rounded-xl w-max cursor-pointer'>{item?.title}</div>
                                 )
                             }
                         </div>
