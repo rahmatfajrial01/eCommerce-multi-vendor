@@ -8,7 +8,7 @@ export const getAllProduct = async () => {
     }
 }
 const sortProduct = async (data) => {
-    const response = await axios.get(`${base_url}product/filter?search=${data.search ? data.search : ''}&category=${data.category ? data.category : ""}&tag=${data.tag ? data.tag : ""}&brand=${data.brand ? data.brand : ""}&`)
+    const response = await axios.get(`${base_url}product/filter?search=${data.search ? data.search : ''}&category=${data.category ? data.category : ""}&tag=${data.tag ? data.tag : ""}&brand=${data.brand ? data.brand : ""}${data.minPrice ? `&price[gte]=${data.minPrice}` : ""}${data.maxPrice ? `&price[lte]=${data.maxPrice}` : ""}&sort=${data.sort ? data.sort : ""}`)
     if (response.data) {
         return response.data
     }

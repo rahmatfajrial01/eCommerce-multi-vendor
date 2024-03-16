@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, resendOtp, verification, login, forgotPassword, resetPassword, loginGoogle, getAllUser, singleUser, addAddress, deleteAddress, addToWishlist, getWishlist } = require('../controllers/userCtrls');
+const { register, resendOtp, verification, login, forgotPassword, resetPassword, loginGoogle, getAllUser, singleUser, addAddress, deleteAddress, addToWishlist, getWishlist, updateProfile } = require('../controllers/userCtrls');
 const { authGuard } = require('../middlewares/authMiddleware');
 
 router.post("/register", register);
@@ -16,6 +16,7 @@ router.get("/wishlist", authGuard, getWishlist);
 router.patch("/wishlist/:productId", authGuard, addToWishlist);
 router.post("/add-address", authGuard, addAddress);
 router.delete("/delete-address/:id", authGuard, deleteAddress);
+router.put("/update-profile", authGuard, updateProfile);
 
 
 

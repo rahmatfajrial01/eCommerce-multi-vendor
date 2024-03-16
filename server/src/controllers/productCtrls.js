@@ -117,24 +117,30 @@ const getAllProduct = asyncHandler(async (req, res) => {
 });
 const sortProduct = asyncHandler(async (req, res) => {
     try {
-        const filter = req.query.search;
-        const { category, tag, brand } = req.query
-        let where = {};
-        if (filter) {
-            where.title = { $regex: filter, $options: "i" };
+
+        const queryObj = { price: req.query.price }
+        let queryStr = JSON.stringify(queryObj)
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
+        let query = JSON.parse(queryStr)
+
+        const { category, tag, brand, search, sort } = req.query
+
+        if (search) {
+            query.title = { $regex: search, $options: "i" };
         }
         if (category) {
-            where.category = category
+            query.category = category
         }
         if (tag) {
-            where.tag = tag
+            query.tag = tag
         }
         if (brand) {
-            where.brand = brand
+            query.brand = brand
         }
-        const allProduct = await Product.find(where).populate('category').populate('brand').populate('shope')
+        const allProduct = await Product.find(query).populate('category').populate('brand').populate('shope').sort(sort)
         return res.json(allProduct);
     } catch (error) {
+        console.log(error)
         throw new Error(error);
     }
 });

@@ -335,6 +335,27 @@ const getWishlist = asyncHandler(async (req, res) => {
     }
 })
 
+const updateProfile = async (req, res, next) => {
+    try {
+        let user = await User.findById(req.user._id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        user.avatar = req.body.avatar || user.avatar;
+        user.username = req.body.username || user.username;
+        // user.email = req.body.email || user.email;
+        if (req.body.password && req.body.password.length < 5) {
+            throw new Error("Password length must be at least 5 character");
+        } else if (req.body.password) {
+            user.password = req.body.password;
+        }
+        await user.save();
+        res.json({ message: 'profile updated' });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 module.exports = {
     register,
@@ -349,6 +370,7 @@ module.exports = {
     addAddress,
     deleteAddress,
     addToWishlist,
-    getWishlist
+    getWishlist,
+    updateProfile
 }
 

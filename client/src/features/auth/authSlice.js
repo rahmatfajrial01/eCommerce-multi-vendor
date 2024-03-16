@@ -68,6 +68,13 @@ export const getCurrentUser = createAsyncThunk("auth/profile", async (token, thu
         return thunkApi.rejectWithValue(error)
     }
 })
+export const updateProfile = createAsyncThunk("auth/update-profile", async (userData, thunkApi) => {
+    try {
+        return await authService.updateProfile(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const resetState = createAction("Reset_all")
 
@@ -280,6 +287,24 @@ export const authSlice = createSlice({
                 state.currentUser = action.payload;
             })
             .addCase(getCurrentUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateProfile.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.profileUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("Profile Updated")
+                }
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

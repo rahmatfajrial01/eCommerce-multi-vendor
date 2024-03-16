@@ -15,15 +15,27 @@ const Store = () => {
     //     dispatch(resetStateSort())
     // }, [])
     const productState = useSelector(state => state?.product)
+    let [sort, setSort] = useState("title")
     let [category, setCategory] = useState("")
     let [tag, setTag] = useState("")
     let [brand, setBrand] = useState("")
+    let [minPrice, setMinPrice] = useState("")
+    let [CMinPrice, setCMinPrice] = useState("")
+    let [maxPrice, setMaxPrice] = useState("")
+    let [CMaxPrice, setCMaxPrice] = useState("")
 
     useEffect(() => {
-        let data = { category: category || sendState.valueCat, tag, brand, search: sendState.value }
+        let data = { category: category || sendState.valueCat, tag, brand, search: sendState.value, maxPrice, minPrice, sort }
         dispatch(sortProduct(data))
-    }, [category, tag, brand, sendState.value, sendState.valueCat])
+    }, [category, tag, brand, sendState.value, sendState.valueCat, maxPrice, minPrice, sort])
 
+    let handlePrice = (e) => {
+        e.preventDefault()
+        setMinPrice(CMinPrice)
+        setMaxPrice(CMaxPrice)
+        // console.log(minPrice, maxPrice)
+    }
+    console.log(sort)
     return (
         <section>
             <div className='flex gap-3 container mx-auto pt-5'>
@@ -38,11 +50,11 @@ const Store = () => {
                     </div>
                     <div className='bg-white border rounded-xl p-3'>
                         <p className='font-semibold mb-2'>Price</p>
-                        <div className='space-y-3'>
-                            <input placeholder='min-price' type="number" className='border w-full rounded-xl py-1 px-2' />
-                            <input placeholder='max-price' type="number" className='border w-full rounded-xl py-1 px-2' />
-                            <button className='border p-1 rounded-xl w-full'>Submit</button>
-                        </div>
+                        <form onSubmit={handlePrice} className='space-y-3'>
+                            <input onChange={(e) => setCMinPrice(e.target.value)} value={CMinPrice} placeholder='min-price' type="number" className='border w-full rounded-xl py-1 px-2' />
+                            <input onChange={(e) => setCMaxPrice(e.target.value)} value={CMaxPrice} placeholder='max-price' type="number" className='border w-full rounded-xl py-1 px-2' />
+                            <button type='submit' className='border p-1 rounded-xl w-full'>Submit</button>
+                        </form>
                     </div>
                     <div className='bg-white border rounded-xl p-3'>
                         <p className='font-semibold mb-2'>Produck Tages</p>
@@ -66,7 +78,7 @@ const Store = () => {
                     <div className='py-1 bg-white border rounded-xl flex justify-between'>
                         <div className='flex items-center gap-2 ps-5'>
                             <span className='font-semibold '>Sort By :</span>
-                            <select className='border p-1 rounded-lg' name="" id="">
+                            <select onChange={(e) => setSort(e.target.value)} value={sort} className='border p-1 rounded-lg' name="" id="">
                                 <option value="title">Alphabetically, A-Z</option>
                                 <option value="-title">Alphabetically, Z-A</option>
                                 <option value="price">price low to hight</option>
