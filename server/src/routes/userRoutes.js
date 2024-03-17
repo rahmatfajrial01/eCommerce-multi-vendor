@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { register, resendOtp, verification, login, forgotPassword, resetPassword, loginGoogle, getAllUser, singleUser, addAddress, deleteAddress, addToWishlist, getWishlist, updateProfile } = require('../controllers/userCtrls');
+const { register, resendOtp, verification, login, forgotPassword, resetPassword, loginGoogle, getAllUser, singleUser, addAddress, deleteAddress, addToWishlist, getWishlist, updateProfile, updateProfilePicture } = require('../controllers/userCtrls');
 const { authGuard } = require('../middlewares/authMiddleware');
+const upload = require('../middlewares/multer');
 
 router.post("/register", register);
 router.post("/verification", verification);
@@ -17,6 +18,7 @@ router.patch("/wishlist/:productId", authGuard, addToWishlist);
 router.post("/add-address", authGuard, addAddress);
 router.delete("/delete-address/:id", authGuard, deleteAddress);
 router.put("/update-profile", authGuard, updateProfile);
+router.put("/update-profile-picture", authGuard, upload.single('profilePicture'), updateProfilePicture);
 
 
 

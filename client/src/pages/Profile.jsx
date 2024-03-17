@@ -42,10 +42,10 @@ const Profile = () => {
     const [picture, setPicture] = useState('')
 
     return (
-        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen -mt-16 '>
-            <div className='flex gap-2'>
-                <div className='bg-white rounded-xl p-5 space-y-3 flex flex-col items-center justify-between'>
-                    <h1 className='text-center font-semibold text-xl'>Avatar</h1>
+        <section className='flex justify-center w-full border rounded-xl'>
+            <div className='flex gap-5 '>
+                <div className='bg-white  p-5 space-y-3 flex flex-col items-center justify-between'>
+                    {/* <h1 className='text-center font-semibold text-xl'>Avatar</h1> */}
                     {
                         userState?.currentUser?.avatar
                             ?
@@ -75,8 +75,8 @@ const Profile = () => {
                 </div>
                 <form
                     onSubmit={formik.handleSubmit}
-                    className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
-                    <h1 className='text-center font-semibold text-xl'>Profile</h1>
+                    className='space-y-3 w-96 px-5 py-5 bg-white '>
+                    {/* <h1 className='text-center font-semibold text-xl'>Profile</h1> */}
                     <div>
                         <Input
                             type="text"

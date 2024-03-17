@@ -31,6 +31,8 @@ import ListProduct from './pages/Admin/ListProduct'
 import ListAllProduct from './pages/Admin/ListAllProduct'
 import ScrollToTop from './components/ScrollToTop'
 import Checkout from './pages/Checkout'
+import ThirdLayout from './components/User/ThirdLayout'
+import Address from './pages/Address'
 
 function App() {
   return (
@@ -41,11 +43,17 @@ function App() {
           <Route index element={<Home />} />
           <Route path=':id' element={<Detail />} />
           <Route path='store' element={<Store />} />
-          <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
           <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />
-          <Route path='order' element={<PrivateRoutes><Order /></PrivateRoutes>} />
-          <Route path='profile' element={<PrivateRoutes><Profile /></PrivateRoutes>} />
-          <Route path='checkout' element={<Checkout />} />
+          {/* <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} /> */}
+          {/* <Route path='order' element={<PrivateRoutes><Order /></PrivateRoutes>} /> */}
+          {/* <Route path='profile' element={<PrivateRoutes><Profile /></PrivateRoutes>} /> */}
+          <Route path='checkout' element={<PrivateRoutes><Checkout /></PrivateRoutes>} />
+          <Route path='user' element={<PrivateRoutes><ThirdLayout /></PrivateRoutes>} >
+            <Route index element={<Profile />} />
+            <Route path='order' element={<Order />} />
+            <Route path='address' element={<Address />} />
+            <Route path='wishlist' element={<Wishlist />} />
+          </Route>
         </Route>
 
         <Route path='/admin/register' element={<PrivateRoutes><RegisterAdmin /></PrivateRoutes>} />

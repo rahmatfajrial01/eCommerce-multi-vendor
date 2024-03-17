@@ -10,6 +10,7 @@ import {
     FaUser,
     FaSearch
 } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCurrentUser, logoutUser, resetState } from '../features/auth/authSlice';
@@ -106,10 +107,10 @@ const Header = () => {
                         <button type='submit' className='text-black py-2 px-3 rounded-full hover:opacity-80 bg-green-600'><FaSearch className='text-white' /></button>
                     </form>
                     <div className='flex gap-3 text-md'>
-                        <Link to={'/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
+                        <Link to={'/user/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
                         <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full '>
                             <FaShoppingCart />Cart<span className='border-2 rounded-full px-2'>{cartState?.cart?.card_product_count}</span></Link>
-                        <Link to={'/order'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaList />Orders</Link>
+                        <Link to={'/user/order'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaList />Orders</Link>
                         {
                             authState?.user === null
                                 ?
@@ -134,7 +135,7 @@ const Header = () => {
                                             </Menu.Button>
                                             <Menu.Items className='absolute w-max bg-white text-black right-0 top-10 p-3 rounded-xl flex flex-col text-end border'>
                                                 <Menu.Item>
-                                                    <Link className='hover:bg-slate-300 px-2 py-1 rounded-xl transition-all' to={'/profile'}>Profile</Link>
+                                                    <Link className='hover:bg-slate-300 px-2 py-1 rounded-xl transition-all' to={'/user'}>Profile</Link>
                                                 </Menu.Item>
                                                 <Menu.Item>
                                                     <Link to={'/'} className='hover:bg-slate-300 px-2 py-1 rounded-xl transition-all '
@@ -150,7 +151,7 @@ const Header = () => {
                 </div>
                 <div className='justify-between flex text-sm'>
                     <div className='relative group cursor-pointer'>
-                        <p>Category</p>
+                        <p className='flex gap-2 items-center'><span><MdCategory size={12} /></span>Category</p>
                         <div className={`${cat ? "group-hover:block" : ""} hidden absolute left-0 bg-green-600 pt-4 px-5 pb-4 space-y-3 rounded-b-xl text-white`}>
                             {
                                 CategoryState.allProductCategory && CategoryState.allProductCategory.map((item, index) =>

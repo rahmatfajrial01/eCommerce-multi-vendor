@@ -21,8 +21,8 @@ const Order = () => {
     // }, [])
     // console.log(order2State.order2.order2Unpaid)
     return (
-        <section className='pt-5'>
-            <div className='container mx-auto space-y-5'>
+        <section className='w-full'>
+            <div className='space-y-5'>
                 <div className='flex gap-5 w-full justify-between text-center'>
                     <div
                         onClick={() => setOrderStatus("")}

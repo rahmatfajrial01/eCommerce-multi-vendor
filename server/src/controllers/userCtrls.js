@@ -5,6 +5,7 @@ const sendEmail = require('./emailCtrls');
 const { v4 } = require("uuid");
 const crypto = require("crypto");
 const axios = require('axios')
+const cloudinary = require('../utils/cloudinary')
 
 const register = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
@@ -356,6 +357,26 @@ const updateProfile = async (req, res, next) => {
     }
 };
 
+const updateProfilePicture = async (req, res, next) => {
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "eCommerce/profile"
+        })
+        await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                avatar: result.secure_url
+            },
+            {
+                new: true
+            }
+        );
+        res.json({ message: 'profile picture updated' });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 module.exports = {
     register,
@@ -371,6 +392,7 @@ module.exports = {
     deleteAddress,
     addToWishlist,
     getWishlist,
-    updateProfile
+    updateProfile,
+    updateProfilePicture
 }
 

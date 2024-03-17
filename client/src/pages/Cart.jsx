@@ -63,7 +63,7 @@ const Cart = () => {
 
     return (
         <section>
-            <div className='container mx-auto space-y-2 mt-5'>
+            <div className='container mx-auto space-y-2 mt-5 w-[1170px]'>
                 {/* <div className='flex border'>
                     <span className='w-5/12 p-1 ps-10'>Product</span>
                     <span className='w-3/12 p-1'>Unit Price</span>
