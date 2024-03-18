@@ -73,6 +73,18 @@ const updateProfile = async (userData) => {
         return response.data
     }
 }
+const updateProfilePicture = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}user/update-profile-picture`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 const logout = () => {
     localStorage.clear()
@@ -88,5 +100,6 @@ export const authService = {
     changePassword,
     loginGoogle,
     currentUser,
-    updateProfile
+    updateProfile,
+    updateProfilePicture
 }

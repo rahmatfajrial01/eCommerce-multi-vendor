@@ -75,6 +75,13 @@ export const updateProfile = createAsyncThunk("auth/update-profile", async (user
         return thunkApi.rejectWithValue(error)
     }
 })
+export const updateProfilePicture = createAsyncThunk("auth/update-profile-picture", async (userData, thunkApi) => {
+    try {
+        return await authService.updateProfilePicture(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const resetState = createAction("Reset_all")
 
@@ -305,6 +312,24 @@ export const authSlice = createSlice({
                 }
             })
             .addCase(updateProfile.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateProfilePicture.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateProfilePicture.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.profilePictureUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("Profile Picture Updated")
+                }
+            })
+            .addCase(updateProfilePicture.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

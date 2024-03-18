@@ -359,13 +359,13 @@ const updateProfile = async (req, res, next) => {
 
 const updateProfilePicture = async (req, res, next) => {
     try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "eCommerce/profile"
-        })
+        // const result = await cloudinary.uploader.upload(req.file.path, {
+        //     folder: "eCommerce/profile"
+        // })
         await User.findByIdAndUpdate(
             req.user._id,
             {
-                avatar: result.secure_url
+                avatar: req.body.avatar
             },
             {
                 new: true

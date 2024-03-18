@@ -98,7 +98,7 @@ const Checkout = () => {
                     let userData = { token, data }
                     dispatch(sendOrder(userData))
                     setTimeout(() => {
-                        navigate('/order')
+                        navigate('/user/order')
                     }, 300);
                 },
                 onPending: (result) => {
@@ -108,7 +108,7 @@ const Checkout = () => {
                     console.log(result)
                     dispatch(sendOrder(userData))
                     setTimeout(() => {
-                        navigate('/order')
+                        navigate('/user/order')
                     }, 300);
                 },
                 onError: (result) => {

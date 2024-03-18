@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCart } from '../features/cart/cartSlice'
 
 import CartItem from '../components/CartItem';
+import CartItemOutStock from '../components/CartItemOutStock';
 import { Button } from '../components/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { createOrder, resetStateOrder } from '../features/order/orderSlice';
@@ -63,7 +64,7 @@ const Cart = () => {
 
     return (
         <section>
-            <div className='container mx-auto space-y-2 mt-5 w-[1170px]'>
+            <div className='container mx-auto space-y-5 mt-5 w-[1170px]'>
                 {/* <div className='flex border'>
                     <span className='w-5/12 p-1 ps-10'>Product</span>
                     <span className='w-3/12 p-1'>Unit Price</span>
@@ -86,6 +87,24 @@ const Cart = () => {
                         )
                     }
                 </div>
+                {
+                    cartState.cart.outOfStockProduct.length > 0
+                    &&
+                    <div className='flex flex-col gap-5'>
+                        <div className='border rounded-xl'>
+                            <h1 className='p-2'>Out of Stock</h1>
+                            {
+                                cartState.cart.outOfStockProduct && cartState.cart.outOfStockProduct.map((item, index) =>
+                                    <CartItemOutStock
+                                        key={index}
+                                        item={item}
+                                    />
+                                )
+                            }
+                        </div>
+                    </div>
+                }
+
                 <div className='flex justify-end w-full p-5 '>
                     <div className='flex gap-6 items-center'>
                         <p>Grant Total :</p>

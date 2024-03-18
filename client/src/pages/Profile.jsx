@@ -5,9 +5,16 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup';
-import { getCurrentUser, updateProfile } from '../features/auth/authSlice'
+import { getCurrentUser, updateProfile, updateProfilePicture } from '../features/auth/authSlice'
 import { IoAdd } from "react-icons/io5";
-
+import {
+    deleteObject,
+    getDownloadURL,
+    getStorage,
+    ref,
+    uploadBytesResumable,
+} from 'firebase/storage';
+import { app } from '../utils/firebase'
 
 const Profile = () => {
 
@@ -35,11 +42,50 @@ const Profile = () => {
         },
     });
 
+    const [isLoading, setIsLoading] = useState(false)
     useEffect(() => {
         dispatch(getCurrentUser(userState?.user?.token))
-    }, [])
+        setIsLoading(false)
+    }, [userState.profilePictureUpdated])
 
     const [picture, setPicture] = useState('')
+
+    useEffect(() => {
+        if (picture) {
+            //firebase delete picture
+            setIsLoading(true)
+            const storage = getStorage(app);
+            const desertRef = ref(storage, userState?.currentUser?.avatar);
+            deleteObject(desertRef)
+                .then(() => { }).catch((error) => {
+                    console.log(error)
+                });
+            //firebase update picture
+            const fileName = new Date().getTime() + picture.name;
+            const storageRef = ref(storage, fileName);
+            const uploadTask = uploadBytesResumable(storageRef, picture);
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    // const progress =
+                    //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // setImagePercent(Math.round(progress));
+                },
+                (error) => {
+                    // setImageError(true);
+                    console.log(error)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        const data = { avatar: downloadURL }
+                        const userData = { data, token: userState?.user?.token }
+                        dispatch(updateProfilePicture(userData))
+                        // setImagePercent(0)
+                    });
+                }
+            );
+        }
+    }, [picture])
 
     return (
         <section className='flex justify-center w-full border rounded-xl'>
@@ -51,17 +97,11 @@ const Profile = () => {
                             ?
                             <img className='rounded-full h-32 w-32' src={userState?.currentUser?.avatar} alt="" />
                             :
-                            picture
-                                ?
-                                <label htmlFor="picture" className='w-full h-full flex items-center justify-center'>
-                                    <img className="object-cover h-32 w-32 rounded-full " src={URL.createObjectURL(picture)} alt="" />
-                                </label>
-                                :
-                                <label htmlFor="picture" className='w-full h-full flex items-center justify-center'>
-                                    <div className='bg-slate-200 h-32 w-32  rounded-full flex items-center justify-center'>
-                                        <IoAdd size={40} />
-                                    </div>
-                                </label>
+                            <label htmlFor="picture" className='w-full h-full flex items-center justify-center'>
+                                <div className='bg-slate-200 h-32 w-32  rounded-full flex items-center justify-center'>
+                                    <IoAdd size={40} />
+                                </div>
+                            </label>
                     }
                     <input onChange={(e) => setPicture(e.target.files[0])} type="file" className='hidden' id='picture' />
 
@@ -71,7 +111,10 @@ const Profile = () => {
                             <p className='opacity-70'>Format Image : .JPEG, .PNG</p>
                         </div>
                     </div>
-                    <button className={`bg-green-500 text-white w-full p-2 rounded-xl text-sm`}>{userState?.currentUser?.avatar ? "Delete" : "Submit"}</button>
+                    <label className='w-full bg-green-500 text-white text-center p-2 rounded-xl text-sm cursor-pointer' htmlFor="picture">
+                        {isLoading ? "Loading..." : "Choose Photo"}
+                    </label>
+                    {/* <button className={`bg-green-500 text-white w-full p-2 rounded-xl text-sm`}>Choose Photo</button> */}
                 </div>
                 <form
                     onSubmit={formik.handleSubmit}
