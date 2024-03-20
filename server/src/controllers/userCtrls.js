@@ -231,6 +231,7 @@ const singleUser = async (req, res, next) => {
                 email: user.email,
                 role: user.role,
                 addresses: user.addresses,
+                wishlist: user.wishlist,
                 admin: user.admin,
             });
         } else {

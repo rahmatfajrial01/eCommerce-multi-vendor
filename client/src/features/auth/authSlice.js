@@ -243,6 +243,7 @@ export const authSlice = createSlice({
                 state.isError = false;
                 state.isSuccess = true;
                 state.user = null;
+                state.currentUser = null;
                 if (state.isSuccess === true) {
                     toast.info("User Logout Successfully")
                 }

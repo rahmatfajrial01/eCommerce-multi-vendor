@@ -74,21 +74,26 @@ const Cart = () => {
                 </div> */}
                 <div className='flex flex-col gap-5'>
                     {
-                        cartState.cart.inStockProduct && cartState.cart.inStockProduct.map((item, index) =>
-                            <div className='border rounded-xl' key={index}>
-                                <p className='p-2'>{item?.shopeName}</p>
-                                {item?.products && item?.products.map((item, key) =>
-                                    <CartItem
-                                        key={key}
-                                        item={item}
-                                    />
-                                )}
+                        cartState?.cart?.inStockProduct?.length > 0
+                            ? cartState.cart.inStockProduct.map((item, index) =>
+                                <div className='border rounded-xl' key={index}>
+                                    <p className='p-2'>{item?.shopeName}</p>
+                                    {item?.products && item?.products.map((item, key) =>
+                                        <CartItem
+                                            key={key}
+                                            item={item}
+                                        />
+                                    )}
+                                </div>)
+                            :
+                            <div className='border rounded-xl h-40 flex flex-col gap-2 items-center justify-center'>
+                                <p className='font-bold'>Your Cart is Empty</p>
+                                <Link className='bg-green-600 text-white p-2 rounded-xl' to={'/'}>Star Shopping</Link>
                             </div>
-                        )
                     }
                 </div>
                 {
-                    cartState.cart.outOfStockProduct.length > 0
+                    cartState?.cart?.outOfStockProduct?.length > 0
                     &&
                     <div className='flex flex-col gap-5'>
                         <div className='border rounded-xl'>

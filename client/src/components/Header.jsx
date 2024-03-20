@@ -10,6 +10,7 @@ import {
     FaUser,
     FaSearch
 } from "react-icons/fa";
+import { RxAvatar } from "react-icons/rx";
 import { MdCategory } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -49,7 +50,8 @@ const Header = () => {
     }, [
         shopeState?.createdShope,
         userState?.addressDeleted,
-        userState?.addressAdded
+        userState?.addressAdded,
+        userState?.wishlistAdded
     ])
 
     useEffect(() => {
@@ -82,6 +84,8 @@ const Header = () => {
         }, 200);
     }
 
+    console.log(authState?.currentUser)
+
     return (
         <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>
             <section className='container mx-auto'>
@@ -107,10 +111,14 @@ const Header = () => {
                         <button type='submit' className='text-black py-2 px-3 rounded-full hover:opacity-80 bg-green-600'><FaSearch className='text-white' /></button>
                     </form>
                     <div className='flex gap-3 text-md'>
-                        <Link to={'/user/wishlist'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaHeart />Wishlist</Link>
-                        <Link to={'/cart'} className='flex items-center gap-1 py-1 px-3 rounded-full '>
-                            <FaShoppingCart />Cart<span className='border-2 rounded-full px-2'>{cartState?.cart?.card_product_count}</span></Link>
-                        <Link to={'/user/order'} className='flex items-center gap-1 py-1 px-3 rounded-full'><FaList />Orders</Link>
+                        <Link to={'/cart'} className='relative flex items-center py-1 me-2 hover:opacity-85'>
+                            <FaShoppingCart size={22} />
+                            {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{cartState?.cart?.card_product_count}</span>}
+                        </Link>
+                        <Link to={'/user/wishlist'} className='relative flex items-center py-1 me-2 hover:opacity-85'><FaHeart size={21} />
+                            {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{authState?.currentUser?.wishlist?.length}</span>}
+                        </Link>
+                        {/* <Link to={'/user/order'} className='flex items-center py-1 rounded-full'><FaList /></Link> */}
                         {
                             authState?.user === null
                                 ?
@@ -123,15 +131,23 @@ const Header = () => {
                                     {
                                         authState?.currentUser?.role >= 2
                                             ?
-                                            <Link to={'/admin'} target="_blank" className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Seller</Link>
+                                            <Link to={'/admin'} target="_blank" className='flex items-center gap-1 py-1 px-1  hover:opacity-80 w-max'>Seller Center</Link>
                                             :
-                                            <Link to={'/admin/register'} className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Seller</Link>
+                                            <Link to={'/admin/register'} className='flex items-center gap-1 py-1 px-3  hover:opacity-80 w-max'>Be Seller</Link>
 
                                     }
                                     <div className='relative'>
                                         <Menu>
-                                            <Menu.Button className='flex items-center'>
-                                                <span className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Account</span>
+                                            <Menu.Button className='flex gap-2 items-center w-max hover:opacity-85'>
+                                                {/* <span className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Account</span> */}
+                                                <p>{authState?.currentUser?.username}</p>
+                                                {
+                                                    authState?.currentUser?.avatar
+                                                        ?
+                                                        <img className='h-9 w-9 border object-cover rounded-full' src={authState?.currentUser?.avatar} alt="" />
+                                                        :
+                                                        <RxAvatar size={30} />
+                                                }
                                             </Menu.Button>
                                             <Menu.Items className='absolute w-max bg-white text-black right-0 top-10 p-3 rounded-xl flex flex-col text-end border'>
                                                 <Menu.Item>

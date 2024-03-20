@@ -126,7 +126,7 @@ const Address = () => {
                 </div>
             </div>
             {/* </div> */}
-            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full  ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
+            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full -mt-32 ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
                 <div className='w-96 bg-white border rounded-xl '>
                     <form onSubmit={formik.handleSubmit} className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
                         <h1 className='text-center font-semibold text-xl'>Add Address</h1>

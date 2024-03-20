@@ -55,11 +55,13 @@ const Profile = () => {
             //firebase delete picture
             setIsLoading(true)
             const storage = getStorage(app);
-            const desertRef = ref(storage, userState?.currentUser?.avatar);
-            deleteObject(desertRef)
-                .then(() => { }).catch((error) => {
-                    console.log(error)
-                });
+            if (userState?.currentUser?.avatar) {
+                const desertRef = ref(storage, userState?.currentUser?.avatar);
+                deleteObject(desertRef)
+                    .then(() => { }).catch((error) => {
+                        console.log(error)
+                    });
+            }
             //firebase update picture
             const fileName = new Date().getTime() + picture.name;
             const storageRef = ref(storage, fileName);
@@ -95,7 +97,7 @@ const Profile = () => {
                     {
                         userState?.currentUser?.avatar
                             ?
-                            <img className='rounded-full h-32 w-32' src={userState?.currentUser?.avatar} alt="" />
+                            <img className='rounded-full h-32 w-32 object-cover' src={userState?.currentUser?.avatar} alt="" />
                             :
                             <label htmlFor="picture" className='w-full h-full flex items-center justify-center'>
                                 <div className='bg-slate-200 h-32 w-32  rounded-full flex items-center justify-center'>
@@ -108,7 +110,7 @@ const Profile = () => {
                     <div className=''>
                         <div className='text-sm bg-slate-200 py-1 px-2 rounded-xl'>
                             <p className='opacity-70'>Max Image Size : 1 MB</p>
-                            <p className='opacity-70'>Format Image : .JPEG, .PNG</p>
+                            <p className='opacity-70'>Format Image : .JPEG, .JPG, .PNG</p>
                         </div>
                     </div>
                     <label className='w-full bg-green-500 text-white text-center p-2 rounded-xl text-sm cursor-pointer' htmlFor="picture">
@@ -134,8 +136,8 @@ const Profile = () => {
                             {formik.touched.username && formik.errors.username}
                         </p>
                     </div>
-                    <div>
-                        <Input
+                    <div className='flex flex-col text-sm'>
+                        {/* <Input
                             type="text"
                             name="email"
                             label='Email'
@@ -146,7 +148,9 @@ const Profile = () => {
                         />
                         <p className='text-red-500'>
                             {formik.touched.email && formik.errors.email}
-                        </p>
+                        </p> */}
+                        <label>Email</label>
+                        <label className='border py-2 px-3 rounded-xl bg-slate-200 opacity-90'>{formik.values.email}</label>
                     </div>
                     <div>
                         <Input

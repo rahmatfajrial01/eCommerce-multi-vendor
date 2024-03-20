@@ -109,6 +109,9 @@ export const productCategorySlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
             })
             .addCase(getAProductCategory.pending, (state) => {
                 state.isLoading = true;

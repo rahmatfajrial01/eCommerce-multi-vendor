@@ -4,6 +4,8 @@ const Shope = require("../models/ShopeModels");
 const Order = require("../models/orderModels");
 const Cart = require("../models/cartModels");
 const Order2 = require('../models/order2Models');
+const Product = require("../models/productModels");
+
 const { v4 } = require("uuid");
 
 const createOrder = asyncHandler(async (req, res) => {
@@ -12,7 +14,7 @@ const createOrder = asyncHandler(async (req, res) => {
         const { _id } = req.user;
         let userOrder = await Order.find({ user: _id });
         if (userOrder) {
-            userOrder = await Order.deleteMany()
+            await Order.findOneAndDelete({ user: _id })
             let newOrder = await new Order({
                 user: _id,
                 products,
@@ -113,12 +115,29 @@ const sendOrder = asyncHandler(async (req, res, next) => {
     const { dataAddress, result } = req.body
     try {
         let order = await Order.findOne({ user: _id })
-        let cart = await Cart.findOne({ user: _id })
+        let cart = await Cart.find({ user: _id })
+        let product = await Product.find()
 
         let data = {}
         let astaga
         let orderStatus
         // const orderId = v4()
+        for (let i = 0; i < cart.length; i++) {
+            for (let j = 0; j < product.length; j++) {
+                if (cart[i].product.toString() === product[j]._id.toString()) {
+                    await Product.findByIdAndUpdate(
+                        cart[i].product,
+                        {
+                            sold: product[j].sold + cart[i].quantity,
+                            quantity: product[j].quantity - cart[i].quantity
+                        },
+                        {
+                            new: true
+                        }
+                    )
+                }
+            }
+        }
 
         if (result.transaction_status === 'pending') {
             orderStatus = 'Unpaid'
@@ -141,8 +160,8 @@ const sendOrder = asyncHandler(async (req, res, next) => {
             astaga = await new Order2(data).save();
         }
         if (astaga) {
-            order = await Order.deleteMany()
-            cart = await Cart.deleteMany()
+            await Cart.deleteMany({ user: _id })
+            await Order.findOneAndDelete({ user: _id })
         }
         return res.json({
             message: "order created"

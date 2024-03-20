@@ -19,15 +19,14 @@ const getOrder2 = async (req, res, next) => {
                     p[i] = {
                         orderId: unique[i],
                         payInfo: unpaidItem[i].payInfo,
-                        order: p[i] &&
+                        order: p[i] ?
                             [
                                 // ...p[i].order,
                                 unpaidItem[j]
+                            ] :
+                            [
+                                unpaidItem[j]
                             ]
-                        // :
-                        // [
-                        //     unpaidItem[j]
-                        // ]
                     }
 
                 }

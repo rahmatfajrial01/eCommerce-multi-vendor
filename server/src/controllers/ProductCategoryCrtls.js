@@ -1,4 +1,7 @@
 const PostCategories = require("../models/productCategoryModels");
+const Product = require("../models/productModels");
+const asyncHandler = require('express-async-handler');
+
 // const Post = require("../models/PostModels");
 
 
@@ -77,7 +80,7 @@ const updatePostCategory = async (req, res, next) => {
     }
 };
 
-const deletePostCategory = async (req, res, next) => {
+const deletePostCategory = asyncHandler(async (req, res, next) => {
     try {
         const categoryId = req.params.postCategoryId;
 
@@ -86,15 +89,19 @@ const deletePostCategory = async (req, res, next) => {
         //     { $pull: { categories: categoryId } }
         // );
 
-        await PostCategories.deleteOne({ _id: categoryId });
-
+        const product = await Product.find({ category: categoryId })
+        if (product.length > 0) {
+            throw new Error(`can't delete because (${product.length}) product use this category `);
+        } else {
+            await PostCategories.deleteOne({ _id: categoryId });
+        }
         res.send({
             message: "Post category is successfully deleted!",
         });
     } catch (error) {
         next(error);
     }
-};
+});
 
 module.exports = {
     createPostCategory, getAllPostCategories, updatePostCategory, deletePostCategory, getAPostCategory

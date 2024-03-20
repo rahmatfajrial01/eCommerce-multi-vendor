@@ -124,11 +124,11 @@ const Home = () => {
             <div className='bg-slate-200 py-5 '>
                 <div className='container mx-auto space-y-2'>
                     <h1>Featured Product</h1>
-                    <div className='grid grid-cols-4 gap-5'>
+                    <div className='grid grid-cols-6 gap-5'>
                         {
                             productState.allProduct && productState.allProduct.filter(item => item?.tag === 'Featured').map((item, index) =>
                                 <Link key={index} to={item?.slug} className=' bg-white rounded-xl'>
-                                    <img src={item?.images?.url} alt="" className='h-56 w-full  rounded-t-xl' />
+                                    <img src={item?.images?.url} alt="" className='w-full  rounded-t-xl' />
                                     <div className='p-3 space-y-1'>
                                         <p className='text-green-500'>{item?.shope?.shopeName}</p>
                                         <p>{item?.title}</p>
@@ -144,7 +144,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className='bg-slate-200 py-5 '>
+            {/* <div className='bg-slate-200 py-5 '>
                 <div className='container mx-auto space-y-2'>
                     <h1>Favorite Product</h1>
                     <div className='grid grid-cols-4 gap-5'>
@@ -165,11 +165,11 @@ const Home = () => {
                         <div className='h-52 bg-red-500 rounded-xl'></div>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className='bg-slate-200 py-5 '>
                 <div className='container mx-auto space-y-2'>
                     <h1>Other Product</h1>
-                    <div className='grid grid-cols-4 gap-5'>
+                    {/* <div className='grid grid-cols-4 gap-5'>
                         <div className='h-52 bg-orange-500 rounded-xl'></div>
                         <div className='h-52 bg-orange-500 rounded-xl'></div>
                         <div className='h-52 bg-orange-500 rounded-xl'></div>
@@ -178,6 +178,24 @@ const Home = () => {
                         <div className='h-52 bg-orange-500 rounded-xl'></div>
                         <div className='h-52 bg-orange-500 rounded-xl'></div>
                         <div className='h-52 bg-orange-500 rounded-xl'></div>
+                    </div> */}
+                    <div className='grid grid-cols-6 gap-5'>
+                        {
+                            productState.allProduct && productState.allProduct.filter(item => item?.tag === 'Basic').map((item, index) =>
+                                <Link key={index} to={item?.slug} className=' bg-white rounded-xl'>
+                                    <img src={item?.images?.url} alt="" className='w-full  rounded-t-xl' />
+                                    <div className='p-3 space-y-1'>
+                                        <p className='text-green-500'>{item?.shope?.shopeName}</p>
+                                        <p>{item?.title}</p>
+                                        <div className='flex justify-between items-center gap-3'>
+                                            <p className='font-semibold'>Rp {item?.price}</p>
+                                            <p className='opacity-85'>{item?.sold} Sold</p>
+                                        </div>
+                                    </div>
+                                </Link>
+
+                            )
+                        }
                     </div>
                 </div>
             </div>

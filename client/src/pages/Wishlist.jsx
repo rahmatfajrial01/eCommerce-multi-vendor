@@ -34,10 +34,10 @@ const Wishlist = () => {
     }
 
     return (
-        <section className=''>
+        <section className='w-full'>
             <div className='gap-5 grid grid-cols-5'>
                 {
-                    wishlistState?.wishlist?.wishlist && wishlistState?.wishlist?.wishlist.filter(item => item?.tag === 'Featured').map((item, index) =>
+                    wishlistState?.wishlist?.wishlist?.length > 0 ? wishlistState?.wishlist?.wishlist.map((item, index) =>
                         <div key={index} className=' bg-white rounded-xl border relative'>
                             <img src={item?.images?.url} alt="" className='rounded-t-xl' />
                             <div className='p-3 space-y-1'>
@@ -64,8 +64,11 @@ const Wishlist = () => {
                             />
 
                         </div>
-
-                    )
+                    ) :
+                        <div className='col-span-5 border rounded-xl h-60 flex flex-col gap-2 items-center justify-center'>
+                            <p className='font-bold'>Your Wishlist is Empty</p>
+                            <Link className='bg-green-600 text-white p-2 rounded-xl' to={'/'}>Seach Product</Link>
+                        </div>
                 }
             </div>
         </section>

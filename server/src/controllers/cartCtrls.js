@@ -20,7 +20,17 @@ const addCart = asyncHandler(async (req, res) => {
             ]
         })
         if (cartAndUser) {
-            throw new Error("cart already axist");
+            const add = await Cart.updateOne(
+                {
+                    "user": _id, "product": product
+                },
+                {
+                    $set: {
+                        "quantity": Number(cartAndUser.quantity) + Number(quantity),
+                    }
+                }
+            )
+            res.json(add)
         } else {
             let newCart = await new Cart({
                 user: _id,

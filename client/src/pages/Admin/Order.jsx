@@ -25,7 +25,7 @@ const Order = () => {
         let userData = { token, data }
         dispatch(changeStatusOrder2(userData))
     }
-
+    console.log(order2State.order2ByShope)
     return (
         <div className='p-5 space-y-5'>
             <div className='flex gap-5 w-full justify-between text-center'>
@@ -33,8 +33,8 @@ const Order = () => {
                     onClick={() => setOrderStatus("")}
                     className={`${orderStatus === '' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>All</div>
                 <div
-                    onClick={() => setOrderStatus("6")}
-                    className={`${orderStatus === '6' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Waiting Payment</div>
+                    onClick={() => setOrderStatus("Unpaid")}
+                    className={`${orderStatus === 'Unpaid' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Waiting Payment</div>
                 <div
                     onClick={() => setOrderStatus('Being Packaged')}
                     className={`${orderStatus === 'Being Packaged' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Being Packaged</div>
@@ -62,7 +62,7 @@ const Order = () => {
                                         <img className='h-20 object-cover border rounded-xl' src={i?.productInfo?.images?.url} alt="" />
                                         <div className='flex gap-5'>
                                             <p>{i?.productInfo?.title}</p>
-                                            <p>X {i?.productInfo?.quantity}</p>
+                                            <p>X {i?.quantity}</p>
                                         </div>
                                     </div>
                                 )
@@ -83,18 +83,25 @@ const Order = () => {
                                 <div className='flex gap-3'>
                                     {/* <FaEdit className='cursor-pointer hover:text-yellow-500' />
                                     <FaTrashAlt onClick={() => handleDelete(item?._id)} className='cursor-pointer hover:text-red-500 ' /> */}
-                                    <select
-                                        defaultValue={item?.orderStatus}
-                                        className='border p-2 rounded-xl'
-                                        name=""
-                                        id=""
-                                        onChange={(e) => updateOrderStatus(item?._id, e.target.value)}
-                                    >
-                                        <option value="">choose</option>
-                                        <option value="Being Packaged">being packaged</option>
-                                        <option value="Sended">Sended</option>
-                                        <option value="Delifery">Delifery</option>
-                                    </select>
+                                    {
+                                        item?.orderStatus !== 'Unpaid'
+                                            ?
+                                            <select
+                                                defaultValue={item?.orderStatus}
+                                                className='border p-2 rounded-xl'
+                                                name=""
+                                                id=""
+                                                onChange={(e) => updateOrderStatus(item?._id, e.target.value)}
+                                            >
+                                                <option value="">choose</option>
+                                                <option value="Being Packaged">being packaged</option>
+                                                <option value="Sended">Sended</option>
+                                                <option value="Delifery">Delifery</option>
+                                            </select>
+                                            :
+                                            <span className='border p-2 rounded-xl'>Unpaid</span>
+                                    }
+
                                 </div>
                             </td>
                         </tr>

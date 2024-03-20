@@ -96,8 +96,14 @@ const Banner = () => {
                             className='w-full p-2 rounded-xl'>
                             <option value=''>Choose Position</option>
                             <option value='main'>Main Banner</option>
-                            <option value='leftTop'>Left Top Banner</option>
-                            <option value='leftBottom'>Left Bottom Banner</option>
+                            {
+                                bannerState.allBanner && bannerState.allBanner.filter(item => item.type === 'leftTop').length < 1 &&
+                                <option value='leftTop'>Left Top Banner</option>
+                            }
+                            {
+                                bannerState.allBanner && bannerState.allBanner.filter(item => item.type === 'leftBottom').length < 1 &&
+                                <option value='leftBottom'>Left Bottom Banner</option>
+                            }
                         </select>
                         {formik.errors.type && formik.touched.type ? <p className='text-red-500'>{formik.errors.type}</p> : null}
                     </div>
