@@ -43,8 +43,49 @@ const deleteBanner = async (req, res, next) => {
     }
 };
 
+const getABanner = async (req, res) => {
+    const { id } = req.params
+    try {
+        const banner = await Banner.findById(id);
+        res.json(banner)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const updateImageBanner = async (req, res) => {
+    try {
+        // console.log(req.params.id)
+        // console.log(req.file.path)
+        let banner = await Banner.findById(req.params.id)
+        let imgId = banner.image.public_id
+        await cloudinary.uploader.destroy(imgId)
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "eCommerce"
+        })
+        if (result)
+            await Banner.findByIdAndUpdate(
+                req.params.id,
+                {
+                    image: {
+                        public_id: result.public_id,
+                        url: result.secure_url
+                    }
+                },
+                {
+                    new: true
+                }
+            )
+        return res.json({ message: "Banner Image Updated" });
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 module.exports = {
     createBanner,
     getAllBanner,
-    deleteBanner
+    deleteBanner,
+    getABanner,
+    updateImageBanner
 }

@@ -34,9 +34,17 @@ export const deleteBrand = async (data) => {
     }
 }
 
+export const getABrand = async (data) => {
+    const response = await axios.get(`${base_url}brand/${data}`)
+    if (response.data) {
+        return response.data
+    }
+}
+
 
 export const brandService = {
     getAllBrand,
     createBrand,
-    deleteBrand
+    deleteBrand,
+    getABrand
 }

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { toast } from "react-toastify"
 import { bannerService } from "./bannerService"
 
@@ -26,6 +26,22 @@ export const deleteBanner = createAsyncThunk("banner/delete-banner", async (data
     }
 })
 
+export const getABanner = createAsyncThunk("banner/get-a-banner", async (id, thunkApi) => {
+    try {
+        return await bannerService.getABanner(id)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+export const updateImageBanner = createAsyncThunk("banner/edit-image-banner", async (userData, thunkApi) => {
+    try {
+        return await bannerService.updateImageBanner(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const resetState = createAction("Reset_single-banner")
 
 const initialState = {
     allBanner: "",
@@ -94,6 +110,42 @@ export const bannerSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
+            })
+            .addCase(getABanner.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getABanner.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.singleBanner = action.payload;
+            })
+            .addCase(getABanner.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateImageBanner.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateImageBanner.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.imageBannerUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.success("Banner Image Update Successfully")
+                }
+            })
+            .addCase(updateImageBanner.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(resetState, (state) => {
+                state.singleBanner = null;
             })
     }
 })

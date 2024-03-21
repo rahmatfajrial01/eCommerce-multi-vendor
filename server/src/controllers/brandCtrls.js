@@ -42,8 +42,19 @@ const deleteBrand = async (req, res, next) => {
     }
 };
 
+const getABrand = async (req, res) => {
+    const { id } = req.params
+    try {
+        const brand = await Brand.findById(id);
+        res.json(brand)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 module.exports = {
     createBrand,
     getAllBrand,
-    deleteBrand
+    deleteBrand,
+    getABrand
 }

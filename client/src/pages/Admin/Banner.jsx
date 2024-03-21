@@ -7,7 +7,9 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { createBanner, deleteBanner, getAllBanner } from '../../features/banner/bannerSlice';
+import { createBanner, deleteBanner, getABanner, getAllBanner, resetState, updateImageBanner } from '../../features/banner/bannerSlice';
+import { GrUpdate } from "react-icons/gr";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Banner = () => {
 
@@ -15,14 +17,20 @@ const Banner = () => {
     const token = useSelector(state => state?.auth?.user?.token)
     const bannerState = useSelector(state => state?.banner)
 
+    const [id, setId] = useState('')
     useEffect(() => {
         dispatch(getAllBanner())
+        if (bannerState?.imageBannerUpdated) {
+            dispatch(getABanner(id))
+        }
     }, [
         bannerState?.bannerCreated,
-        bannerState?.bannerDeleted
+        bannerState?.bannerDeleted,
+        bannerState?.imageBannerUpdated
     ])
 
     const [picture, setPicture] = useState('')
+    const [editPicture, setEditPicture] = useState('')
     const handleChoose = (e) => {
         const file = e.target.files[0];
         setPicture(file);
@@ -44,10 +52,10 @@ const Banner = () => {
         image: yup.mixed().required("image is required"),
     });
     const formik = useFormik({
-        // enableReinitialize: true,
+        enableReinitialize: true,
         initialValues: {
-            title: '',
-            type: '',
+            title: bannerState?.singleBanner?.title || '',
+            type: bannerState?.singleBanner?.type || '',
             image: '',
         },
         validationSchema: Schema,
@@ -64,23 +72,57 @@ const Banner = () => {
         },
     });
 
+    const getAId = (id) => {
+        dispatch(getABanner(id))
+    }
+
+    useEffect(() => {
+        if (editPicture) {
+            const data = new FormData()
+            data.append('image', editPicture)
+            let userData = { data, token, id }
+            // console.log(editPicture, id)
+            dispatch(updateImageBanner(userData))
+        }
+    }, [editPicture])
+
+
     return (
         <section className='p-5 space-y-5'>
             <form onSubmit={formik.handleSubmit} className='flex gap-5 p-5 bg-slate-200 rounded-xl '>
                 <div className='w-2/3'>
                     {
-                        picture
+                        bannerState?.singleBanner?.image?.url
                             ?
                             <div className='relative'>
-                                <label htmlFor="img" className='flex justify-center bg-white'>
-                                    <img className='h-80' src={URL.createObjectURL(picture)} alt="" />
-                                    <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
+                                <div className='flex justify-center bg-white'>
+                                    <div>
+                                        <img className='h-80' src={bannerState?.singleBanner?.image?.url} alt="" />
+                                    </div>
+                                    <label htmlFor="imgUpdate">
+                                        {
+                                            bannerState?.isLoading
+                                                ?
+                                                <AiOutlineLoading3Quarters size={40} className='text-black absolute top-2 right-2 animate-spin  bg-white rounded-full p-2' />
+                                                :
+                                                <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                        }
+                                        <input id='imgUpdate' onChange={(e) => { setEditPicture(e.target.files[0]), setId(bannerState?.singleBanner?._id) }} className='hidden' type="file" />
+                                    </label>
+                                </div>
+                            </div> :
+                            picture
+                                ?
+                                <div className='relative'>
+                                    <label htmlFor="img" className='flex justify-center bg-white'>
+                                        <img className='h-80' src={URL.createObjectURL(picture)} alt="" />
+                                        <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
+                                    </label>
+                                </div>
+                                :
+                                <label htmlFor="img" className='flex h-80 items-center justify-center p-20 bg-white rounded-xl'>
+                                    <div>Click Here</div>
                                 </label>
-                            </div>
-                            :
-                            <label htmlFor="img" className='flex h-80 items-center justify-center p-20 bg-white rounded-xl'>
-                                <div>Click Here</div>
-                            </label>
                     }
                     {formik.errors.image && formik.touched.image ? <p className='text-red-500'>{formik.errors.image}</p> : null}
                     <input onChange={handleChoose} type="file" id='img' className='hidden' />
@@ -119,12 +161,23 @@ const Banner = () => {
                         />
                         {formik.errors.title && formik.touched.title ? <p className='text-red-500'>{formik.errors.title}</p> : null}
                     </div>
-                    <Button
-                        name={bannerState?.isLoading ? 'Loading...' : 'Submit'}
-                        color='green'
-                        w='full'
-                        type='submit'
-                    />
+                    <div className='flex gap-4'>
+                        <Button
+                            name={bannerState?.isLoading ? 'Loading...' : 'Submit'}
+                            color='green'
+                            w='full'
+                            type='submit'
+                        />
+                        {
+                            bannerState?.singleBanner &&
+                            <Button
+                                onClick={() => dispatch(resetState())}
+                                name='ok'
+                                color='red'
+                                type='submit'
+                            />
+                        }
+                    </div>
                 </div>
             </form>
             <DataTable
@@ -142,7 +195,7 @@ const Banner = () => {
                             <td className='p-2'>
                                 <div className='flex gap-3'>
                                     <FaTrashAlt onClick={() => handleDelete(item?._id)} className='cursor-pointer hover:text-red-500 ' />
-                                    <FaEdit className='cursor-pointer hover:text-yellow-500' />
+                                    <FaEdit onClick={() => getAId(item?._id)} className='cursor-pointer hover:text-yellow-500' />
                                 </div>
                             </td>
                         </tr>

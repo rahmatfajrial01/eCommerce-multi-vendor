@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { toast } from "react-toastify"
 import { brandService } from "./brandService"
 
@@ -25,6 +25,15 @@ export const deleteBrand = createAsyncThunk("brand/delete-brand", async (data, t
         return thunkApi.rejectWithValue(error)
     }
 })
+export const getABrand = createAsyncThunk("brand/get-a-brand", async (data, thunkApi) => {
+    try {
+        return await brandService.getABrand(data)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const resetState = createAction("Reset_single-brand")
 
 const initialState = {
     allBrand: "",
@@ -94,6 +103,25 @@ export const bannerSlice = createSlice({
                 state.isSuccess = false;
                 state.message = action.error;
             })
+            .addCase(getABrand.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getABrand.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.singleBrand = action.payload;
+            })
+            .addCase(getABrand.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(resetState, (state) => {
+                state.singleBrand = null;
+            })
+
     }
 })
 

@@ -35,9 +35,30 @@ export const deleteBanner = async (data) => {
     }
 }
 
+export const getABanner = async (data) => {
+    const response = await axios.get(`${base_url}banner/${data}`)
+    if (response.data) {
+        return response.data
+    }
+}
+
+export const updateImageBanner = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}banner/${userData.id}`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const bannerService = {
     getAllBanner,
     createBanner,
     deleteBanner,
+    getABanner,
+    updateImageBanner
 }
