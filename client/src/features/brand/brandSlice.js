@@ -32,6 +32,13 @@ export const getABrand = createAsyncThunk("brand/get-a-brand", async (data, thun
         return thunkApi.rejectWithValue(error)
     }
 })
+export const updateBrand = createAsyncThunk("brand/update-a-brand", async (data, thunkApi) => {
+    try {
+        return await brandService.updateBrand(data)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const resetState = createAction("Reset_single-brand")
 
@@ -113,6 +120,24 @@ export const bannerSlice = createSlice({
                 state.singleBrand = action.payload;
             })
             .addCase(getABrand.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateBrand.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateBrand.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.brandUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.success("Brand Updated Successfully")
+                }
+            })
+            .addCase(updateBrand.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

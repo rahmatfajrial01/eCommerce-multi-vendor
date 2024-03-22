@@ -7,7 +7,7 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { createBrand, deleteBrand, getABrand, getAllBrand, resetState } from '../../features/brand/brandSlice';
+import { createBrand, deleteBrand, getABrand, getAllBrand, resetState, updateBrand } from '../../features/brand/brandSlice';
 import { GrUpdate } from "react-icons/gr";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -19,12 +19,16 @@ const Brand = () => {
 
     useEffect(() => {
         dispatch(getAllBrand())
+        dispatch(resetState())
+        setPicture('');
     }, [
         brandState?.brandCreated,
-        brandState?.brandDeleted
+        brandState?.brandDeleted,
+        brandState?.brandUpdated
     ])
 
     const [picture, setPicture] = useState('')
+
     const handleChoose = (e) => {
         const file = e.target.files[0];
         setPicture(file);
@@ -40,8 +44,6 @@ const Brand = () => {
         dispatch(deleteBrand(userData))
     }
 
-    const [editPicture, setEditPicture] = useState('')
-
     const Schema = yup.object({
         title: yup.string().required('title is required'),
         image: yup.mixed().required("image is required"),
@@ -50,7 +52,7 @@ const Brand = () => {
         enableReinitialize: true,
         initialValues: {
             title: brandState?.singleBrand?.title || '',
-            image: '',
+            image: brandState?.singleBrand?.image || '',
         },
         validationSchema: Schema,
         onSubmit: (values, { resetForm }) => {
@@ -58,14 +60,19 @@ const Brand = () => {
             const data = new FormData()
             data.append('image', values.image)
             data.append('title', values.title)
-            let userData = { data, token }
-            dispatch(createBrand(userData))
-            resetForm()
-            setPicture('');
+            let userData = { data, token, id: brandState?.singleBrand?._id }
+            if (brandState?.singleBrand) {
+                dispatch(updateBrand(userData))
+            } else {
+                dispatch(createBrand(userData))
+                setPicture('');
+                resetForm()
+            }
         },
     });
 
     const getAId = (id) => {
+        setPicture("")
         dispatch(getABrand(id))
     }
 
@@ -74,32 +81,42 @@ const Brand = () => {
             <form onSubmit={formik.handleSubmit} className='flex gap-5 p-5 bg-slate-200 rounded-xl '>
                 <div className='w-2/3'>
                     {
-                        brandState?.singleBrand?.image?.url
+                        picture
                             ?
                             <div className='relative'>
                                 <div className='flex justify-center bg-white'>
                                     <div>
-                                        <img className='h-32' src={brandState?.singleBrand?.image?.url} alt="" />
+                                        <img className='h-32' src={URL.createObjectURL(picture)} alt="" />
                                     </div>
-                                    <label htmlFor="imgUpdate">
+                                    <label htmlFor="img">
                                         {
-                                            brandState?.isLoading
+                                            brandState?.singleBrand
                                                 ?
-                                                <AiOutlineLoading3Quarters size={40} className='text-black absolute top-2 right-2 animate-spin  bg-white rounded-full p-2' />
-                                                :
                                                 <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                                :
+                                                <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
                                         }
-                                        {/* <input id='imgUpdate' onChange={(e) => { setEditPicture(e.target.files[0]), setId(brandState?.singleBrand?._id) }} className='hidden' type="file" /> */}
                                     </label>
                                 </div>
-                            </div> :
-                            picture
+                            </div>
+                            :
+                            brandState?.singleBrand?.image?.url
                                 ?
                                 <div className='relative'>
-                                    <label htmlFor="img" className='flex justify-center bg-white'>
-                                        <img className='h-32' src={URL.createObjectURL(picture)} alt="" />
-                                        <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
-                                    </label>
+                                    <div className='flex justify-center bg-white'>
+                                        <div>
+                                            <img className='h-32' src={brandState?.singleBrand?.image?.url} alt="" />
+                                        </div>
+                                        <label htmlFor="img">
+                                            {/* {
+                                                brandState?.isLoading
+                                                    ?
+                                                    <AiOutlineLoading3Quarters size={40} className='text-black absolute top-2 right-2 animate-spin  bg-white rounded-full p-2' />
+                                                    : */}
+                                            <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                            {/* } */}
+                                        </label>
+                                    </div>
                                 </div>
                                 :
                                 <label htmlFor="img" className='flex h-32 items-center justify-center p-20 bg-white rounded-xl'>
@@ -124,7 +141,7 @@ const Brand = () => {
                     </div>
                     <div className='flex gap-4'>
                         <Button
-                            name={brandState?.isLoading ? 'Loading...' : 'Submit'}
+                            name={brandState?.isLoading ? 'Loading...' : brandState?.singleBrand ? 'Update' : 'Submit'}
                             color='green'
                             w='full'
                             type='submit'
@@ -132,7 +149,7 @@ const Brand = () => {
                         {
                             brandState?.singleBrand &&
                             <Button
-                                onClick={() => dispatch(resetState())}
+                                onClick={() => { dispatch(resetState()), setPicture('') }}
                                 name='ok'
                                 color='red'
                                 type='submit'

@@ -52,9 +52,56 @@ const getABrand = async (req, res) => {
     }
 }
 
+const updateBrand = async (req, res) => {
+    try {
+        // console.log(req.params.id)
+        // console.log(req.file.path)
+        let brand = await Brand.findById(req.params.id)
+        let imgId = brand.image.public_id
+        const fileImage = req?.file?.path
+
+        if (fileImage) {
+            await cloudinary.uploader.destroy(imgId)
+            const result = await cloudinary.uploader.upload(fileImage, {
+                folder: "eCommerce"
+            })
+            if (result) {
+                await Brand.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        image: {
+                            public_id: result.public_id,
+                            url: result.secure_url
+                        },
+                        title: req.body.title || brand.title
+                    },
+                    {
+                        new: true
+                    }
+                )
+            }
+        } else {
+            await Brand.findByIdAndUpdate(
+                req.params.id,
+                {
+                    title: req.body.title || brand.title
+                },
+                {
+                    new: true
+                }
+            )
+        }
+        return res.json({ message: "Brand Image Updated" });
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
 module.exports = {
     createBrand,
     getAllBrand,
     deleteBrand,
-    getABrand
+    getABrand,
+    updateBrand
 }

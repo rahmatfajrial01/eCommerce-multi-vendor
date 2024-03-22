@@ -33,6 +33,18 @@ export const deleteBrand = async (data) => {
         return response.data
     }
 }
+export const updateBrand = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}brand/${userData.id}`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const getABrand = async (data) => {
     const response = await axios.get(`${base_url}brand/${data}`)
@@ -46,5 +58,6 @@ export const brandService = {
     getAllBrand,
     createBrand,
     deleteBrand,
-    getABrand
+    getABrand,
+    updateBrand
 }
