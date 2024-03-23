@@ -10,6 +10,7 @@ import { useFormik } from 'formik';
 import { createBrand, deleteBrand, getABrand, getAllBrand, resetState, updateBrand } from '../../features/brand/brandSlice';
 import { GrUpdate } from "react-icons/gr";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Modal from '../../components/Modal';
 
 const Brand = () => {
 
@@ -28,6 +29,8 @@ const Brand = () => {
     ])
 
     const [picture, setPicture] = useState('')
+    let [isOpen, setIsOpen] = useState(false)
+    let [idCat, setIdCat] = useState("")
 
     const handleChoose = (e) => {
         const file = e.target.files[0];
@@ -39,9 +42,16 @@ const Brand = () => {
         formik.setFieldValue('image', "");
     }
 
-    const handleDelete = (id) => {
-        let userData = { token, id }
+    const handleDelete = () => {
+        setIsOpen(false)
+        let userData = { token, id: idCat }
         dispatch(deleteBrand(userData))
+    }
+
+    const closeModal = (e) => {
+        if (e === 'container') {
+            setIsOpen(false)
+        }
     }
 
     const Schema = yup.object({
@@ -171,7 +181,7 @@ const Brand = () => {
                             <td className='p-2'>{item?.createdAt}</td>
                             <td className='p-2'>
                                 <div className='flex gap-3'>
-                                    <FaTrashAlt onClick={() => handleDelete(item?._id)} className='cursor-pointer hover:text-red-500 ' />
+                                    <FaTrashAlt onClick={() => { setIsOpen(true), setIdCat(item?._id) }} className='cursor-pointer hover:text-red-500 ' />
                                     <FaEdit onClick={() => getAId(item?._id)} className='cursor-pointer hover:text-yellow-500' />
                                 </div>
                             </td>
@@ -179,6 +189,22 @@ const Brand = () => {
                     )
                 }
             </DataTable>
+            <Modal
+                isOpen={isOpen}
+                closeModal={(e) => closeModal(e.target.id)}
+                text='are you sure deleting this Brand'
+            >
+                <Button
+                    onClick={handleDelete}
+                    name='Yes'
+                    color='blue'
+                    type='button' />
+                <Button
+                    onClick={() => setIsOpen(false)}
+                    name='No'
+                    color='red'
+                    type='reset' />
+            </Modal >
         </section>
     )
 }

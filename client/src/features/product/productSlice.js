@@ -40,6 +40,13 @@ export const deleteProduct = createAsyncThunk("product/delete-product", async (d
         return thunkApi.rejectWithValue(error)
     }
 })
+export const updateProduct = createAsyncThunk("product/update-product", async (data, thunkApi) => {
+    try {
+        return await productService.updateProduct(data)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const resetState = createAction("Reset_createdProduct")
 export const setSearchs = createAction("product/set-search-filter")
@@ -145,8 +152,27 @@ export const productSlice = createSlice({
                 state.isSuccess = false;
                 state.message = action.error;
             })
+            .addCase(updateProduct.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateProduct.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.productUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.success("Product Updated Successfully")
+                }
+            })
+            .addCase(updateProduct.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
             .addCase(resetState, (state) => {
                 state.productCreated = null;
+                state.productUpdated = null;
             })
             .addCase(setSearchs, (state, action) => {
                 state.value = action.payload;

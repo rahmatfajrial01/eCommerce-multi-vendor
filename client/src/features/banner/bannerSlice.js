@@ -33,9 +33,9 @@ export const getABanner = createAsyncThunk("banner/get-a-banner", async (id, thu
         return thunkApi.rejectWithValue(error)
     }
 })
-export const updateImageBanner = createAsyncThunk("banner/edit-image-banner", async (userData, thunkApi) => {
+export const updateBanner = createAsyncThunk("banner/edit-banner", async (userData, thunkApi) => {
     try {
-        return await bannerService.updateImageBanner(userData)
+        return await bannerService.updateBanner(userData)
     } catch (error) {
         return thunkApi.rejectWithValue(error)
     }
@@ -126,19 +126,19 @@ export const bannerSlice = createSlice({
                 state.isSuccess = false;
                 state.message = action.error;
             })
-            .addCase(updateImageBanner.pending, (state) => {
+            .addCase(updateBanner.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(updateImageBanner.fulfilled, (state, action) => {
+            .addCase(updateBanner.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isError = false;
                 state.isSuccess = true;
-                state.imageBannerUpdated = action.payload;
+                state.bannerUpdated = action.payload;
                 if (state.isSuccess === true) {
                     toast.success("Banner Image Update Successfully")
                 }
             })
-            .addCase(updateImageBanner.rejected, (state, action) => {
+            .addCase(updateBanner.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

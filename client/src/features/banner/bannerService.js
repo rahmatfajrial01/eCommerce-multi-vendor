@@ -42,7 +42,7 @@ export const getABanner = async (data) => {
     }
 }
 
-export const updateImageBanner = async (userData) => {
+export const updateBanner = async (userData) => {
     const config = {
         headers: {
             Authorization: `Bearer ${userData.token}`,
@@ -60,5 +60,5 @@ export const bannerService = {
     createBanner,
     deleteBanner,
     getABanner,
-    updateImageBanner
+    updateBanner
 }

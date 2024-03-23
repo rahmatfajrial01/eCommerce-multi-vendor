@@ -62,6 +62,7 @@ function App() {
           <Route path='user' element={<User />} />
           <Route path='category' element={<Category />} />
           <Route path='product' element={<Product />} />
+          <Route path='product/:slug' element={<Product />} />
           <Route path='list-product' element={<ListProduct />} />
           <Route path='list-all-product' element={<ListAllProduct />} />
           <Route path='order' element={<Order2 />} />

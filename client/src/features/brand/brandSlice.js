@@ -109,6 +109,9 @@ export const bannerSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
+                if (state.isError === true) {
+                    toast.error(action.payload.response.data.message)
+                }
             })
             .addCase(getABrand.pending, (state) => {
                 state.isLoading = true;

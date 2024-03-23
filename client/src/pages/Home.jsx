@@ -115,7 +115,7 @@ const Home = () => {
                     <Marquee>
                         {
                             brandState.allBrand && brandState.allBrand.map((item, index) =>
-                                <div key={index} className='h-full w-20  text-center rounded-xl mx-10'><img src={item?.image?.url} alt="" /></div>
+                                <div key={index} className='h-full w-20  text-center rounded-xl mx-14'><img src={item?.image?.url} alt="" /></div>
                             )
                         }
                     </Marquee>

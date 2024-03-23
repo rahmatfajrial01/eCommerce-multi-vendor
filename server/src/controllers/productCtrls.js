@@ -36,7 +36,6 @@ const createProduct = asyncHandler(async (req, res) => {
 
 
 const getAProduct = asyncHandler(async (req, res) => {
-    const { slug } = req.params;
     try {
         const findProduct = await Product.findOne({ slug: req.params.slug }).populate("shope");
         res.json(findProduct)
@@ -145,10 +144,56 @@ const sortProduct = asyncHandler(async (req, res) => {
     }
 });
 
+const updateProduct = async (req, res) => {
+    try {
+        // console.log(req.params.id)
+        // console.log(req.file.path)
+        let product = await Product.findById(req.params.id)
+        let imgId = product.images.public_id
+        const fileImage = req?.file?.path
+
+        if (fileImage) {
+            await cloudinary.uploader.destroy(imgId)
+            const result = await cloudinary.uploader.upload(fileImage, {
+                folder: "eCommerce"
+            })
+            if (result) {
+                await Product.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        images: {
+                            public_id: result.public_id,
+                            url: result.secure_url
+                        },
+                        title: req.body.title || product.title
+                    },
+                    {
+                        new: true
+                    }
+                )
+            }
+        } else {
+            await Product.findByIdAndUpdate(
+                req.params.id,
+                {
+                    title: req.body.title || product.title
+                },
+                {
+                    new: true
+                }
+            )
+        }
+        return res.json({ message: "Product Image Updated" });
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 module.exports = {
     createProduct,
     getAProduct,
     getAllProduct,
     deleteProduct,
-    sortProduct
+    sortProduct,
+    updateProduct
 }

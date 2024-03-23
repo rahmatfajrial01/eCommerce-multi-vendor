@@ -47,10 +47,24 @@ export const deleteProduct = async (data) => {
     }
 }
 
+export const updateProduct = async (data) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}product/${data.id}`, data.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+
 export const productService = {
     getAllProduct,
     createProduct,
     deleteProduct,
     getAProduct,
-    sortProduct
+    sortProduct,
+    updateProduct
 }

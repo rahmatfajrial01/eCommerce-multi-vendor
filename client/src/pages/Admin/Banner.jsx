@@ -7,7 +7,7 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { createBanner, deleteBanner, getABanner, getAllBanner, resetState, updateImageBanner } from '../../features/banner/bannerSlice';
+import { createBanner, deleteBanner, getABanner, getAllBanner, resetState, updateBanner } from '../../features/banner/bannerSlice';
 import { GrUpdate } from "react-icons/gr";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -20,13 +20,15 @@ const Banner = () => {
     const [id, setId] = useState('')
     useEffect(() => {
         dispatch(getAllBanner())
-        if (bannerState?.imageBannerUpdated) {
-            dispatch(getABanner(id))
-        }
+        dispatch(resetState())
+        setPicture('');
+        // if (bannerState?.imageBannerUpdated) {
+        //     dispatch(getABanner(id))
+        // }
     }, [
         bannerState?.bannerCreated,
         bannerState?.bannerDeleted,
-        bannerState?.imageBannerUpdated
+        bannerState?.bannerUpdated
     ])
 
     const [picture, setPicture] = useState('')
@@ -56,7 +58,7 @@ const Banner = () => {
         initialValues: {
             title: bannerState?.singleBanner?.title || '',
             type: bannerState?.singleBanner?.type || '',
-            image: '',
+            image: bannerState?.singleBanner?.image || '',
         },
         validationSchema: Schema,
         onSubmit: (values, { resetForm }) => {
@@ -65,26 +67,31 @@ const Banner = () => {
             data.append('image', values.image)
             data.append('type', values.type)
             data.append('title', values.title)
-            let userData = { data, token }
-            dispatch(createBanner(userData))
-            resetForm()
-            setPicture('');
+            let userData = { data, token, id: bannerState?.singleBanner?._id }
+            if (bannerState?.singleBanner) {
+                dispatch(updateBanner(userData))
+            } else {
+                dispatch(createBanner(userData))
+                resetForm()
+                setPicture('');
+            }
         },
     });
 
     const getAId = (id) => {
+        setPicture("")
         dispatch(getABanner(id))
     }
 
-    useEffect(() => {
-        if (editPicture) {
-            const data = new FormData()
-            data.append('image', editPicture)
-            let userData = { data, token, id }
-            // console.log(editPicture, id)
-            dispatch(updateImageBanner(userData))
-        }
-    }, [editPicture])
+    // useEffect(() => {
+    //     if (editPicture) {
+    //         const data = new FormData()
+    //         data.append('image', editPicture)
+    //         let userData = { data, token, id }
+    //         // console.log(editPicture, id)
+    //         dispatch(updateImageBanner(userData))
+    //     }
+    // }, [editPicture])
 
 
     return (
@@ -92,34 +99,41 @@ const Banner = () => {
             <form onSubmit={formik.handleSubmit} className='flex gap-5 p-5 bg-slate-200 rounded-xl '>
                 <div className='w-2/3'>
                     {
-                        bannerState?.singleBanner?.image?.url
+                        picture
                             ?
                             <div className='relative'>
-                                <div className='flex justify-center bg-white'>
-                                    <div>
-                                        <img className='h-80' src={bannerState?.singleBanner?.image?.url} alt="" />
-                                    </div>
-                                    <label htmlFor="imgUpdate">
-                                        {
-                                            bannerState?.isLoading
-                                                ?
-                                                <AiOutlineLoading3Quarters size={40} className='text-black absolute top-2 right-2 animate-spin  bg-white rounded-full p-2' />
-                                                :
-                                                <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
-                                        }
-                                        <input id='imgUpdate' onChange={(e) => { setEditPicture(e.target.files[0]), setId(bannerState?.singleBanner?._id) }} className='hidden' type="file" />
-                                    </label>
-                                </div>
-                            </div> :
-                            picture
+                                <label htmlFor="img" className='flex justify-center bg-white'>
+                                    <img className='h-80' src={URL.createObjectURL(picture)} alt="" />
+                                    {
+                                        bannerState?.singleBanner
+                                            ?
+                                            <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                            :
+                                            <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
+                                    }
+                                </label>
+                            </div>
+                            :
+                            bannerState?.singleBanner?.image?.url
                                 ?
                                 <div className='relative'>
-                                    <label htmlFor="img" className='flex justify-center bg-white'>
-                                        <img className='h-80' src={URL.createObjectURL(picture)} alt="" />
-                                        <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
-                                    </label>
-                                </div>
-                                :
+                                    <div className='flex justify-center bg-white'>
+                                        <div>
+                                            <img className='h-80' src={bannerState?.singleBanner?.image?.url} alt="" />
+                                        </div>
+                                        <label htmlFor="img">
+                                            {/* {
+                                                bannerState?.isLoading
+                                                    ?
+                                                    <AiOutlineLoading3Quarters size={40} className='text-black absolute top-2 right-2 animate-spin  bg-white rounded-full p-2' />
+                                                    : */}
+
+                                            <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                            {/* } */}
+                                            {/* <input id='imgUpdate' onChange={(e) => { setEditPicture(e.target.files[0]), setId(bannerState?.singleBanner?._id) }} className='hidden' type="file" /> */}
+                                        </label>
+                                    </div>
+                                </div> :
                                 <label htmlFor="img" className='flex h-80 items-center justify-center p-20 bg-white rounded-xl'>
                                     <div>Click Here</div>
                                 </label>

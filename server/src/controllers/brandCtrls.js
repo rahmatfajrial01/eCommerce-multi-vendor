@@ -1,5 +1,6 @@
 const Brand = require("../models/brandModels");
 const cloudinary = require('../utils/cloudinary')
+const Product = require("../models/productModels");
 
 const createBrand = async (req, res, next) => {
     try {
@@ -32,10 +33,15 @@ const getAllBrand = async (req, res, next) => {
 
 const deleteBrand = async (req, res, next) => {
     try {
-        let brand = await Brand.findById(req.params.id)
-        let imgId = brand.image.public_id
-        await cloudinary.uploader.destroy(imgId)
-        await Brand.findByIdAndDelete(req.params.id)
+        const product = await Product.find({ brand: req.params.id })
+        if (product.length > 0) {
+            throw new Error(`can't delete because (${product.length}) product use this brand `);
+        } else {
+            let brand = await Brand.findById(req.params.id)
+            let imgId = brand.image.public_id
+            await cloudinary.uploader.destroy(imgId)
+            await Brand.findByIdAndDelete(req.params.id)
+        }
         return res.json({ message: "Brand Deleted" });
     } catch (error) {
         next(error);

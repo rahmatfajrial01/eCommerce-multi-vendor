@@ -8,8 +8,9 @@ import { getAllBrand } from '../../features/brand/brandSlice'
 import { TiDeleteOutline } from 'react-icons/ti'
 import * as yup from 'yup';
 import { useFormik } from 'formik'
-import { createProduct, resetState } from '../../features/product/productSlice'
+import { createProduct, getSingleProduct, resetState, updateProduct } from '../../features/product/productSlice'
 import { useNavigate } from 'react-router-dom'
+import { GrUpdate } from 'react-icons/gr'
 
 
 const Product = () => {
@@ -20,12 +21,17 @@ const Product = () => {
     const productState = useSelector(state => state?.product)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const getSlug = location?.pathname?.split('/')[3]
 
-    console.log(productState)
+    console.log(productState?.singleProduct)
 
     useEffect(() => {
         dispatch(getAllProductCategory())
         dispatch(getAllBrand())
+    }, [])
+
+    useEffect(() => {
+        dispatch(getSingleProduct(getSlug))
     }, [])
     // console.log(shopeState?.currentShope?.shope[0]?._id)
 
@@ -143,14 +149,14 @@ const Product = () => {
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            title: '',
-            description: '',
-            price: '',
-            category: '',
-            brand: '',
-            quantity: '',
-            tag: '',
-            image: '',
+            title: productState?.singleProduct?.title || '',
+            description: productState?.singleProduct?.description || '',
+            price: productState?.singleProduct?.price || '',
+            category: productState?.singleProduct?.category || '',
+            brand: productState?.singleProduct?.brand || '',
+            quantity: productState?.singleProduct?.quantity || '',
+            tag: productState?.singleProduct?.tag || '',
+            image: productState?.singleProduct?.images?.url || '',
         },
         validationSchema: Schema,
         onSubmit: (values, { resetForm }) => {
@@ -172,9 +178,13 @@ const Product = () => {
             data.append('shope', shopeState?.currentShope?.shope[0]?._id)
             data.append('shopeName', shopeState?.currentShope?.shope[0]?.shopeName)
             data.append('image', values.image)
-            const dataProducts = { token, data }
-            dispatch(createProduct(dataProducts))
-
+            const dataProducts = { token, data, id: productState?.singleProduct._id }
+            if (productState?.singleProduct) {
+                dispatch(updateProduct(dataProducts))
+                // console.log(dataProducts)
+            } else {
+                dispatch(createProduct(dataProducts))
+            }
             // resetForm()
             // }
         },
@@ -184,8 +194,11 @@ const Product = () => {
         if (productState.productCreated !== null && productState.isError === false) {
             navigate('/admin/list-product')
             dispatch(resetState())
+        } else if (productState.productUpdated !== null && productState.isError === false) {
+            navigate('/admin/list-product')
+            dispatch(resetState())
         }
-    }, [productState?.productCreated])
+    }, [productState?.productCreated, productState?.productUpdated])
 
     return (
         <section className='p-5'>
@@ -259,11 +272,11 @@ const Product = () => {
                             className='text-sm space-y-3'>
                             <label htmlFor="">Tag</label>
                             <div className='space-x-1'>
-                                <input name='tag' value="Featured" type="radio" />
+                                <input checked={formik.values.tag === 'Featured'} name='tag' value="Featured" type="radio" />
                                 <label htmlFor="">Featured</label>
                             </div>
                             <div className='space-x-1'>
-                                <input name='tag' value="Basic" type="radio" />
+                                <input checked={formik.values.tag === "Basic"} name='tag' value="Basic" type="radio" />
                                 <label htmlFor="">Basic</label>
                             </div>
                             {formik.errors.tag && formik.touched.tag ? <p className='text-red-500'>{formik.errors.tag}</p> : null}
@@ -298,15 +311,42 @@ const Product = () => {
                                 picture
                                     ?
                                     <div className='relative'>
-                                        <label htmlFor="img" className='flex justify-center bg-white'>
+                                        <div className='flex justify-center bg-white'>
                                             <img className='h-32' src={URL.createObjectURL(picture)} alt="" />
-                                            <TiDeleteOutline onClick={handleResetPic} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
+                                        </div>
+                                        <label htmlFor="img" >
+                                            {
+                                                productState?.singleProduct
+                                                    ?
+                                                    <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                                    :
+                                                    <TiDeleteOutline onClick={handleReset} className='text-4xl text-red-500 absolute top-2 right-2 bg-white rounded-full cursor-pointer' />
+                                            }
                                         </label>
                                     </div>
                                     :
-                                    <label htmlFor="img" className='flex h-32 items-center justify-center p-20 bg-white rounded-xl'>
-                                        <div>Click Here</div>
-                                    </label>
+                                    productState?.singleProduct?.images?.url
+                                        ?
+                                        <div className='relative'>
+                                            <div className='flex justify-center bg-white'>
+                                                <div>
+                                                    <img className='h-32' src={productState?.singleProduct?.images?.url} alt="" />
+                                                </div>
+                                                <label htmlFor="img">
+                                                    {/* {
+                                                    brandState?.isLoading
+                                                        ?
+                                                        <AiOutlineLoading3Quarters size={40} className='text-black absolute top-2 right-2 animate-spin  bg-white rounded-full p-2' />
+                                                        : */}
+                                                    <GrUpdate size={40} className='text-black absolute top-2 right-2 bg-white rounded-full cursor-pointer p-2' />
+                                                    {/* } */}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        :
+                                        <label htmlFor="img" className='flex h-32 items-center justify-center p-20 bg-white rounded-xl'>
+                                            <div>Click Here</div>
+                                        </label>
                             }
                             {/* {formik.errors.image && formik.touched.image ? <p className='text-red-500'>{formik.errors.image}</p> : null} */}
                             <input onChange={handleChoose} type="file" id='img' className='hidden' />

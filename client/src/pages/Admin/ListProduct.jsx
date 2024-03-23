@@ -16,7 +16,7 @@ const ListProduct = () => {
     const productState = useSelector(state => state?.product)
     const shopeState = useSelector(state => state?.shope)
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
     // console.log('ini shpe', shopeState.currentShope.shope[0]._id)
     // console.log(productState.allProduct)
 
@@ -78,7 +78,7 @@ const ListProduct = () => {
                             <td className='p-2'>
                                 <div className='flex gap-3'>
                                     <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />
-                                    <FaEdit onClick={() => { getAId(item?._id) }} className='cursor-pointer hover:text-yellow-500' />
+                                    <FaEdit onClick={() => { navigate(`/admin/product/${item?.slug}`) }} className='cursor-pointer hover:text-yellow-500' />
                                 </div>
                             </td>
                         </tr>
