@@ -165,7 +165,13 @@ const updateProduct = async (req, res) => {
                             public_id: result.public_id,
                             url: result.secure_url
                         },
-                        title: req.body.title || product.title
+                        title: req.body.title || product.title,
+                        description: req.body.description || product.description,
+                        category: req.body.category || product.category,
+                        brand: req.body.brand || product.brand,
+                        tag: req.body.tag || product.tag,
+                        price: req.body.price || product.price,
+                        quantity: req.body.quantity || product.quantity
                     },
                     {
                         new: true
@@ -176,7 +182,13 @@ const updateProduct = async (req, res) => {
             await Product.findByIdAndUpdate(
                 req.params.id,
                 {
-                    title: req.body.title || product.title
+                    title: req.body.title || product.title,
+                    description: req.body.description || product.description,
+                    category: req.body.category || product.category,
+                    brand: req.body.brand || product.brand,
+                    tag: req.body.tag || product.tag,
+                    price: req.body.price || product.price,
+                    quantity: req.body.quantity || product.quantity
                 },
                 {
                     new: true

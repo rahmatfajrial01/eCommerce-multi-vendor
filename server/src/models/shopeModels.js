@@ -9,12 +9,16 @@ const shopeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    address: {
-        type: String,
-        required: true,
-    },
-    codePos: {
-        type: Number,
+    // address: {
+    //     type: String,
+    //     required: true,
+    // },
+    // codePos: {
+    //     type: Number,
+    //     required: true,
+    // },
+    addresses: {
+        type: Array,
         required: true,
     },
     user: [{ type: mongoose.Schema.ObjectId, ref: "User", required: true }],

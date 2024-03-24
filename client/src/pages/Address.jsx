@@ -174,7 +174,7 @@ const Address = () => {
                             {formik.errors.province && formik.touched.province ? <p className='text-red-500'>{formik.errors.province}</p> : null}
                         </div>
                         <div>
-                            <label name="" id="">Province</label>
+                            <label name="" id="">City</label>
                             <select
                                 name="city"
                                 onChange={formik.handleChange}

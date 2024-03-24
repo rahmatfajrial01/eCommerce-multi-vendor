@@ -243,7 +243,7 @@ const Checkout = () => {
         }
         dispatch(updateCost(userData))
     }
-
+    // console.log(dataAddress)
 
     return (
         <section>
@@ -304,6 +304,7 @@ const Checkout = () => {
                                                     item={item}
                                                     fromChild={fromChild}
                                                     idShope={item?.shope}
+                                                    destination={dataAddress && dataAddress?.city_id}
                                                 // onClickJne={() => { setShipment('jne'), setCost('') }}
                                                 // onClickPos={() => { setShipment('pos'), setCost('') }}
                                                 // onClickTiki={() => { setShipment('tiki'), setCost('') }}

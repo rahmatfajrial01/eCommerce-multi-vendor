@@ -9,6 +9,6 @@ router.get("/", getAllProduct);
 router.get("/filter", sortProduct);
 router.get("/:slug", getAProduct);
 router.delete("/:id", authGuard, adminGuard, deleteProduct);
-router.put("/:id", authGuard, adminGuard, upload.single('image'), updateProduct);
+router.put("/:id", authGuard, upload.single('image'), updateProduct);
 
 module.exports = router

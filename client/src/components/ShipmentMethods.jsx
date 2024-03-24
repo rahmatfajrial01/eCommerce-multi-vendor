@@ -10,9 +10,10 @@ const ShipmentMethods = (props) => {
     const {
         item,
         fromChild,
-        idShope
+        idShope,
+        destination
     } = props
-    // console.log(item)
+    // console.log(destination)
 
     const token = useSelector(state => state?.auth?.user?.token)
     const rajaOngkirState = useSelector((state) => state?.rajaOngkir)
@@ -32,7 +33,7 @@ const ShipmentMethods = (props) => {
 
     useEffect(() => {
         if (shipment) {
-            let data = { origin: '153', destination: 4, weight: 1700, courier: shipment, idShope: id }
+            let data = { origin: '153', destination: destination, weight: 1700, courier: shipment, idShope: id }
             // let data = { origin: '501', destination: '114', weight: 1700, courier: 'jne' }
             let userData = {
                 token, data
@@ -44,7 +45,7 @@ const ShipmentMethods = (props) => {
         // setCost('')
         // }
     }, [
-        shipment
+        shipment, destination
     ])
 
     let handleClick = (a, b) => {

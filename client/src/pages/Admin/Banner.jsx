@@ -10,6 +10,7 @@ import { useFormik } from 'formik';
 import { createBanner, deleteBanner, getABanner, getAllBanner, resetState, updateBanner } from '../../features/banner/bannerSlice';
 import { GrUpdate } from "react-icons/gr";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Modal from '../../components/Modal';
 
 const Banner = () => {
 
@@ -33,6 +34,9 @@ const Banner = () => {
 
     const [picture, setPicture] = useState('')
     const [editPicture, setEditPicture] = useState('')
+    let [isOpen, setIsOpen] = useState(false)
+    let [idCat, setIdCat] = useState("")
+
     const handleChoose = (e) => {
         const file = e.target.files[0];
         setPicture(file);
@@ -44,8 +48,15 @@ const Banner = () => {
     }
 
     const handleDelete = (id) => {
-        let userData = { token, id }
+        let userData = { token, id: idCat }
         dispatch(deleteBanner(userData))
+        setIsOpen(false)
+    }
+
+    const closeModal = (e) => {
+        if (e === 'container') {
+            setIsOpen(false)
+        }
     }
 
     const Schema = yup.object({
@@ -157,7 +168,15 @@ const Banner = () => {
                                 <option value='leftTop'>Left Top Banner</option>
                             }
                             {
+                                bannerState?.singleBanner?.type === "leftTop" &&
+                                <option value='leftTop'>Left Top Banner</option>
+                            }
+                            {
                                 bannerState.allBanner && bannerState.allBanner.filter(item => item.type === 'leftBottom').length < 1 &&
+                                <option value='leftBottom'>Left Bottom Banner</option>
+                            }
+                            {
+                                bannerState?.singleBanner?.type === "leftBottom" &&
                                 <option value='leftBottom'>Left Bottom Banner</option>
                             }
                         </select>
@@ -208,7 +227,7 @@ const Banner = () => {
                             <td className='p-2'>{item?.createdAt}</td>
                             <td className='p-2'>
                                 <div className='flex gap-3'>
-                                    <FaTrashAlt onClick={() => handleDelete(item?._id)} className='cursor-pointer hover:text-red-500 ' />
+                                    <FaTrashAlt onClick={() => { setIsOpen(true), setIdCat(item?._id) }} className='cursor-pointer hover:text-red-500 ' />
                                     <FaEdit onClick={() => getAId(item?._id)} className='cursor-pointer hover:text-yellow-500' />
                                 </div>
                             </td>
@@ -216,6 +235,22 @@ const Banner = () => {
                     )
                 }
             </DataTable>
+            <Modal
+                isOpen={isOpen}
+                closeModal={(e) => closeModal(e.target.id)}
+                text='are you sure deleting this Brand'
+            >
+                <Button
+                    onClick={handleDelete}
+                    name='Yes'
+                    color='blue'
+                    type='button' />
+                <Button
+                    onClick={() => setIsOpen(false)}
+                    name='No'
+                    color='red'
+                    type='reset' />
+            </Modal >
         </section>
     )
 }

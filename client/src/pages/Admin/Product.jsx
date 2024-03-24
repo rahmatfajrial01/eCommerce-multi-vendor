@@ -178,11 +178,12 @@ const Product = () => {
             data.append('shope', shopeState?.currentShope?.shope[0]?._id)
             data.append('shopeName', shopeState?.currentShope?.shope[0]?.shopeName)
             data.append('image', values.image)
-            const dataProducts = { token, data, id: productState?.singleProduct._id }
             if (productState?.singleProduct) {
+                let dataProducts = { token, data, id: productState?.singleProduct._id }
                 dispatch(updateProduct(dataProducts))
                 // console.log(dataProducts)
             } else {
+                let dataProducts = { token, data }
                 dispatch(createProduct(dataProducts))
             }
             // resetForm()
