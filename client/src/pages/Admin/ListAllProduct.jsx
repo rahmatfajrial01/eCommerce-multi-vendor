@@ -53,7 +53,7 @@ const ListProduct = () => {
     return (
         <section className='mt-4 px-4 overflow-x-auto space-y-3 w-full'>
             <DataTable
-                headerTitle={['Product', 'Shope', 'tag', 'Category', 'Brand', 'Quantity', 'Price']}
+                headerTitle={['Product', 'Shope', 'tag', 'Category', 'Brand', 'Quantity', 'Price', 'Weight']}
             >
                 {
                     productState.allProduct && productState.allProduct?.map((item, index) =>
@@ -68,6 +68,7 @@ const ListProduct = () => {
                             <td className='p-2'>{item?.brand?.title}</td>
                             <td className='p-2'>{item?.quantity}</td>
                             <td className='p-2'>{item?.price}</td>
+                            <td className='p-2'>{item?.weight}</td>
                             <td className='p-2'>
                                 <div className='flex gap-3'>
                                     <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />

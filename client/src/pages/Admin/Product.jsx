@@ -140,6 +140,7 @@ const Product = () => {
         title: yup.string().required('Product Name is required'),
         description: yup.string().required('Description is required'),
         price: yup.number().required('Price is required'),
+        weight: yup.number().required('Weight is required'),
         category: yup.string().required('Category is required'),
         brand: yup.string().required('brand is required'),
         quantity: yup.number().required('quantity is required'),
@@ -152,6 +153,7 @@ const Product = () => {
             title: productState?.singleProduct?.title || '',
             description: productState?.singleProduct?.description || '',
             price: productState?.singleProduct?.price || '',
+            weight: productState?.singleProduct?.weight || '',
             category: productState?.singleProduct?.category || '',
             brand: productState?.singleProduct?.brand || '',
             quantity: productState?.singleProduct?.quantity || '',
@@ -171,6 +173,7 @@ const Product = () => {
             data.append('title', values.title)
             data.append('description', values.description)
             data.append('price', values.price)
+            data.append('weight', values.weight)
             data.append('category', values.category)
             data.append('brand', values.brand)
             data.append('quantity', values.quantity)
@@ -242,7 +245,7 @@ const Product = () => {
                                     <option value=''>Choose</option>
                                     {
                                         productCatState.allProductCategory && productCatState.allProductCategory.map((item, index) =>
-                                            <option value={item._id} >{item?.title}</option>
+                                            <option key={index} value={item._id} >{item?.title}</option>
                                         )
                                     }
                                 </select>
@@ -260,7 +263,7 @@ const Product = () => {
                                 <option value=''>Choose</option>
                                 {
                                     brandState.allBrand && brandState.allBrand.map((item, index) =>
-                                        <option value={item._id} >{item?.title}</option>
+                                        <option key={index} value={item._id} >{item?.title}</option>
                                     )
                                 }
                             </select>
@@ -273,11 +276,11 @@ const Product = () => {
                             className='text-sm space-y-3'>
                             <label htmlFor="">Tag</label>
                             <div className='space-x-1'>
-                                <input checked={formik.values.tag === 'Featured'} name='tag' value="Featured" type="radio" />
+                                <input checked={formik.values.tag === 'Featured'} name='tag' value="Featured" type="radio" readOnly />
                                 <label htmlFor="">Featured</label>
                             </div>
                             <div className='space-x-1'>
-                                <input checked={formik.values.tag === "Basic"} name='tag' value="Basic" type="radio" />
+                                <input checked={formik.values.tag === "Basic"} name='tag' value="Basic" type="radio" readOnly />
                                 <label htmlFor="">Basic</label>
                             </div>
                             {formik.errors.tag && formik.touched.tag ? <p className='text-red-500'>{formik.errors.tag}</p> : null}
@@ -293,6 +296,18 @@ const Product = () => {
                                 onBlur={formik.handleBlur}
                             />
                             {formik.errors.price && formik.touched.price ? <p className='text-red-500'>{formik.errors.price}</p> : null}
+                        </div>
+                        <div>
+                            <Input
+                                type="number"
+                                name="weight"
+                                label="Weight"
+                                placeholder='...'
+                                value={formik.values.weight}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.weight && formik.touched.weight ? <p className='text-red-500'>{formik.errors.weight}</p> : null}
                         </div>
                         <div>
                             <Input

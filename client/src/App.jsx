@@ -33,6 +33,7 @@ import ScrollToTop from './components/ScrollToTop'
 import Checkout from './pages/Checkout'
 import ThirdLayout from './components/User/ThirdLayout'
 import Address from './pages/Address'
+import { AdminRoutes } from './routing/adminRoutes'
 
 function App() {
   return (
@@ -59,15 +60,15 @@ function App() {
         <Route path='/admin/register' element={<PrivateRoutes><RegisterAdmin /></PrivateRoutes>} />
         <Route path='/admin' element={<PrivateRoutes><SecondLayout /></PrivateRoutes>} >
           <Route index element={<Dashboard />} />
-          <Route path='user' element={<User />} />
-          <Route path='category' element={<Category />} />
+          <Route path='user' element={<AdminRoutes><User /></AdminRoutes>} />
+          <Route path='category' element={<AdminRoutes><Category /></AdminRoutes>} />
+          <Route path='banner' element={<AdminRoutes><Banner /></AdminRoutes>} />
+          <Route path='brand' element={<AdminRoutes><Brand /></AdminRoutes>} />
+          <Route path='list-all-product' element={<AdminRoutes><ListAllProduct /></AdminRoutes>} />
           <Route path='product' element={<Product />} />
           <Route path='product/:slug' element={<Product />} />
           <Route path='list-product' element={<ListProduct />} />
-          <Route path='list-all-product' element={<ListAllProduct />} />
           <Route path='order' element={<Order2 />} />
-          <Route path='banner' element={<Banner />} />
-          <Route path='brand' element={<Brand />} />
         </Route >
 
         <Route path='/register' element={<OpenRoutes><Register /></OpenRoutes>} />

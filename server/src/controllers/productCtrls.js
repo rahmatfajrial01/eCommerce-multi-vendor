@@ -11,12 +11,13 @@ const createProduct = asyncHandler(async (req, res) => {
             folder: "eCommerce/products"
         })
 
-        const { title, description, price, category, brand, quantity, shope, tag, shopeName } = req.body;
+        const { title, description, price, weight, category, brand, quantity, shope, tag, shopeName } = req.body;
         const newProduct = await Product.create({
             title,
             slug: slugify(req.body.title),
             description,
             price,
+            weight,
             category,
             brand,
             shopeName,
@@ -171,6 +172,7 @@ const updateProduct = async (req, res) => {
                         brand: req.body.brand || product.brand,
                         tag: req.body.tag || product.tag,
                         price: req.body.price || product.price,
+                        weight: req.body.weight || product.weight,
                         quantity: req.body.quantity || product.quantity
                     },
                     {
@@ -188,6 +190,7 @@ const updateProduct = async (req, res) => {
                     brand: req.body.brand || product.brand,
                     tag: req.body.tag || product.tag,
                     price: req.body.price || product.price,
+                    weight: req.body.weight || product.weight,
                     quantity: req.body.quantity || product.quantity
                 },
                 {

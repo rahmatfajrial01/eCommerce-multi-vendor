@@ -9,9 +9,9 @@ const Header = () => {
     const shopeState = useSelector(state => state?.shope)
 
     const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(getCurrentUser(authState?.user?.token))
-    }, [])
+    // useEffect(() => {
+    //     dispatch(getCurrentUser(authState?.user?.token))
+    // }, [])
 
     useEffect(() => {
         // if (authState?.currentUser?._id !== undefined) {

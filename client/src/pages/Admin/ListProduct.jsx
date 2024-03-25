@@ -21,6 +21,7 @@ const ListProduct = () => {
     // console.log(productState.allProduct)
 
     useEffect(() => {
+        dispatch(resetState())
         dispatch(getAllProduct())
     }, [
         productState.productDeleted
@@ -61,7 +62,7 @@ const ListProduct = () => {
                 </Link>
             </div>
             <DataTable
-                headerTitle={['Product', 'Tag', 'Category', 'Brand', 'Quantity', 'Price']}
+                headerTitle={['Product', 'Tag', 'Category', 'Brand', 'Quantity', 'Price', 'Weight']}
             >
                 {
                     productState.allProduct && productState.allProduct?.filter(item => item?.shope?._id === shopeState?.currentShope?.shope[0]?._id).map((item, index) =>
@@ -75,6 +76,7 @@ const ListProduct = () => {
                             <td className='p-2'>{item?.brand?.title}</td>
                             <td className='p-2'>{item?.quantity}</td>
                             <td className='p-2'>{item?.price}</td>
+                            <td className='p-2'>{item?.weight}</td>
                             <td className='p-2'>
                                 <div className='flex gap-3'>
                                     <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />
