@@ -13,7 +13,7 @@ const ShipmentMethods = (props) => {
         idShope,
         destination
     } = props
-    // console.log(destination)
+    console.log(item)
 
     const token = useSelector(state => state?.auth?.user?.token)
     const rajaOngkirState = useSelector((state) => state?.rajaOngkir)
@@ -33,7 +33,7 @@ const ShipmentMethods = (props) => {
 
     useEffect(() => {
         if (shipment) {
-            let data = { origin: '153', destination: destination, weight: 1700, courier: shipment, idShope: id }
+            let data = { origin: '153', destination: destination, weight: item?.weight, courier: shipment, idShope: id }
             // let data = { origin: '501', destination: '114', weight: 1700, courier: 'jne' }
             let userData = {
                 token, data
@@ -64,7 +64,7 @@ const ShipmentMethods = (props) => {
     return (
         <div className='space-y-5' >
             <h1>Shipment Methods</h1>
-            <p>Sent From : <span>{rajaOngkirState?.cost?.rajaongkir?.origin_details?.province}, {rajaOngkirState?.cost?.rajaongkir?.origin_details?.city_name}</span></p>
+            {/* <p>Sent From : <span>{rajaOngkirState?.cost?.rajaongkir?.origin_details?.province}, {rajaOngkirState?.cost?.rajaongkir?.origin_details?.city_name}</span></p> */}
             <div className='flex gap-5 items-center'>
                 <button onClick={() => { handleClearCost(), setCost(''), setShipment('jne'), setId(idShope) }} className={`rounded-lg p-1  ${shipment === 'jne' && 'border-2 border-green-500'}`}>
                     <img className='h-16 w-24 object-cover' src={images.jne} alt="" />

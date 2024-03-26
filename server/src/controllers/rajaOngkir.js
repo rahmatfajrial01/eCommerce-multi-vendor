@@ -39,6 +39,10 @@ const getCity = asyncHandler(async (req, res) => {
 const getCost = asyncHandler(async (req, res) => {
     try {
         const { _id } = req.user;
+        let shope = await Shope.findById(req.body.idShope);
+        if (shope) {
+            req.body.origin = shope.addresses[0].city_id
+        }
         const config = {
             headers: {
                 key: `${process.env.RAJA_ONGKIR_API_KEY}`,
@@ -58,7 +62,6 @@ const getCost = asyncHandler(async (req, res) => {
                 }
             }
         )
-
         return res.status(201).json(response.data)
     } catch (error) {
         throw new Error(error)

@@ -69,6 +69,7 @@ const getCart = asyncHandler(async (req, res) => {
         let buy_product_item = 0
         let calculatePrice = 0;
         let card_product_count = 0;
+        let calculateWeight = 0;
 
         const outOfStockProduct = card_products.filter(p => p.products[0].quantity < p.quantity)
         for (let i = 0; i < outOfStockProduct.length; i++) {
@@ -84,23 +85,27 @@ const getCart = asyncHandler(async (req, res) => {
             buy_product_item = buy_product_item + quantity
             const {
                 price,
-                discount
+                weight
             } = inStockProduct[i].products[0]
 
             calculatePrice = calculatePrice + quantity * price
+            calculateWeight = calculateWeight + quantity * weight
 
         }
-
+        console.log(calculateWeight)
         let p = []
         let unique = [...new Set(inStockProduct.map(p => p.products[0].shope.toString()))]
         for (let i = 0; i < unique.length; i++) {
             let price = 0;
+            let weight = 0;
             for (let j = 0; j < inStockProduct.length; j++) {
                 const tempProduct = inStockProduct[j].products[0]
                 if (unique[i] === tempProduct.shope.toString()) {
 
                     pri = tempProduct.price
+                    we = tempProduct.weight
                     price = price + pri * inStockProduct[j].quantity
+                    weight = weight + we * inStockProduct[j].quantity
                     p[i] = {
                         shope: unique[i],
                         shopeName: tempProduct.shopeName,
@@ -108,7 +113,7 @@ const getCart = asyncHandler(async (req, res) => {
                         shippment: "",
                         shippmentCost: "",
                         shippmentService: "",
-                        price,
+                        weight,
                         products: p[i] ? [
                             ...p[i].products,
                             {
@@ -131,7 +136,7 @@ const getCart = asyncHandler(async (req, res) => {
             inStockProduct: p,
             price: calculatePrice,
             card_product_count,
-            shipping_fee: 85 * p.length,
+            weight: calculateWeight,
             outOfStockProduct,
             buy_product_item
         })

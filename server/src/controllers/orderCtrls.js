@@ -10,7 +10,7 @@ const { v4 } = require("uuid");
 
 const createOrder = asyncHandler(async (req, res) => {
     try {
-        const { shope, shopeName, price, products } = req.body
+        const { shope, shopeName, price, products, weight } = req.body
         const { _id } = req.user;
         let userOrder = await Order.find({ user: _id });
         if (userOrder) {
@@ -26,6 +26,7 @@ const createOrder = asyncHandler(async (req, res) => {
                 shope,
                 shopeName,
                 price,
+                weight,
                 products,
             }).save();
             res.json(newOrder);

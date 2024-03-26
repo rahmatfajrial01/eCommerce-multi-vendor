@@ -9,10 +9,10 @@ const shopeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    // address: {
-    //     type: String,
-    //     required: true,
-    // },
+    avatar: {
+        type: String,
+        default: ""
+    },
     // codePos: {
     //     type: Number,
     //     required: true,

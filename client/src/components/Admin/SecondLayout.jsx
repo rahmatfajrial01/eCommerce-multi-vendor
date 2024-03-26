@@ -20,9 +20,9 @@ const Layout = () => {
                     ?
                     <>
                         <Header />
-                        <div className='flex mt-10'>
+                        <div className='flex mt-12'>
                             <Navigasi />
-                            <div className='ps-44 w-full mb-5 min-h-screen'>
+                            <div className='ps-52 w-full mb-5 min-h-screen'>
                                 <Outlet />
                             </div>
                         </div>

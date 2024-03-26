@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const User = require("../models/userModels");
 const Shope = require("../models/ShopeModels");
 const axios = require('axios')
+const cloudinary = require('../utils/cloudinary')
 
 const register = asyncHandler(async (req, res) => {
     const { telephone, shopeName, address, codePos, user, province, city, fullAddress } = req.body;
@@ -62,7 +63,27 @@ const currentShope = asyncHandler(async (req, res, next) => {
     }
 });
 
+const updatePictureShope = async (req, res, next) => {
+    try {
+        // const result = await cloudinary.uploader.upload(req.file.path, {
+        //     folder: "eCommerce/profile"
+        // })
+        await Shope.findByIdAndUpdate(
+            req.params.id,
+            {
+                avatar: req.body.avatar
+            },
+            {
+                new: true
+            }
+        );
+        res.json({ message: 'profile shope updated' });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 module.exports = {
-    register, currentShope
+    register, currentShope, updatePictureShope
 }

@@ -17,6 +17,13 @@ export const getCurrentShope = createAsyncThunk("shope/current-shope", async (us
         return thunkApi.rejectWithValue(error)
     }
 })
+export const updateProfileShope = createAsyncThunk("shope/update-profile-shope", async (userData, thunkApi) => {
+    try {
+        return await authService.updateProfileShope(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
 
 export const resetState = createAction("Reset_all")
 
@@ -76,6 +83,24 @@ export const authSlice = createSlice({
                 // if (state.isError === true) {
                 //     toast.error("action.payload.response.data.message")
                 // }
+            })
+            .addCase(updateProfileShope.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateProfileShope.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.pictureShopeUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("update profile shope successfully")
+                }
+            })
+            .addCase(updateProfileShope.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
             })
             .addCase(resetState, () => initialState)
 

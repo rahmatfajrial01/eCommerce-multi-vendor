@@ -27,7 +27,19 @@ const currentShope = async (userData) => {
         return response.data
     }
 }
+const updateProfileShope = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}shope/update-picture/${userData.id}`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const authService = {
-    register, currentShope
+    register, currentShope, updateProfileShope
 }

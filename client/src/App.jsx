@@ -34,6 +34,8 @@ import Checkout from './pages/Checkout'
 import ThirdLayout from './components/User/ThirdLayout'
 import Address from './pages/Address'
 import { AdminRoutes } from './routing/adminRoutes'
+import AdminAddress from './pages/Admin/ShopeSetting'
+import Seller from './pages/Admin/Seller'
 
 function App() {
   return (
@@ -69,6 +71,8 @@ function App() {
           <Route path='product/:slug' element={<Product />} />
           <Route path='list-product' element={<ListProduct />} />
           <Route path='order' element={<Order2 />} />
+          <Route path='shope-setting' element={<AdminAddress />} />
+          <Route path='seller' element={<Seller />} />
         </Route >
 
         <Route path='/register' element={<OpenRoutes><Register /></OpenRoutes>} />
