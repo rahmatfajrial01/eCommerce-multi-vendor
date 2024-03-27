@@ -83,7 +83,79 @@ const updatePictureShope = async (req, res, next) => {
     }
 };
 
+const updateInfoShope = async (req, res, next) => {
+    try {
+        let shope = await Shope.findById(req.params.id)
+        if (shope) {
+            await Shope.findByIdAndUpdate(
+                req.params.id,
+                {
+                    shopeName: req.body.shopeName || shope.shopeName,
+                    telephone: req.body.telephone || shope.telephone
+                },
+                {
+                    new: true
+                }
+            );
+            res.json({ message: 'shope info updated' });
+        } else {
+            throw new Error("shope not axists")
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+const updateAddressShope = async (req, res, next) => {
+    try {
+        let shope = await Shope.findById(req.params.id)
+        if (shope) {
+            const { province, city, fullAddress } = req.body;
+            const config = {
+                headers: {
+                    key: `${process.env.RAJA_ONGKIR_API_KEY}`,
+                    "content-type": "application/x-www-form-urlencoded"
+                },
+            };
+            const response = await axios.get(`https://api.rajaongkir.com/starter/city?id=${city || shope.city}province=${province || shope.province}`, config)
+
+            await Shope.findByIdAndUpdate(
+                req.params.id,
+                {
+                    addresses: {
+                        province: response.data.rajaongkir.results.province || shope.province,
+                        city: response.data.rajaongkir.results.city_name || shope.city_name,
+                        city_id: response.data.rajaongkir.results.city_id || shope.city_id,
+                        fullAddress: fullAddress || shope.fullAddress
+                    },
+                },
+                {
+                    new: true
+                }
+            );
+            res.json({ message: 'shope info updated' });
+        } else {
+            throw new Error("shope not axists")
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getMemberShope = asyncHandler(async (req, res, next) => {
+    try {
+        let shope = await Shope.findById(req.params.id).populate([
+            {
+                path: "user",
+                select: ["avatar", "username", "email", "createdAt"],
+            }
+        ]);
+        return res.status(201).json(shope)
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = {
-    register, currentShope, updatePictureShope
+    register, currentShope, updatePictureShope, updateInfoShope, updateAddressShope, getMemberShope
 }

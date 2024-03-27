@@ -39,7 +39,44 @@ const updateProfileShope = async (userData) => {
         return response.data
     }
 }
+const updateInfoShope = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}shope/update-info/${userData.id}`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+const updateAddressShope = async (userData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}shope/update-address/${userData.id}`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+const getMemberShope = async (userData) => {
+    console.log(userData)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.get(`${base_url}shope/member-shope/${userData.id}`, config)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const authService = {
-    register, currentShope, updateProfileShope
+    register, currentShope, updateProfileShope, updateInfoShope, updateAddressShope, getMemberShope
 }

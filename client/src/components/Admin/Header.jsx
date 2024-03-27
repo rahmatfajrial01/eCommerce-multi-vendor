@@ -23,7 +23,9 @@ const Header = () => {
 
     }, [
         // authState?.currentUser?._id
-        shopeState?.pictureShopeUpdated
+        shopeState?.pictureShopeUpdated,
+        shopeState?.infoShopeUpdated,
+        shopeState?.addressShopeUpdated
     ])
 
     // console.log('ini', authState?.currentUser)

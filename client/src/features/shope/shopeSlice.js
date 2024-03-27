@@ -25,6 +25,30 @@ export const updateProfileShope = createAsyncThunk("shope/update-profile-shope",
     }
 })
 
+export const updateInfoShope = createAsyncThunk("shope/update-info-shope", async (userData, thunkApi) => {
+    try {
+        return await authService.updateInfoShope(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const updateAddressShope = createAsyncThunk("shope/update-address-shope", async (userData, thunkApi) => {
+    try {
+        return await authService.updateAddressShope(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
+export const getMemberShope = createAsyncThunk("shope/get-member-shope", async (userData, thunkApi) => {
+    try {
+        return await authService.getMemberShope(userData)
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 export const resetState = createAction("Reset_all")
 
 
@@ -97,6 +121,57 @@ export const authSlice = createSlice({
                 }
             })
             .addCase(updateProfileShope.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateInfoShope.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateInfoShope.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.infoShopeUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("update info shope successfully")
+                }
+            })
+            .addCase(updateInfoShope.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateAddressShope.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateAddressShope.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.addressShopeUpdated = action.payload;
+                if (state.isSuccess === true) {
+                    toast.info("update address shope successfully")
+                }
+            })
+            .addCase(updateAddressShope.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(getMemberShope.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getMemberShope.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.memberShope = action.payload;
+            })
+            .addCase(getMemberShope.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false;

@@ -35,7 +35,7 @@ import ThirdLayout from './components/User/ThirdLayout'
 import Address from './pages/Address'
 import { AdminRoutes } from './routing/adminRoutes'
 import AdminAddress from './pages/Admin/ShopeSetting'
-import Seller from './pages/Admin/Seller'
+import Seller from './pages/Admin/SellerSetting'
 
 function App() {
   return (
