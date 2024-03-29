@@ -36,6 +36,8 @@ import Address from './pages/Address'
 import { AdminRoutes } from './routing/adminRoutes'
 import AdminAddress from './pages/Admin/ShopeSetting'
 import Seller from './pages/Admin/SellerSetting'
+import Vendor from './pages/Admin/Vendor'
+import SellerStore from './pages/SellerStore'
 
 function App() {
   return (
@@ -45,6 +47,7 @@ function App() {
         <Route path='/' element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path=':id' element={<Detail />} />
+          <Route path='seller/:shopeName' element={<SellerStore />} />
           <Route path='store' element={<Store />} />
           <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />
           {/* <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} /> */}
@@ -66,6 +69,7 @@ function App() {
           <Route path='category' element={<AdminRoutes><Category /></AdminRoutes>} />
           <Route path='banner' element={<AdminRoutes><Banner /></AdminRoutes>} />
           <Route path='brand' element={<AdminRoutes><Brand /></AdminRoutes>} />
+          <Route path='vendor' element={<AdminRoutes><Vendor /></AdminRoutes>} />
           <Route path='list-all-product' element={<AdminRoutes><ListAllProduct /></AdminRoutes>} />
           <Route path='product' element={<Product />} />
           <Route path='product/:slug' element={<Product />} />

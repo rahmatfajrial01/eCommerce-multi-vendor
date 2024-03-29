@@ -1,42 +1,49 @@
 import React, { useEffect } from 'react'
+import { RxAvatar } from 'react-icons/rx'
 import { useDispatch, useSelector } from 'react-redux'
 import DataTable from '../../components/DataTable'
-import { getAllUser } from '../../features/user/userSlice'
-import { RxAvatar } from "react-icons/rx";
+import { getAllShope } from '../../features/shope/shopeSlice'
+import { TbSquareRoundedMinus } from "react-icons/tb";
 
-const User = () => {
+const Vendor = () => {
+    const token = useSelector(state => state?.auth?.user?.token)
+    const shopeState = useSelector(state => state?.shope)
+    console.log(shopeState)
     const dispatch = useDispatch()
-    const userState = useSelector(state => state?.user)
-    const authState = useSelector(state => state?.auth)
     useEffect(() => {
-        dispatch(getAllUser(authState?.user?.token))
+        dispatch(getAllShope(token))
     }, [])
+
     return (
         <section className='mt-4 px-4 overflow-x-auto  w-full'>
             <DataTable
                 headerTitle={[
-                    'Usernme',
-                    'Email',
-                    'Role',
+                    'Shope Name',
+                    'Telephone',
+                    'Addres',
+                    'Member',
+                    'Products',
                     'Created At',
                     'Action',
                 ]}
             >
                 {
-                    userState?.allUser?.map((item, index) =>
+                    shopeState?.allShope?.map((item, index) =>
                         <tr key={index} className='border-2 p-2'>
                             <td className='p-2 flex items-center gap-2 w-max'>
                                 {
                                     item?.avatar
                                         ?
-                                        <img className='h-12 w-12 object-cover rounded-full' src={item?.avatar} alt="" />
+                                        <img className='h-12 w-12 object-cover rounded-2xl' src={item?.avatar} alt="" />
                                         :
-                                        <RxAvatar size={50} />
+                                        <TbSquareRoundedMinus size={50} />
                                 }
-                                <span>{item?.username}</span>
+                                <span>{item?.shopeName}</span>
                             </td>
-                            <td className='p-2'>{item?.email}</td>
-                            <td className='p-2'>{item?.role > 2 ? "Admin" : item?.role === 1 ? "buyer" : "Seller"}</td>
+                            <td className='p-2'>{item?.telephone}</td>
+                            <td className='p-2'>{item?.addresses[0]?.city} ({item?.addresses[0]?.province})</td>
+                            <td className='px-8'>{item?.user?.length}</td>
+                            <td className='px-8'>{item?.products?.length}</td>
                             <td className='p-2'>
                                 {new Date(item?.createdAt).getDate()}
                                 {" "}
@@ -53,4 +60,4 @@ const User = () => {
     )
 }
 
-export default User
+export default Vendor

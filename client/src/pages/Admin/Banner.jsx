@@ -224,7 +224,13 @@ const Banner = () => {
                                 <p>{item?.title}                                </p>
                             </td>
                             <td className='p-2'>{item?.type}</td>
-                            <td className='p-2'>{item?.createdAt}</td>
+                            <td className='p-2'>
+                                {new Date(item?.createdAt).getDate()}
+                                {" "}
+                                {new Date(item?.createdAt).toLocaleString("default", { month: "long", })}
+                                {" "}
+                                {new Date(item?.createdAt).getFullYear()}
+                            </td>
                             <td className='p-2'>
                                 <div className='flex gap-3'>
                                     <FaTrashAlt onClick={() => { setIsOpen(true), setIdCat(item?._id) }} className='cursor-pointer hover:text-red-500 ' />

@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../components/Button'
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { addCart } from '../features/cart/cartSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { CgProfile } from "react-icons/cg";
 import { FaHeart } from "react-icons/fa";
 import { addWishlist, getWishlist } from '../features/user/userSlice';
+import { TbSquareRoundedMinus } from 'react-icons/tb';
 
 const Detail = () => {
     const getSlug = location?.pathname?.split('/')[1]
@@ -116,10 +117,16 @@ const Detail = () => {
                                     className={`hover:opacity-95 cursor-pointer ${wishlistState.wishlist.wishlist && wishlistState.wishlist.wishlist?.filter((item) => item?._id === productState?._id).length === 1 ? "text-red-500 " : ""}`}
                                 />
                             </div>
-                            <div className='pt-5 flex gap-2 items-center'>
-                                <CgProfile size='30' />
+                            <Link to={`/seller/${productState?.shope?.shopeName}`} className='pt-5 flex gap-2 items-center'>
+                                {
+                                    productState?.shope
+                                        ?
+                                        <img className='h-12 w-12 object-cover rounded-2xl' src={productState?.shope?.avatar} alt="" />
+                                        :
+                                        <TbSquareRoundedMinus size={50} />
+                                }
                                 <p>{productState?.shope?.shopeName}</p>
-                            </div>
+                            </Link>
                         </div>
                     </div>
             }

@@ -84,7 +84,7 @@ const Header = () => {
         }, 200);
     }
 
-    console.log(authState?.currentUser)
+    // console.log(authState?.currentUser)
 
     return (
         <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>

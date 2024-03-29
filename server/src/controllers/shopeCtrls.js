@@ -2,7 +2,9 @@ const asyncHandler = require('express-async-handler');
 const User = require("../models/userModels");
 const Shope = require("../models/ShopeModels");
 const axios = require('axios')
-const cloudinary = require('../utils/cloudinary')
+const cloudinary = require('../utils/cloudinary');
+const cartModels = require('../models/cartModels');
+const mongoose = require("mongoose");
 
 const register = asyncHandler(async (req, res) => {
     const { telephone, shopeName, address, codePos, user, province, city, fullAddress } = req.body;
@@ -156,6 +158,98 @@ const getMemberShope = asyncHandler(async (req, res, next) => {
     }
 });
 
+const getNewMember = asyncHandler(async (req, res, next) => {
+    try {
+        let user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return res.status(201).json({ message: 'user not found' })
+        }
+        else if (user.role >= 2) {
+            return res.status(201).json({ message: 'user already be seller' })
+        } else {
+            return res.status(201).json({
+                avatar: user.avatar,
+                username: user.username,
+                email: user.email,
+                id: user._id,
+            })
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+const acceptMember = asyncHandler(async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            throw new Error("user not axists")
+        }
+        else if (user.role >= 2) {
+            throw new Error("user already be seller")
+        } else {
+            await User.findByIdAndUpdate(req.params.id, { role: 2 })
+            let shope = await Shope.findByIdAndUpdate(
+                req.params.shopeId,
+                {
+                    $push: { user: user._id },
+                },
+                {
+                    new: true
+                }
+            )
+            res.json(shope)
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+const getAllShope = asyncHandler(async (req, res, next) => {
+    try {
+        const shope = await Shope.aggregate([
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: "shope",
+                    as: 'products'
+                }
+            },
+
+        ]);
+        res.json(shope)
+    } catch (error) {
+        console.log(error)
+        next(error);
+    }
+});
+
+const getShope = asyncHandler(async (req, res, next) => {
+    try {
+        const shope = await Shope.aggregate([
+            {
+                $match: {
+                    shopeName: req.params.shopeName
+                }
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: "shope",
+                    as: 'products'
+                }
+            },
+
+        ]);
+        res.json(shope)
+    } catch (error) {
+        console.log(error)
+        next(error);
+    }
+});
+
 module.exports = {
-    register, currentShope, updatePictureShope, updateInfoShope, updateAddressShope, getMemberShope
+    register, currentShope, updatePictureShope, updateInfoShope, updateAddressShope, getMemberShope, getNewMember, acceptMember, getAllShope, getShope
 }

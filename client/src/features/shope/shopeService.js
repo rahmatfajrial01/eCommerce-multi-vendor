@@ -64,7 +64,6 @@ const updateAddressShope = async (userData) => {
     }
 }
 const getMemberShope = async (userData) => {
-    console.log(userData)
     const config = {
         headers: {
             Authorization: `Bearer ${userData.token}`,
@@ -76,7 +75,52 @@ const getMemberShope = async (userData) => {
         return response.data
     }
 }
+const getNewMember = async (userData) => {
+    console.log(userData)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.post(`${base_url}shope/new-member`, userData.data, config)
+    if (response.data) {
+        return response.data
+    }
+}
+const acceptMember = async (userData) => {
+    console.log(userData)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.put(`${base_url}shope/accept-member/${userData.id}/${userData.shopeId}`, '', config)
+    if (response.data) {
+        return response.data
+    }
+}
+
+const getAllShope = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+        },
+    };
+    const response = await axios.get(`${base_url}shope`, config)
+    if (response.data) {
+        return response.data
+    }
+}
+const getShope = async (userData) => {
+    const response = await axios.get(`${base_url}shope/${userData}`)
+    if (response.data) {
+        return response.data
+    }
+}
 
 export const authService = {
-    register, currentShope, updateProfileShope, updateInfoShope, updateAddressShope, getMemberShope
+    register, currentShope, updateProfileShope, updateInfoShope, updateAddressShope, getMemberShope, getNewMember, acceptMember, getAllShope, getShope
 }

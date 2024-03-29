@@ -92,7 +92,6 @@ const getCart = asyncHandler(async (req, res) => {
             calculateWeight = calculateWeight + quantity * weight
 
         }
-        console.log(calculateWeight)
         let p = []
         let unique = [...new Set(inStockProduct.map(p => p.products[0].shope.toString()))]
         for (let i = 0; i < unique.length; i++) {

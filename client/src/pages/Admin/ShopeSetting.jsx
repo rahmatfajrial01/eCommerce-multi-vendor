@@ -83,8 +83,10 @@ const Address = () => {
 
 
     useEffect(() => {
-        let data = { token, id: idProvince }
-        dispatch(getCity(data))
+        if (idProvince) {
+            let data = { token, id: idProvince }
+            dispatch(getCity(data))
+        }
     }, [idProvince])
 
     const handleOpenInfo = () => {

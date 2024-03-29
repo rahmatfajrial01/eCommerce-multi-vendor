@@ -104,7 +104,13 @@ const Category = () => {
                         productCatState?.allProductCategory && productCatState?.allProductCategory?.map((item, index) =>
                             <tr key={index} className='border-2 p-2'>
                                 <td className='p-2'>{item?.title}</td>
-                                <td className='p-2'>{item?.createdAt}</td>
+                                <td className='p-2'>
+                                    {new Date(item?.createdAt).getDate()}
+                                    {" "}
+                                    {new Date(item?.createdAt).toLocaleString("default", { month: "long", })}
+                                    {" "}
+                                    {new Date(item?.createdAt).getFullYear()}
+                                </td>
                                 <td className='p-2 flex gap-3 '>
                                     <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />
                                     <FaEdit onClick={() => { getAId(item?._id) }} className='cursor-pointer hover:text-yellow-500' />

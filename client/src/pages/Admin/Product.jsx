@@ -204,6 +204,23 @@ const Product = () => {
         }
     }, [productState?.productCreated, productState?.productUpdated])
 
+    let [stock, setStock] = useState("")
+
+    useEffect(() => {
+        let tes = result.split('-').slice(0, -1).map((i => ({
+            variant: i,
+            stock: 0,
+            price: 0
+        })))
+        for (let index = 0; index < tes.length; index++) {
+            // element = tes[index];
+            if (stock) {
+                tes[index].stock = stock
+            }
+        }
+        console.log(tes)
+    }, [result, stock])
+
     return (
         <section className='p-5'>
             <div className='space-y-5'>
@@ -485,7 +502,7 @@ const Product = () => {
                                                         </div>
                                                         <div className='flex flex-col p-1'>
                                                             <label className='font-semibold' htmlFor="">stock</label>
-                                                            <input type="text" className='border' />
+                                                            <input value={stock} onChange={e => setStock(e.target.value)} type="text" className='border' />
                                                         </div>
                                                     </div>
                                                 )

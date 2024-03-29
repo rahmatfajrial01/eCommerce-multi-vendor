@@ -62,7 +62,7 @@ const ListProduct = () => {
                 </Link>
             </div>
             <DataTable
-                headerTitle={['Product', 'Tag', 'Category', 'Brand', 'Quantity', 'Price', 'Weight']}
+                headerTitle={['Product', 'Tag', 'Category', 'Brand', 'Quantity', 'Price', 'Weight', 'createdAt']}
             >
                 {
                     productState.allProduct && productState.allProduct?.filter(item => item?.shope?._id === shopeState?.currentShope?.shope[0]?._id).map((item, index) =>
@@ -77,6 +77,13 @@ const ListProduct = () => {
                             <td className='p-2'>{item?.quantity}</td>
                             <td className='p-2'>{item?.price}</td>
                             <td className='p-2'>{item?.weight}</td>
+                            <td className='p-2'>
+                                {new Date(item?.createdAt).getDate()}
+                                {" "}
+                                {new Date(item?.createdAt).toLocaleString("default", { month: "long", })}
+                                {" "}
+                                {new Date(item?.createdAt).getFullYear()}
+                            </td>
                             <td className='p-2'>
                                 <div className='flex gap-3'>
                                     <FaTrashAlt onClick={() => { openModal(item?._id) }} className='cursor-pointer hover:text-red-500' />
