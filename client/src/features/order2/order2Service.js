@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { base_url } from '../../Utils/axiosConfig';
+import { base_url } from '../../utils/axiosConfig';
 
 const changeStatusOrder2 = async (userData) => {
     const config = {

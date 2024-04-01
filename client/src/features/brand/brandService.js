@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { base_url } from '../../Utils/axiosConfig';
+import { base_url } from '../../utils/axiosConfig';
 
 export const getAllBrand = async () => {
     const response = await axios.get(`${base_url}brand`)
