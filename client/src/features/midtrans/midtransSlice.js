@@ -72,6 +72,7 @@ export const bannerSlice = createSlice({
             })
             .addCase(resetState, (state) => {
                 state.midtrans = null;
+                state.statusOrder = null;
             })
     }
 })

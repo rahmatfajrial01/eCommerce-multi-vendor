@@ -197,9 +197,9 @@ export const userSlice = createSlice({
                 state.isError = false;
                 state.isSuccess = true;
                 state.sendedOrder = action.payload;
-                if (state.isSuccess === true) {
-                    toast.info("shope ok")
-                }
+                // if (state.isSuccess === true) {
+                //     toast.info("shope ok")
+                // }
             })
             .addCase(sendOrder.rejected, (state, action) => {
                 state.isLoading = false;

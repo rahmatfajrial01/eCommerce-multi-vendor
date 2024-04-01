@@ -4,6 +4,6 @@ const { createMidtrans, getStatusOrder } = require('../controllers/midtransCtrls
 const { authGuard, adminGuard } = require('../middlewares/authMiddleware');
 
 router.post("/", authGuard, createMidtrans);
-router.get("/", authGuard, getStatusOrder);
+router.get("/:id", authGuard, getStatusOrder);
 
 module.exports = router;

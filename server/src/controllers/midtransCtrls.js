@@ -3,6 +3,7 @@ const { v4 } = require("uuid");
 const Order = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
 const axios = require('axios')
+const Order2 = require("../models/order2Models");
 
 const createMidtrans = asyncHandler(async (req, res, next) => {
     try {
@@ -60,7 +61,18 @@ const getStatusOrder = asyncHandler(async (req, res, next) => {
                 password: "",
             },
         };
-        const response = await axios.get(`https://api.sandbox.midtrans.com/v2/840db1c7-8b26-4d59-b8bc-1ce99a18dee1/status`, config)
+        const response = await axios.get(`https://api.sandbox.midtrans.com/v2/${req.params.id}/status`, config)
+        if (response.data.transaction_status === 'settlement') {
+            await Order2.updateMany(
+                { "orderId": response.data.order_id },
+                {
+                    "$set":
+                    {
+                        "orderStatus": "Being Packaged",
+                        "payInfo": response.data
+                    }
+                });
+        }
         return res.status(201).json(response.data)
     } catch (error) {
         next(error);

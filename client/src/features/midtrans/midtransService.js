@@ -13,14 +13,14 @@ export const createMidtrans = async (token) => {
         return response.data
     }
 }
-export const getStatusOrder = async (token) => {
+export const getStatusOrder = async (userData) => {
     const config = {
         headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData.token}`,
             Accept: "application/json",
         },
     };
-    const response = await axios.get(`${base_url}midtrans`, config)
+    const response = await axios.get(`${base_url}midtrans/${userData.id}`, config)
     if (response.data) {
         return response.data
     }

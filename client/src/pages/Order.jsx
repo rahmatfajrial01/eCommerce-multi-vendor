@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrder2 } from '../features/order2/order2Slice'
 import OrderItem from '../components/OrderItem'
-import { getStatusOrder } from '../features/midtrans/midtransSlice'
+import { getStatusOrder, resetState } from '../features/midtrans/midtransSlice'
+import { toast } from 'react-toastify'
 
 
 const Order = () => {
@@ -14,12 +15,26 @@ const Order = () => {
     useEffect(() => {
         let userData = { token, orderStatus }
         dispatch(getOrder2(userData))
-    }, [orderStatus])
+        if (midtransState?.statusOrder?.transaction_status === 'pending') {
+            toast.info('still not paid')
+        } else if (midtransState?.statusOrder?.transaction_status === 'settlement') {
+            toast.success('payment has been made')
+            let userData = { token, orderStatus }
+            dispatch(getOrder2(userData))
+            dispatch(resetState())
+        }
+    }, [orderStatus, midtransState.statusOrder])
 
     // useEffect(() => {
     //     dispatch(getStatusOrder(token))
     // }, [])
     // console.log(order2State.order2.order2Unpaid)
+
+    const getStatus = (id) => {
+        let userData = { token, id }
+        dispatch(getStatusOrder(userData))
+    }
+
     return (
         <section className='w-full'>
             <div className='space-y-5'>
@@ -49,7 +64,10 @@ const Order = () => {
                             <div key={index} className='border rounded-xl'>
                                 <div className='flex justify-between py-2 px-5'>
                                     <p>Order Id : {item?.orderId}</p>
-                                    <p>Unpaid</p>
+                                    <div className='flex gap-3'>
+                                        <p>Unpaid</p>
+                                        <button onClick={() => getStatus(item?.orderId)} className='border px-2 rounded-xl bg-green-500 text-white hover:opacity-85'>Refresh</button>
+                                    </div>
                                 </div>
                                 <div className='border-t'>
                                     {item?.order && item?.order.map((i, key) =>
