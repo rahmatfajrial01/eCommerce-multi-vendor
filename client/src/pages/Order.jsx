@@ -15,15 +15,15 @@ const Order = () => {
     useEffect(() => {
         let userData = { token, orderStatus }
         dispatch(getOrder2(userData))
-        if (midtransState?.statusOrder?.transaction_status === 'pending') {
-            toast.info('still not paid')
-        } else if (midtransState?.statusOrder?.transaction_status === 'settlement') {
-            toast.success('payment has been made')
-            let userData = { token, orderStatus }
-            dispatch(getOrder2(userData))
-            dispatch(resetState())
-        }
-    }, [orderStatus, midtransState.statusOrder])
+        // if (midtransState?.statusOrder?.transaction_status === 'pending') {
+        //     toast.info('still not paid')
+        // } else if (midtransState?.statusOrder?.transaction_status === 'settlement') {
+        //     toast.success('payment has been made')
+        //     let userData = { token, orderStatus }
+        //     dispatch(getOrder2(userData))
+        //     dispatch(resetState())
+        // }
+    }, [orderStatus])
 
     // useEffect(() => {
     //     dispatch(getStatusOrder(token))

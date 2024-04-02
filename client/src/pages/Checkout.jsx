@@ -97,26 +97,25 @@ const Checkout = () => {
                     let data = { dataAddress, result }
                     let userData = { token, data }
                     dispatch(sendOrder(userData))
-                    setTimeout(() => {
-                        navigate('/user/order')
-                    }, 300);
+                    // setTimeout(() => {
+                    //     navigate('/user/order')
+                    // }, 300);
                 },
                 onPending: (result) => {
                     setMidtrans("")
                     let data = { dataAddress, result }
                     let userData = { token, data }
-                    console.log(result)
                     dispatch(sendOrder(userData))
-                    setTimeout(() => {
-                        navigate('/user/order')
-                    }, 300);
+                    // setTimeout(() => {
+                    //     navigate('/user/order')
+                    // }, 300);
                 },
                 onError: (result) => {
                     setMidtrans("")
                 },
                 onClose: (result) => {
                     setMidtrans("")
-                    dispatch(resetState())
+                    // dispatch(resetState())
                 },
             })
         }
@@ -138,7 +137,7 @@ const Checkout = () => {
             document.body.removeChild(scriptTag)
         }
 
-    }, [])
+    }, [midtrans])
 
     useEffect(() => {
         let data = { token, id: idProvince }

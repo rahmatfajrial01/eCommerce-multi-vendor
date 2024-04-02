@@ -60,6 +60,11 @@ export const bannerSlice = createSlice({
                 state.isError = false;
                 state.isSuccess = true;
                 state.statusOrder = action.payload;
+                if (action.payload.transaction_status === 'pending') {
+                    toast.info('still not paid')
+                } else {
+                    toast.success('payment succesfully')
+                }
             })
             .addCase(getStatusOrder.rejected, (state, action) => {
                 state.isLoading = false;
@@ -72,7 +77,7 @@ export const bannerSlice = createSlice({
             })
             .addCase(resetState, (state) => {
                 state.midtrans = null;
-                state.statusOrder = null;
+                // state.statusOrder = null;
             })
     }
 })
