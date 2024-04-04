@@ -8,7 +8,8 @@ import {
     FaShoppingCart,
     FaList,
     FaUser,
-    FaSearch
+    FaSearch,
+    FaShoppingBag
 } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
 import { MdCategory } from "react-icons/md";
@@ -21,6 +22,7 @@ import { setCategory, sortProduct } from '../features/product/productSlice';
 import { getAllProductCategory } from '../features/category/productCategorySlice';
 import { getAllBrand } from '../features/brand/brandSlice';
 import { setSearchs } from '../features/product/productSlice';
+import { toast } from 'react-toastify';
 
 const Header = () => {
     const navigate = useNavigate()
@@ -85,6 +87,9 @@ const Header = () => {
     }
 
     // console.log(authState?.currentUser)
+    const loginFirst = () => {
+        toast.info("Please Login First")
+    }
 
     return (
         <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>
@@ -111,13 +116,26 @@ const Header = () => {
                         <button type='submit' className='text-black py-2 px-3 rounded-full hover:opacity-80 bg-green-600'><FaSearch className='text-white' /></button>
                     </form>
                     <div className='flex gap-3 text-md'>
-                        <Link to={'/cart'} className='relative flex items-center py-1 me-2 hover:opacity-85'>
-                            <FaShoppingCart size={22} />
-                            {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{cartState?.cart?.card_product_count}</span>}
-                        </Link>
-                        <Link to={'/user/wishlist'} className='relative flex items-center py-1 me-2 hover:opacity-85'><FaHeart size={21} />
-                            {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{authState?.currentUser?.wishlist?.length}</span>}
-                        </Link>
+                        {
+                            authState?.currentUser ?
+                                <>
+                                    <Link to={'/cart'} className='relative flex items-center py-1 me-2 hover:opacity-85'>
+                                        <FaShoppingCart size={22} />
+                                        {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{cartState?.cart?.card_product_count}</span>}
+                                    </Link>
+                                    <Link to={'/user/wishlist'} className='relative flex items-center py-1 me-2 hover:opacity-85'><FaHeart size={21} />
+                                        {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{authState?.currentUser?.wishlist?.length}</span>}
+                                    </Link>
+                                    <Link to={'/user/order'} className='relative flex items-center py-1 me-2 hover:opacity-85'><FaShoppingBag size={21} />
+                                        {/* {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{authState?.currentUser?.wishlist?.length}</span>} */}
+                                    </Link>
+                                </> :
+                                <>
+                                    <div onClick={loginFirst} className='relative flex items-center py-1 me-2 hover:opacity-85 cursor-pointer'><FaShoppingCart size={22} /></div>
+                                    <div onClick={loginFirst} className='relative flex items-center py-1 me-2 hover:opacity-85 cursor-pointer'><FaHeart size={21} /></div>
+                                    <div onClick={loginFirst} className='relative flex items-center py-1 me-2 hover:opacity-85 cursor-pointer'><FaShoppingBag size={21} /></div>
+                                </>
+                        }
                         {/* <Link to={'/user/order'} className='flex items-center py-1 rounded-full'><FaList /></Link> */}
                         {
                             authState?.user === null

@@ -23,7 +23,7 @@ const Order = () => {
         //     dispatch(getOrder2(userData))
         //     dispatch(resetState())
         // }
-    }, [orderStatus])
+    }, [orderStatus, midtransState.statusOrder])
 
     // useEffect(() => {
     //     dispatch(getStatusOrder(token))

@@ -75,6 +75,9 @@ const Detail = () => {
         dispatch(addWishlist(data))
     }
 
+    const loginFirst = () => {
+        toast.info("Please Login First")
+    }
     // console.log(wishlistState.wishlist.wishlist)
     return (
         <section>
@@ -106,13 +109,13 @@ const Detail = () => {
                             </div>
                             <div className='flex gap-3 pt-5 items-center'>
                                 <Button
-                                    onClick={addCartHandler}
+                                    onClick={token ? addCartHandler : loginFirst}
                                     type='button'
                                     color='green'
                                     name='Add to Cart'
                                 />
                                 <FaHeart
-                                    onClick={() => addToWishlistHandler(productState?._id)}
+                                    onClick={() => { token ? addToWishlistHandler(productState?._id) : loginFirst() }}
                                     size={22}
                                     className={`hover:opacity-95 cursor-pointer ${wishlistState.wishlist.wishlist && wishlistState.wishlist.wishlist?.filter((item) => item?._id === productState?._id).length === 1 ? "text-red-500 " : ""}`}
                                 />
