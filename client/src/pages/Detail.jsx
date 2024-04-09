@@ -102,7 +102,7 @@ const Detail = () => {
                         </div>
                         <div className='p-10 space-y-3 border-2'>
                             <p className='font-bold text-xl'>{productState?.title}</p>
-                            <p>Price : Rp.{productState?.price}</p>
+                            <p>Price : Rp.{productState?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
                             <div className='flex items-center space-x-5'>
                                 <p className=''>Qty</p>
                                 <input min={1} onChange={(e) => setQuantity(e.target.value)} value={quantity} type='number' className='p-1 rounded-xl w-10 focus:outline-none' />

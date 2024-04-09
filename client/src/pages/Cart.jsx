@@ -113,7 +113,7 @@ const Cart = () => {
                 <div className='flex justify-end w-full p-5 '>
                     <div className='flex gap-6 items-center'>
                         <p>Grant Total :</p>
-                        <p className='font-bold text-xl'>Rp.{cartState.cart.price}</p>
+                        <p className='font-bold text-xl'>Rp.{cartState?.cart?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
                         <button onClick={() => handleCheckout()} className='bg-green-500 p-2 rounded-xl text-white' >
                             Checkout
                         </button>

@@ -193,7 +193,7 @@ const Home = () => {
                                                 <p className='text-green-500'>{item?.shope?.shopeName}</p>
                                                 <p className='truncate text-wrap'>{item?.title}</p>
                                                 <div className='flex justify-between items-center gap-3'>
-                                                    <p className='font-semibold'>Rp {item?.price}</p>
+                                                    <p className='font-semibold'>Rp {item?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
                                                     <p className='opacity-85'>{item?.sold} Sold</p>
                                                 </div>
                                             </div>

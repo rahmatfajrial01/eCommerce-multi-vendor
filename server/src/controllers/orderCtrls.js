@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require("../models/userModels");
-const Shope = require("../models/ShopeModels");
+const Shope = require("../models/shopeModels");
 const Order = require("../models/orderModels");
 const Cart = require("../models/cartModels");
 const Order2 = require('../models/order2Models');

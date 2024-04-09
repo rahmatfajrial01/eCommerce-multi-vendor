@@ -1,4 +1,5 @@
-export const base_url = "http://localhost:5000/api/"
+// export const base_url = "http://localhost:5000/api/"
+export const base_url = "http://103.127.99.11/api/"
 
 // const getTokenFromLocalStorage = localStorage.getItem("user")
 //     ? localStorage.getItem("user")
