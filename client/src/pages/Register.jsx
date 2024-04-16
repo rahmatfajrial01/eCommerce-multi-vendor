@@ -19,7 +19,7 @@ const Register = () => {
     const Schema = Yup.object().shape({
         username: Yup.string().required("username is required"),
         email: Yup.string().email("email must be valid").required("email is required"),
-        password: Yup.string().required("password is required"),
+        password: Yup.string().required("password is required").min(5),
         Cpassword: Yup.string().required("confirm password is required").oneOf([Yup.ref('password'), null], 'Must match "password" field value'),
     });
 
@@ -48,8 +48,8 @@ const Register = () => {
 
 
     return (
-        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen'>
-            <form onSubmit={formik.handleSubmit} className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
+        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen px-5'>
+            <form onSubmit={formik.handleSubmit} className='space-y-3 sm:w-96 w-full px-5 py-5 bg-white rounded-lg'>
                 <h1 className='text-center font-semibold text-xl'>Register</h1>
                 <div>
                     <Input

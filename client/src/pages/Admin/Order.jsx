@@ -58,10 +58,10 @@ const Order = () => {
                             <td className='p-2 flex-nowrap space-y-3'>
 
                                 {item?.products && item?.products.map((i, key) =>
-                                    <div key={key} className='flex gap-3 items-center w-max'>
+                                    <div key={key} className='flex gap-3 items-center w-96'>
                                         <img className='h-20 object-cover border rounded-xl' src={i?.productInfo?.images?.url} alt="" />
                                         <div className='flex gap-5'>
-                                            <p>{i?.productInfo?.title}</p>
+                                            <p className='text-wrap'>{i?.productInfo?.title}</p>
                                             <p>X {i?.quantity}</p>
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@ const Order = () => {
                                         item?.orderStatus !== 'Unpaid'
                                             ?
                                             <select
-                                                defaultValue={item?.orderStatus}
+                                                value={item?.orderStatus}
                                                 className='border p-2 rounded-xl'
                                                 name=""
                                                 id=""

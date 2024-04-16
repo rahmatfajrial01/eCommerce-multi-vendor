@@ -69,7 +69,7 @@ const ListProduct = () => {
                         <tr key={index} className='border-2 p-2'>
                             <td className='p-2 flex gap-3 items-center w-max'>
                                 <img className='h-20' src={item?.images?.url} alt="" />
-                                <p>{item?.title}                                </p>
+                                <p className='max-w-96 text-wrap'>{item?.title}</p>
                             </td>
                             <td className='p-2'>{item?.tag}</td>
                             <td className='p-2'>{item?.category?.title}</td>

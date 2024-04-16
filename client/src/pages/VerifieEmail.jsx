@@ -37,8 +37,8 @@ const VerifieEmail = () => {
         }
     }, [authState.createdUserVerif])
     return (
-        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen'>
-            <form onSubmit={submitOtp} className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
+        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen px-5'>
+            <form onSubmit={submitOtp} className='space-y-3 sm:w-96 w-full px-5 py-5 bg-white rounded-lg'>
                 <h1 className='text-center font-semibold text-xl'>Verifie Email</h1>
                 <input
                     value={otp}

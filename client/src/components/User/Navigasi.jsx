@@ -16,7 +16,7 @@ const Navigasi = () => {
     }
 
     return (
-        <nav className='flex flex-col border ps-8 py-5 pe-16 rounded-xl gap-2 h-full'>
+        <nav className='flex justify-between md:justify-normal px-5 md:flex-col border md:ps-8 py-5 md:pe-16 rounded-xl gap-2 h-full'>
             <Link to={'/user'}>Profile</Link>
             <Link to={'/user/address'}>Address</Link>
             <Link to={'/user/order'} >Orders</Link>

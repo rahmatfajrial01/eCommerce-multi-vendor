@@ -64,7 +64,7 @@ const Cart = () => {
 
     return (
         <section>
-            <div className='container mx-auto space-y-5 mt-5 w-[1170px]'>
+            <div className='container mx-auto space-y-5 mt-5 md:w-[900px] px-5 pb-20'>
                 {/* <div className='flex border'>
                     <span className='w-5/12 p-1 ps-10'>Product</span>
                     <span className='w-3/12 p-1'>Unit Price</span>
@@ -97,7 +97,7 @@ const Cart = () => {
                     &&
                     <div className='flex flex-col gap-5'>
                         <div className='border rounded-xl'>
-                            <h1 className='p-2'>Out of Stock</h1>
+                            <h1 className='p-2'>Out of Stock (Can't be processed) </h1>
                             {
                                 cartState.cart.outOfStockProduct && cartState.cart.outOfStockProduct.map((item, index) =>
                                     <CartItemOutStock
@@ -112,8 +112,10 @@ const Cart = () => {
 
                 <div className='flex justify-end w-full p-5 '>
                     <div className='flex gap-6 items-center'>
-                        <p>Grant Total :</p>
-                        <p className='font-bold text-xl'>Rp.{cartState?.cart?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
+                        <div className='md:flex gap-5 items-center'>
+                            <p>Grant Total :</p>
+                            <p className='font-bold text-xl'>Rp.{cartState?.cart?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
+                        </div>
                         <button onClick={() => handleCheckout()} className='bg-green-500 p-2 rounded-xl text-white' >
                             Checkout
                         </button>

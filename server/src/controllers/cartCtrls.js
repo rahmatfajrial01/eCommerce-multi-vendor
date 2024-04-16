@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Cart = require('../models/cartModels');
+const Product = require('../models/productModels');
 const { mongo: { ObjectId } } = require('mongoose')
 
 const addCart = asyncHandler(async (req, res) => {
@@ -20,17 +21,22 @@ const addCart = asyncHandler(async (req, res) => {
             ]
         })
         if (cartAndUser) {
-            const add = await Cart.updateOne(
-                {
-                    "user": _id, "product": product
-                },
-                {
-                    $set: {
-                        "quantity": Number(cartAndUser.quantity) + Number(quantity),
+            const pStock = await Product.findOne({ _id: product })
+            if (Number(cartAndUser.quantity) + Number(quantity) > pStock.quantity) {
+                throw (`this product out of stock in your cart`);
+            } else {
+                const add = await Cart.updateOne(
+                    {
+                        "user": _id, "product": product
+                    },
+                    {
+                        $set: {
+                            "quantity": Number(cartAndUser.quantity) + Number(quantity),
+                        }
                     }
-                }
-            )
-            res.json(add)
+                )
+                res.json(add)
+            }
         } else {
             let newCart = await new Cart({
                 user: _id,

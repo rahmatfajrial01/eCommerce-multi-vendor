@@ -115,7 +115,7 @@ const Checkout = () => {
                 },
                 onClose: (result) => {
                     setMidtrans("")
-                    // dispatch(resetState())
+                    dispatch(resetState())
                 },
             })
         }
@@ -246,9 +246,9 @@ const Checkout = () => {
 
     return (
         <section>
-            <div className='flex mt-5 container justify-center mx-auto gap-5'>
+            <div className='flex md:flex-row flex-col px-5 md:px-0 mt-5 container justify-center mx-auto gap-5 md:mb-8'>
                 <div className='space-y-5'>
-                    <div className='w-[700px]'>
+                    <div className='md:w-[700px]'>
                         <div className='border p-5 rounded-xl space-y-5'>
                             <h1>Address</h1>
                             <Button
@@ -344,7 +344,7 @@ const Checkout = () => {
                         } */}
                     {/* </div> */}
                 </div>
-                <div className='w-[450px]'>
+                <div className='md:w-[450px] mb-24'>
                     <div className='border space-y-5 p-5 rounded-lg'>
                         {/* {
                             cartState.cart && cartState.cart.map((item, index) =>
@@ -362,13 +362,13 @@ const Checkout = () => {
                         } */}
                         <div className='space-y-1'>
                             <div className='flex justify-between'>
-                                <p>SubTotal : </p><span className='font-semibold'>Rp. {userState?.cost?.totalPrice}</span>
+                                <p>SubTotal : </p><span className='font-semibold'>Rp. {userState?.cost?.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</span>
                             </div>
                             <div className='flex justify-between'>
-                                <p>ShippingTotal : </p><span className='font-semibold'>Rp. {isShipment ? userState?.cost?.totalShippment : '0'}</span>
+                                <p>ShippingTotal : </p><span className='font-semibold'>Rp. {isShipment ? userState?.cost?.totalShippment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0'}</span>
                             </div>
                             <div className='flex justify-between item'>
-                                <p>Total :  </p><span className='font-semibold text-xl'>Rp. {isShipment ? userState?.cost?.grandTotal : '0'}</span>
+                                <p>Total :  </p><span className='font-semibold text-xl'>Rp. {isShipment ? userState?.cost?.grandTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0'}</span>
                             </div>
                         </div>
                         <Button

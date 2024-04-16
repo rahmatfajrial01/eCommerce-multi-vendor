@@ -17,7 +17,7 @@ const Login = () => {
 
     const Schema = yup.object({
         email: yup.string().nullable().email("email shoul be valid").required('email is required'),
-        password: yup.string().required("passowrd is reguired"),
+        password: yup.string().required("passowrd is reguired").min(5),
     });
 
     const formik = useFormik({
@@ -44,10 +44,10 @@ const Login = () => {
     }, [authState])
 
     return (
-        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen'>
+        <section className='flex flex-col justify-center bg-slate-200 items-center min-h-screen px-5'>
             <form
                 onSubmit={formik.handleSubmit}
-                className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
+                className='space-y-3 sm:w-96 w-full px-5 py-5 bg-white rounded-lg'>
                 <h1 className='text-center font-semibold text-xl'>Login</h1>
                 <div>
                     <Input

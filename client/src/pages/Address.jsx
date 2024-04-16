@@ -81,7 +81,7 @@ const Address = () => {
     return (
         <section className='w-full'>
             {/* <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full  ${isOpen === true ? "flex justify-center items-center" : "hidden"}`}> */}
-            <div className='min-w-96 bg-white border rounded-xl p-5'>
+            <div className='md:min-w-96 bg-white border rounded-xl p-5'>
                 <div className='flex justify-center w-full p-5 rounded-xl'>
                     <Button
                         color='green'
@@ -96,7 +96,7 @@ const Address = () => {
                         addressState?.currentUser?.addresses && addressState?.currentUser?.addresses?.map((item, index) =>
                             <div
                                 key={index}
-                                className=' flex justify-between gap-5 rounded-xl p-3 opacity-95 border-2 cursor-pointer'>
+                                className=' flex justify-between gap-5 rounded-xl p-3 opacity-95 border cursor-pointer'>
                                 <div className='flex gap-5'>
                                     <div>
                                         <p>{item?.recipientName}</p>
@@ -126,9 +126,9 @@ const Address = () => {
                 </div>
             </div>
             {/* </div> */}
-            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full -mt-32 ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
-                <div className='w-96 bg-white border rounded-xl '>
-                    <form onSubmit={formik.handleSubmit} className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
+            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black px-5 bg-opacity-20 fixed inset-0 md:-top-5 top-24 z-10 min-h-screen w-full -mt-32 ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
+                <div className='md:w-96 w-full bg-white border rounded-xl '>
+                    <form onSubmit={formik.handleSubmit} className='space-y-3 w-full md:w-96 px-5 py-5 bg-white rounded-lg'>
                         <h1 className='text-center font-semibold text-xl'>Add Address</h1>
                         <div>
                             <Input

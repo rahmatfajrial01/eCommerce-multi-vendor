@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
     return (
-        <footer className='min-h-[50vh] bg-black text-white flex gap-20 justify-center items-center'>
+        <footer className='min-h-[50vh] bg-white text-black border-t md:flex gap-20 justify-center items-center hidden px-5'>
             <div className='space-y-5'>
                 <p className='font-bold text-xl'>eCommers.</p>
                 <p>About eCommers</p>

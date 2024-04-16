@@ -43,6 +43,8 @@ const Detail = () => {
     // }, [])
     // console.log(productState?.shope?._id)
 
+    let [cart, setCart] = useState(1)
+
     const addCartHandler = () => {
         // if (quantity > productState?.quantity) {
         //     toast.info("Out of Stock")
@@ -51,13 +53,13 @@ const Detail = () => {
         //     toast.info("Cart Already Axist")
         // }
         // else 
-        if (quantity <= 0) {
+        if (cart <= 0) {
             toast.info("Minimal Cart 1")
         } else {
             let data = {
                 product: productState?._id,
                 shope: productState?.shope?._id,
-                quantity,
+                quantity: cart,
                 price: productState?.price
             }
             let userData = {
@@ -80,7 +82,7 @@ const Detail = () => {
     }
     // console.log(wishlistState.wishlist.wishlist)
     return (
-        <section>
+        <section className='px-5 md:pb-0 pb-24'>
             {
                 loading
                     ?
@@ -88,26 +90,40 @@ const Detail = () => {
                         <p>Loading...</p>
                     </div>
                     :
-                    <div className='flex mt-5 container mx-auto justify-center '>
-                        <div className='flex'>
-                            <div className='w-24 h-96 flex flex-col'>
+                    <div className='md:flex md:flex-row flex flex-col mt-5 container mx-auto justify-center gap-2'>
+                        {/* <div className='flex'> */}
+                        {/* <div className='w-24 h-96 flex flex-col'>
                                 <img className='object-cover w-24 border-2' src={productState?.images?.url} alt="" />
                                 <img className='object-cover w-24 border-2' src={productState?.images?.url} alt="" />
                                 <img className='object-cover w-24 border-2' src={productState?.images?.url} alt="" />
                                 <img className='object-cover w-24 border-2' src={productState?.images?.url} alt="" />
-                            </div>
-                            <div className='w-96 flex justify-center'>
-                                <img className='w-96 h-full object-cover border-2 ' src={productState?.images?.url} alt="" />
-                            </div>
+                            </div> */}
+                        <div className='md:w-96 flex justify-center  '>
+                            <img className='md:w-96 md:max-h-96 w-full h-full object-cover border rounded-xl' src={productState?.images?.url} alt="" />
                         </div>
-                        <div className='p-10 space-y-3 border-2'>
+                        {/* </div> */}
+                        <div className='p-10 space-y-3 border rounded-xl'>
                             <p className='font-bold text-xl'>{productState?.title}</p>
                             <p>Price : Rp.{productState?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
-                            <div className='flex items-center space-x-5'>
-                                <p className=''>Qty</p>
+                            {/* <div className='flex items-center space-x-5'>
+                                <p className=''>Qty :</p>
                                 <input min={1} onChange={(e) => setQuantity(e.target.value)} value={quantity} type='number' className='p-1 rounded-xl w-10 focus:outline-none' />
+                            </div> */}
+                            <div className='flex items-center gap-10'>
+                                <div className='flex gap-4 items-center py-3'>
+                                    <button>
+                                        <FaMinus size={25} onClick={() => setCart(cart === 1 ? 1 : cart - 1)} className='cursor-pointer border p-1 hover:border-2 border-black rounded-full' />
+                                    </button>
+                                    <span className='w-3 text-center'>
+                                        {cart}
+                                    </span>
+                                    <button>
+                                        <FaPlus size={25} onClick={() => setCart(cart + 1)} className='cursor-pointer border p-1 hover:border-2 border-black rounded-full' />
+                                    </button>
+                                </div>
+                                <p>Stock : <span>{productState?.quantity}</span></p>
                             </div>
-                            <div className='flex gap-3 pt-5 items-center'>
+                            <div className='flex gap-3  items-center'>
                                 <Button
                                     onClick={token ? addCartHandler : loginFirst}
                                     type='button'
@@ -130,6 +146,7 @@ const Detail = () => {
                                 }
                                 <p>{productState?.shope?.shopeName}</p>
                             </Link>
+                            <p className='max-w-96'>{productState?.description}</p>
                         </div>
                     </div>
             }

@@ -34,21 +34,21 @@ const Wishlist = () => {
     }
 
     return (
-        <section className='w-full'>
-            <div className='gap-5 grid grid-cols-5'>
+        <section className='w-full md:mb-0 mb-24'>
+            <div className='gap-5 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2'>
                 {
                     wishlistState?.wishlist?.wishlist?.length > 0 ? wishlistState?.wishlist?.wishlist.map((item, index) =>
                         <div key={index} className=' bg-white rounded-xl border relative'>
                             <img src={item?.images?.url} alt="" className='rounded-t-xl' />
                             <div className='p-3 space-y-1'>
                                 <p className='text-green-500'>{item?.shope?.shopeName}</p>
-                                <p>{item?.title}</p>
-                                <div className='flex justify-between items-center gap-3'>
+                                <p className='line-clamp-2'>{item?.title}</p>
+                                <div className='lg:flex justify-between items-center gap-3'>
                                     <p className='font-semibold'>Rp {item?.price}</p>
                                     <p className='opacity-85'>{item?.sold} Sold</p>
                                 </div>
                             </div>
-                            <div className='p-5'>
+                            <div className='px-5 pb-5'>
                                 <Button
                                     onClick={() => addToCart(item?._id, item?.shope, item?.price)}
                                     type='button'

@@ -24,7 +24,7 @@ const Profile = () => {
     const Schema = yup.object({
         username: yup.string().required("username is reguired"),
         email: yup.string().nullable().email("email shoul be valid").notRequired('email is required'),
-        password: yup.string(),
+        password: yup.string().min(5),
     });
 
     const formik = useFormik({
@@ -90,8 +90,8 @@ const Profile = () => {
     }, [picture])
 
     return (
-        <section className='flex justify-center w-full border rounded-xl'>
-            <div className='flex gap-5 '>
+        <section className='flex justify-center w-full border rounded-xl  md:mb-0 mb-24'>
+            <div className='md:flex gap-5 '>
                 <div className='bg-white  p-5 space-y-3 flex flex-col items-center justify-between'>
                     {/* <h1 className='text-center font-semibold text-xl'>Avatar</h1> */}
                     {
@@ -120,7 +120,7 @@ const Profile = () => {
                 </div>
                 <form
                     onSubmit={formik.handleSubmit}
-                    className='space-y-3 w-96 px-5 py-5 bg-white '>
+                    className='space-y-3 md:w-96 px-5 py-5 bg-white '>
                     {/* <h1 className='text-center font-semibold text-xl'>Profile</h1> */}
                     <div>
                         <Input

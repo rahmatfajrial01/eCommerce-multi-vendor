@@ -92,9 +92,9 @@ const Header = () => {
     }
 
     return (
-        <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10'>
+        <header className='bg-green-600 text-white py-2 w-full fixed top-0  z-10 px-5'>
             <section className='container mx-auto'>
-                <div className='flex justify-between text-sm' >
+                <div className='md:flex justify-between text-sm hidden' >
                     <div className='flex gap-3'>
                         <FaInstagram />
                         <FaTiktok />
@@ -103,8 +103,8 @@ const Header = () => {
                     </div>
                     <div>Telephone +078678668709</div>
                 </div>
-                <div className='flex justify-between gap-6 py-2 items-center'>
-                    <div className='font-semibold text-2xl'><a href="/">eCommerce.</a> </div>
+                <div className='flex justify-between md:gap-6 gap-3 py-2 items-center'>
+                    <div className='font-semibold text-2xl hidden md:block'><a href="/">eCommerce.</a> </div>
                     <form onSubmit={handleSearch} className='flex items-center w-full border-2 rounded-full bg-white border-white'>
                         <input
                             value={search}
@@ -115,7 +115,21 @@ const Header = () => {
                         />
                         <button type='submit' className='text-black py-2 px-3 rounded-full hover:opacity-80 bg-green-600'><FaSearch className='text-white' /></button>
                     </form>
-                    <div className='flex gap-3 text-md'>
+                    <div className='md:hidden'>
+                        {
+                            authState?.currentUser ?
+                                <>
+                                    <Link to={'/cart'} className='relative flex items-center py-1 me-2 hover:opacity-85'>
+                                        <FaShoppingCart size={22} />
+                                        {authState?.currentUser && <span className='absolute -top-1 left-3 bg-slate-600 text-sm text-white h-5 px-1 min-w-5 text-center rounded-full'>{cartState?.cart?.card_product_count}</span>}
+                                    </Link>
+                                </> :
+                                <>
+                                    <div onClick={loginFirst} className='relative flex items-center py-1 me-2 hover:opacity-85 cursor-pointer'><FaShoppingCart size={22} /></div>
+                                </>
+                        }
+                    </div>
+                    <div className='md:flex gap-3 text-md hidden'>
                         {
                             authState?.currentUser ?
                                 <>
@@ -158,7 +172,7 @@ const Header = () => {
                                         <Menu>
                                             <Menu.Button className='flex gap-2 items-center w-max hover:opacity-85'>
                                                 {/* <span className='border-2 flex items-center gap-1 py-1 px-3 rounded-full hover:opacity-80'>Account</span> */}
-                                                <p>{authState?.currentUser?.username}</p>
+                                                <p className='max-w-24 truncate'>{authState?.currentUser?.username}</p>
                                                 {
                                                     authState?.currentUser?.avatar
                                                         ?
@@ -183,7 +197,7 @@ const Header = () => {
                         }
                     </div>
                 </div>
-                <div className='justify-between flex text-sm'>
+                <div className='justify-between md:flex text-sm hidden'>
                     <div className='relative group cursor-pointer'>
                         <p className='flex gap-2 items-center'><span><MdCategory size={12} /></span>Category</p>
                         <div className={`${cat ? "group-hover:block" : ""} hidden absolute left-0 bg-green-600 pt-4 px-5 pb-4 space-y-3 rounded-b-xl text-white`}>

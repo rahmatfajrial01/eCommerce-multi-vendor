@@ -58,9 +58,9 @@ const ListProduct = () => {
                 {
                     productState.allProduct && productState.allProduct?.map((item, index) =>
                         <tr key={index} className='border-2 p-2'>
-                            <td className='p-2 flex gap-3 items-center w-max'>
+                            <td className='p-2 flex gap-3 items-center w-96'>
                                 <img className='h-20' src={item?.images?.url} alt="" />
-                                <p>{item?.title}                                </p>
+                                <p className='text-wrap'>{item?.title}                                </p>
                             </td>
                             <td className='p-2'>{item?.shope?.shopeName}</td>
                             <td className='p-2'>{item?.category?.title}</td>

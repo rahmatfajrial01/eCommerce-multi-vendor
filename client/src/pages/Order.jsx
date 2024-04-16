@@ -36,9 +36,20 @@ const Order = () => {
     }
 
     return (
-        <section className='w-full'>
+        <section className='w-full  md:mb-0 mb-24'>
             <div className='space-y-5'>
-                <div className='flex gap-5 w-full justify-between text-center'>
+                <div className='flex gap-2 items-center md:hidden'>
+                    <h1 className='text-lg'>Filter : </h1>
+                    <select onChange={(e) => setOrderStatus(e.target.value)} value={orderStatus} className='border p-2 rounded-xl' name="" id="">
+                        <option value="">All Order</option>
+                        <option value="Unpaid">Unpaid</option>
+                        <option value="Being Packaged">Being Packaged</option>
+                        <option value="Sended">Sended</option>
+                        <option value="Delifery">Delifery</option>
+                        <option value="Cancel">Cancel</option>
+                    </select>
+                </div>
+                <div className='md:flex gap-5 w-full justify-between text-center hidden'>
                     <div
                         onClick={() => setOrderStatus("")}
                         className={`${orderStatus === '' ? "bg-green-500 text-white" : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>All</div>
@@ -55,16 +66,16 @@ const Order = () => {
                         onClick={() => setOrderStatus('Delifery')}
                         className={`${orderStatus === 'Delifery' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Delivery</div>
                     <div
-                        onClick={() => setOrderStatus('4')}
-                        className={`${orderStatus === '4' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Cancel</div>
+                        onClick={() => setOrderStatus('Cancel')}
+                        className={`${orderStatus === 'Cancel' ? "bg-green-500 text-white " : 'bg-slate-300'} w-full text-nowrap py-1 px-2 rounded-2xl opacity-95 cursor-pointer transition-all `}>Cancel</div>
                 </div>
                 <div className='space-y-5'>
                     {
                         order2State?.order2?.order2Unpaid && order2State?.order2?.order2Unpaid.map((item, index) =>
                             <div key={index} className='border rounded-xl'>
-                                <div className='flex justify-between py-2 px-5'>
+                                <div className='flex justify-between py-2 px-5 gap-1'>
                                     <p>Order Id : {item?.orderId}</p>
-                                    <div className='flex gap-3'>
+                                    <div className='flex items-center gap-3'>
                                         <p>Unpaid</p>
                                         <button onClick={() => getStatus(item?.orderId)} className='border px-2 rounded-xl bg-green-500 text-white hover:opacity-85'>Refresh</button>
                                     </div>
@@ -72,7 +83,7 @@ const Order = () => {
                                 <div className='border-t'>
                                     {item?.order && item?.order.map((i, key) =>
                                         <div key={key} className='flex justify-between p-5 '>
-                                            <div className='flex gap-8'>
+                                            <div className='flex md:flex-row flex-col gap-8'>
                                                 <div>
                                                     <p>Payment Methods</p>
                                                     <span className='font-semibold'>{i?.payInfo[0].payment_type} ( {i?.payInfo[0]?.va_numbers[0]?.bank})</span>

@@ -4,7 +4,7 @@ import images from '../constants/images'
 import { updateShippment } from '../features/order/orderSlice'
 import { getCost } from '../features/rajaOngkir/rajaOngkirSlice'
 import { clearCost } from '../features/user/userSlice'
-
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const ShipmentMethods = (props) => {
     const {
@@ -63,7 +63,10 @@ const ShipmentMethods = (props) => {
 
     return (
         <div className='space-y-5' >
-            <h1>Shipment Methods</h1>
+            <div className='flex items-center gap-3'>
+                <h1>Shipment Methods</h1>
+                {rajaOngkirState.isLoading && <AiOutlineLoading3Quarters className='animate-spin' size={15} />}
+            </div>
             {/* <p>Sent From : <span>{rajaOngkirState?.cost?.rajaongkir?.origin_details?.province}, {rajaOngkirState?.cost?.rajaongkir?.origin_details?.city_name}</span></p> */}
             <div className='flex gap-5 items-center'>
                 <button onClick={() => { handleClearCost(), setCost(''), setShipment('jne'), setId(idShope) }} className={`rounded-lg p-1  ${shipment === 'jne' && 'border-2 border-green-500'}`}>
@@ -76,16 +79,16 @@ const ShipmentMethods = (props) => {
                     <img className='h-8 w-24 object-cover' src={images.tiki} alt="" />
                 </button>
             </div>
-            <div className='flex gap-5'>
+            <div className='grid grid-cols-2 md:grid-cols-3 md:gap-5 gap-2'>
                 {
                     dataCost && dataCost.map((item, index) =>
                         <div key={index} className={`${item?.cost[0]?.value === cost && 'border-2 border-green-500'} space-y-3 p-3 rounded-xl border cursor-pointer `} onClick={() => handleClick(item?.cost[0]?.value, item?.service)}
                         >
-                            <div className='flex justify-between gap-10'>
+                            <div className='flex justify-between md:gap-10'>
                                 <p>{item?.service}</p>
                                 <p>{item?.cost[0]?.etd}</p>
                             </div>
-                            <p>Rp. {item?.cost[0]?.value}</p>
+                            <p>Rp.{item?.cost[0]?.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</p>
                         </div>
                     )
                 }
