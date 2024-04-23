@@ -7,6 +7,7 @@ import { getAllProvince, getCity } from '../features/rajaOngkir/rajaOngkirSlice'
 import Input from '../components/Input'
 import { Button } from '../components/Button'
 import { FaTrashAlt } from 'react-icons/fa'
+import { IoMdClose } from "react-icons/io";
 
 const Address = () => {
     const dispatch = useDispatch()
@@ -128,7 +129,8 @@ const Address = () => {
             {/* </div> */}
             <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black px-5 bg-opacity-20 fixed inset-0 md:-top-5 top-24 z-10 min-h-screen w-full -mt-32 ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
                 <div className='md:w-96 w-full bg-white border rounded-xl '>
-                    <form onSubmit={formik.handleSubmit} className='space-y-3 w-full md:w-96 px-5 py-5 bg-white rounded-lg'>
+                    <form onSubmit={formik.handleSubmit} className='relative space-y-3 w-full md:w-96 px-5 py-5 bg-white rounded-lg'>
+                        <button type='button' onClick={() => setIsOpenAdd(false)} className='absolute top-5 right-5'><IoMdClose /></button>
                         <h1 className='text-center font-semibold text-xl'>Add Address</h1>
                         <div>
                             <Input

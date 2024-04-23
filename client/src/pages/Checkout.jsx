@@ -16,6 +16,7 @@ import ShipmentMethods from '../components/ShipmentMethods'
 import OrderItem from '../components/OrderItem'
 import { getOrder, resetStateOrder, updateShippmentCost } from '../features/order/orderSlice'
 import { toast } from 'react-toastify'
+import { IoMdClose } from 'react-icons/io'
 
 const Checkout = () => {
     const navigate = useNavigate()
@@ -382,15 +383,16 @@ const Checkout = () => {
                 </div>
             </div>
 
-            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full  ${isOpen === true ? "flex justify-center items-center" : "hidden"}`}>
-                <div className='min-w-96 bg-white border rounded-xl p-5'>
-                    <div className='flex justify-center w-full p-5 rounded-xl'>
+            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black px-5 bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full  ${isOpen === true ? "flex justify-center items-center" : "hidden"}`}>
+                <div className='relative md:max-w-96 w-full  bg-white border rounded-xl p-5'>
+                    <div className='flex justify-center md:w-full p-5 rounded-xl'>
                         <Button
                             color='green'
                             name='+ add new address'
                             onClick={() => { dispatch(getAllProvince(token)), setIsOpenAdd(true), setIsOpen(false) }}
                         />
                     </div>
+                    <button type='button' onClick={() => setIsOpen(false)} className='absolute top-7 right-7'><IoMdClose /></button>
                     <div className='space-y-3'>
 
                         {/* add submit */}
@@ -429,10 +431,11 @@ const Checkout = () => {
                 </div>
             </div>
 
-            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen w-full  ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
-                <div className='w-96 bg-white border rounded-xl '>
-                    <form onSubmit={formik.handleSubmit} className='space-y-3 w-96 px-5 py-5 bg-white rounded-lg'>
+            <div id='container' onClick={(e) => closeModal(e.target.id)} className={`bg-black px-5 bg-opacity-20 fixed inset-0 -top-5 z-10 min-h-screen md:w-full  ${isOpenAdd === true ? "flex justify-center items-center" : "hidden"}`}>
+                <div className='md:w-96 w-full bg-white border rounded-xl '>
+                    <form onSubmit={formik.handleSubmit} className='relative space-y-3 md:w-96 w-full px-5 py-5 bg-white rounded-lg'>
                         <h1 className='text-center font-semibold text-xl'>Add Address</h1>
+                        <button type='button' onClick={() => setIsOpenAdd(false)} className='absolute top-4 right-4'><IoMdClose /></button>
                         <div>
                             <Input
                                 type="text"

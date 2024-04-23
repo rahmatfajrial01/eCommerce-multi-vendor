@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { IoMdClose } from 'react-icons/io'
 import { RxAvatar } from 'react-icons/rx'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../../components/Button'
@@ -121,7 +122,9 @@ const Seller = () => {
                 isOpen={isOpen}
                 closeModal={(e) => closeModal(e.target.id)}
             >
-                <div className='text-black'>
+                <div className='text-black m-3 relative'>
+                    <button type='button' onClick={() => setIsOpen(false)} className='absolute -top-4 -right-4'><IoMdClose /></button>
+
                     {shopeState?.newMemberShope?.message}
                     {
                         shopeState?.newMemberShope?.message ? "" :
